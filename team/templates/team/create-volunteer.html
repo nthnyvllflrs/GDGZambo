@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container mt-5 mb-3">
+	<h5 class="font-italic">
+		<strong>Volunteer Creation Form</strong>
+	</h5>
+	<hr />
+
+	<div class="row">
+		<div class="col-6 offset-3">
+			<form method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<div class="row">
+					<div class="col-sm-12">{{ volunteer_form.photo|as_crispy_field }}</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6">{{ volunteer_form.firstname|as_crispy_field }}</div>
+					<div class="col-sm-6">{{ volunteer_form.lastname|as_crispy_field }}</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">{{ volunteer_form.description|as_crispy_field }}</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">{{ volunteer_form.expertise|as_crispy_field }}</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">{{ volunteer_form.email|as_crispy_field }}</div>
+					<div class="col-sm-6">{{ volunteer_form.facebook|as_crispy_field }}</div>
+					<div class="col-sm-6">{{ volunteer_form.twitter|as_crispy_field }}</div>
+					<div class="col-sm-6">{{ volunteer_form.instagram|as_crispy_field }}</div>
+					<div class="col-sm-6">{{ volunteer_form.website|as_crispy_field }}</div>
+				</div>
+				<button type="submit" class="btn btn-block btn-dark" style="letter-spacing: 3px;">Create Volunteer</button>
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock content %}

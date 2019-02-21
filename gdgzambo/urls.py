@@ -10,6 +10,7 @@ urlpatterns = [
     path('blog/', include(('blog.urls', 'blog'), namespace='blog')),
     path('story/', include(('story.urls', 'story'), namespace='story')),
     path('user/', include(('user.urls', 'user'), namespace='user')),
+    path('team/', include(('team.urls', 'team'), namespace='team')),
 
     path('admin/', admin.site.urls),
 ]

@@ -8,23 +8,92 @@
 		<!-- FONT AWESOME -->
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
+		<!-- JQUERY -->
+		<script src="https://code.jquery.com/jquery-3.3.1.js" crossorigin="anonymous"></script>
+
 		<!-- BOOTSTRAP 4 -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-		<!-- JQUERY -->
-		<script src="https://code.jquery.com/jquery-3.3.1.js" crossorigin="anonymous"></script>
-		
 		<!-- GOOGLE FONT -->
 		<link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet"> 
 		<style type="text/css">
 			* {
 				font-family: 'Roboto Mono', monospace;
 			}
+			.red-border:hover {
+				border-bottom: solid;
+				border-color: #db4437;
+			}
+
+			.blue-border:hover {
+				border-bottom: solid;
+				border-color: #4285f4;
+			}
+
+			.green-border:hover {
+				border-bottom: solid;
+				border-color: #0f9d58;
+			}
+
+			.yellow-border:hover {
+				border-bottom: solid;
+				border-color: #ffc107;
+			}
+
+			.navbar-custom {
+			    background-color: #104d53;
+			}
+
+			.responsive-image{
+				margin: 0 auto;
+
+				width: 255px;
+				height: 255px;
+
+				background-size: cover;
+				background-repeat: no-repeat;
+				background-position: center;
+			}
+
+			 /* Extra small devices (phones, 600px and down) */
+			@media only screen and (max-width: 600px) {
+				.responsive-image{
+					width: 150px;
+					height: 130px;
+					background-size: contain;
+				}
+			}
+
+			/* Small devices (portrait tablets and large phones, 600px and up) */
+			@media only screen and (min-width: 600px) {
+				.responsive-image{
+					width: 185px;
+					height: 160px;
+				}
+			}
+
+			/* Medium devices (landscape tablets, 768px and up) */
+			@media only screen and (min-width: 768px) {
+				.responsive-image{
+					width: 220px;
+					height: 193px;
+				}
+			}
+
+			/* Large devices (laptops/desktops, 992px and up) */
+			@media only screen and (min-width: 992px) {
+				.responsive-image{
+					width: 255px;
+					height: 255px;
+				}
+			}
 		</style>
 	</head>
 	<body style="padding-top: 75px;">
-
+		{% block content %}
+			<!-- Main Content -->
+		{% endblock content %}
 	</body>
 </html>

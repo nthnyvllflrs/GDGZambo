@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container mt-5 mb-3">
+	<h5 class="font-italic">
+		<strong>Member Creation Form</strong>
+	</h5>
+	<hr />
+
+	<div class="row">
+		<div class="col-6 offset-3">
+			<form method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<div class="row">
+					<div class="col-sm-12">{{ member_form.photo|as_crispy_field }}</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6">{{ member_form.firstname|as_crispy_field }}</div>
+					<div class="col-sm-6">{{ member_form.lastname|as_crispy_field }}</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">{{ member_form.description|as_crispy_field }}</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">{{ member_form.expertise|as_crispy_field }}</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">{{ member_form.email|as_crispy_field }}</div>
+					<div class="col-sm-6">{{ member_form.facebook|as_crispy_field }}</div>
+					<div class="col-sm-6">{{ member_form.twitter|as_crispy_field }}</div>
+					<div class="col-sm-6">{{ member_form.instagram|as_crispy_field }}</div>
+					<div class="col-sm-6">{{ member_form.website|as_crispy_field }}</div>
+				</div>
+				<button type="submit" class="btn btn-block btn-dark" style="letter-spacing: 3px;">Create Member</button>
+			</form>
+		</div>
+	</div>
+	
+	{% if success %}
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+		  	<div class="modal-dialog modal-dialog-centered" role="document">
+		    	<div class="modal-content">
+		      		<div class="modal-header">
+		        		<h5 class="modal-title">Create User Account</h5>
+		      		</div>
+		      		<div class="modal-body text-center">
+		        		Do you want to create a user account for the newly added member?
+		      		</div>
+		      		<div class="modal-footer">
+		      			<a href="#" class="btn btn-sm btn-secondary">&nbspNo&nbsp</a>
+		        		<a href="#" class="btn btn-sm btn-dark">&nbspYes&nbsp</a>
+		      		</div>
+		    	</div>
+		  	</div>
+		</div>
+	    <script>
+	        $(document).ready(function() {
+	            $('#myModal').modal('show')
+	        });
+	    </script>
+	{% endif %}
+</div>
+{% endblock content %}

@@ -11,25 +11,8 @@ from cloudinary.models import CloudinaryField
 from .utils import unique_slug_generator
 
 # Outer App imports
-from user.models import Member
+from team.models import Member, Volunteer
 
-class Volunteer(models.Model):
-	name 				= models.CharField(max_length=200)
-	firstname 	= models.CharField(max_length=100)
-	lastname 		= models.CharField(max_length=100)
-	photo 			= CloudinaryField('photo', blank=True, null=True)
-	description = models.TextField(max_length=300)
-	expertise 	= models.TextField(null=True, blank=True)
-	email 			= models.EmailField(null=True, blank=True)
-	facebook 		= models.URLField(max_length=500, null=True, blank=True)
-	twitter 		= models.URLField(max_length=500, null=True, blank=True)
-	instagram 	= models.URLField(max_length=500, null=True, blank=True)
-	website 		= models.URLField(max_length=500, null=True, blank=True)
-	slug 				= models.SlugField(null=True, blank=True)
-	timestamp 	= models.DateTimeField(auto_now_add=True)
-
-	def __str__(self):
-		return self.name
 
 def volunteer_pre_save_receiver(sender, instance, *args, **kwargs):
 	if not instance.slug:

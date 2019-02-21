@@ -1,0 +1,409 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+	<h5><strong class="font-italic">The GDG Zamboanga Core Team</strong></h5>
+	{% if request.user.is_authenticated and request.user.is_superuser %}
+	    <a href="{% url 'team:create-member' %}" class="btn btn-sm btn-info mt-2">Add Member</a>
+	{% endif %}
+	<hr />
+	{% if member_list.count == 0 %}
+		<div class="card">
+		  	<div class="card-body">
+		    	<p class="card-text font-italic">
+		    		Looks like there are no members added!
+		    	</p>
+		  	</div>
+		</div>
+	{% else %}
+		<small>
+			<div class="row mt-5">
+				{% for member in member_list %}
+				<div class="col-6 col-lg-3 mb-5">
+					<div class="card text-center border-0">
+						{% if member.photo.url %}
+						    <div class="responsive-image rounded-circle" style="background-image: url({{ member.photo.url }});"></div>
+						{% else %}
+							<div class="responsive-image rounded-circle" style="background-image: url('https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg');"></div>
+						{% endif %}
+					  	<div class="card-body">
+					  		<p class="card-title mb-1">
+					  			<strong style="font-size: 1.3em;">
+						  			{{ member.firstname }} {{ member.lastname }}
+						  			<a 
+						  				href="#" data-toggle="modal" 
+						  				data-target="#informationModal{{member.id}}" 
+						  				style="font-size: .9em;">
+										<i class="fas fa-info-circle"></i>
+									</a>
+						  		</strong>
+					  		</p>
+					    	<p>
+								{% if member.facebook %}
+					    		    <a href="{{ member.facebook }}" target="_blank" style="font-size: 1.2em;color: #333;">
+										<i class="fab fa-facebook-f"></i>
+									</a>
+					    		{% endif %}
+								{% if member.twitter %}
+									<a href="{{ member.twitter }}" target="_blank" style="font-size: 1.2em;color: #333;">
+										<i class="fab fa-twitter"></i>
+									</a>
+								{% endif %}
+								{% if member.instagram %}
+									<a href="{{ member.instagram }}" target="_blank" style="font-size: 1.2em;color: #333;">
+										<i class="fab fa-instagram"></i>
+									</a>
+								{% endif %}
+								{% if member.website %}
+									<a href="{{ member.website }}" target="_blank" style="font-size: 1.2em;color: #333;">
+										<i class="fas fa-globe-asia"></i>
+									</a>
+								{% endif %}
+
+								{% if request.user.is_authenticated and request.user.is_superuser %}
+									|
+									{% if not member.memberuseraccount %}
+										<a 
+											href="#"
+											style="font-size: 1.2em;color: #FF6347;">
+											<i class="fas fa-user-plus"></i>
+										</a>
+									{% endif %}
+									<a href="{% url 'team:update-member' member.slug %}" style="font-size: 1.2em;color: #FF6347;">
+										<i class="fas fa-pencil-alt"></i>
+									</a>
+									<a 
+										href="#" data-toggle="modal" data-target="#confirmationModal{{member.id}}"
+										style="font-size: 1.2em;color: #FF6347;">
+										<i class="fas fa-trash"></i>
+									</a>
+									<!-- Modal -->
+									<div class="modal fade" id="confirmationModal{{member.id}}" tabindex="-1" role="dialog">
+									  	<div class="modal-dialog modal-dialog-centered" role="document">
+									    	<div class="modal-content">
+									      		<div class="modal-header">
+									        		<h5 class="modal-title">Confirm Member Deletion</h5>
+									      		</div>
+									      		<div class="modal-body text-center">
+									        		<p style="font-size: 1.3em;">Are you sure you want to delete <strong>{{ member.firstname }} {{ member.lastname }}</strong>?</p>
+									      		</div>
+									      		<div class="modal-footer">
+									        		<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
+									        		<a href="{% url 'team:delete-member' member.slug %}" class="btn btn-sm btn-danger">Confirm</a>
+									      		</div>
+									    	</div>
+									  	</div>
+									</div>
+								{% endif %}
+					    	</p>
+					  	</div>
+					</div>
+					<div class="modal fade" id="informationModal{{member.id}}" tabindex="-1" role="dialog">
+					  	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+					    	<div class="modal-content">
+					      		<div class="modal-header">
+					        		<h5 class="modal-title"><strong>{{ member.name }}</strong></h5>
+					      		</div>
+					      		<div class="modal-body" style="font-size: 1.2em;">
+
+					      			<div class="row">
+					      				<div class="col-sm-6">
+					      					<strong>Description</strong>
+					      					<p>{{ member.description }}</p>
+					      				</div>
+					      				<div class="col-sm-6">
+					      					<strong>Expertise</strong>
+					      					<p>{{ member.expertise }}</p>
+					      				</div>
+					      				<div class="col-sm-12">
+					      					<strong>Email</strong>
+					      					<p>{{ member.email }}</p>
+					      				</div>
+					      				<div class="col-sm-6">
+					      					<strong>Facebook</strong>
+					      					<p>
+					      						{{ member.facebook }} 
+					      						<a href="{{ member.facebook }}" target="_blank" style="font-size: .75em">
+					      							<i class="fas fa-external-link-alt"></i>
+					      						</a>
+					      					</p>
+					      				</div>
+					      				<div class="col-sm-6">
+					      					<strong>Twitter</strong>
+					      					<p>
+					      						{{ member.twitter }} 
+					      						<a href="{{ member.twitter }}" target="_blank" style="font-size: .75em">
+					      							<i class="fas fa-external-link-alt"></i>
+					      						</a>
+					      					</p>
+					      				</div>
+					      				<div class="col-sm-6">
+					      					<strong>Instagram</strong>
+					      					<p>
+					      						{{ member.instagram }} 
+					      						<a href="{{ member.instagram }}" target="_blank" style="font-size: .75em">
+					      							<i class="fas fa-external-link-alt"></i>
+					      						</a>
+					      					</p>
+					      				</div>
+					      				<div class="col-sm-6">
+					      					<strong>Website</strong>
+					      					<p>
+					      						{{ member.website }} 
+					      						<a href="{{ member.website }}" target="_blank" style="font-size: .75em">
+					      							<i class="fas fa-external-link-alt"></i>
+					      						</a>
+					      					</p>
+					      				</div>
+					      				<div class="col-sm-12">
+					      					<div class="row">
+					      						<div class="col-12 col-sm-4 mb-3">
+					      							<div class="row">
+					      								<div class="col-12">
+					      									<strong>Events (Speaker)</strong>
+					      								</div>
+					      								{% for event in member.event_set.all %}
+					      									<div class="col-12">
+						      									+ {{ event.title }}
+						      								</div>
+					      								{% endfor %}
+					      							</div>
+					      						</div>
+					      						<div class="col-12 col-sm-4 mb-3">
+					      							<div class="row">
+					      								<div class="col-12">
+					      									<strong>Sponsored Events</strong>
+					      								</div>
+					      								{% for event in member.sponsored_events.all %}
+					      									<div class="col-12">
+						      									+ {{ event.title }}
+						      								</div>
+					      								{% endfor %}
+					      							</div>
+					      						</div>
+					      						<div class="col-12 col-sm-4 mb-3">
+					      							<div class="row">
+					      								<div class="col-12">
+					      									<strong>Volunteered Events</strong>
+					      								</div>
+					      								{% for event in member.volunteered_events.all %}
+					      									<div class="col-12">
+						      									+ {{ event.title }}
+						      								</div>
+					      								{% endfor %}
+					      							</div>
+					      						</div>
+					      					</div>
+					      				</div>
+					      			</div>
+					      		</div>
+					    	</div>
+					  	</div>
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+		</small>
+	{% endif %}
+	
+	<div class="mt-5"></div>
+	<h5><strong class="font-italic">The GDG Zamboanga Volunteers</strong></h5>
+	{% if request.user.is_authenticated and request.user.is_superuser %}
+	    <a href="{% url 'team:create-volunteer' %}" class="btn btn-sm btn-info mt-2">Add Volunteers</a>
+	{% endif %}
+	<hr />
+
+	{% if volunteer_list.count == 0 %}
+		<div class="card">
+		  	<div class="card-body">
+		    	<p class="card-text font-italic">
+		    		Looks like there are no volunteers added!
+		    	</p>
+		  	</div>
+		</div>
+		<div style="height: 250px;"></div>
+	{% else %}
+		<small>
+			<div class="row mt-5">
+				{% for volunteer in volunteer_list %}
+				<div class="col-6 col-lg-3 mb-5">
+					<div class="card text-center border-0">
+						{% if volunteer.photo.url %}
+						    <div class="responsive-image rounded-circle" style="background-image: url({{ volunteer.photo.url }});"></div>
+						{% else %}
+							<div class="responsive-image rounded-circle" style="background-image: url('https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg');"></div>
+						{% endif %}
+					  	<div class="card-body">
+					  		<p class="card-title mb-1">
+					  			<strong style="font-size: 1.3em;">
+						  			{{ volunteer.firstname }} {{ volunteer.lastname }}
+						  			<a 
+						  				href="#" data-toggle="modal" 
+						  				data-target="#informationModalVol{{volunteer.id}}" 
+						  				style="font-size: .9em;">
+										<i class="fas fa-info-circle"></i>
+									</a>
+						  		</strong>
+					  		</p>
+					    	<p>
+								{% if volunteer.facebook %}
+					    		    <a href="{{ volunteer.facebook }}" target="_blank" style="font-size: 1.2em;color: #333;">
+										<i class="fab fa-facebook-f"></i>
+									</a>
+					    		{% endif %}
+								{% if volunteer.twitter %}
+									<a href="{{ volunteer.twitter }}" target="_blank" style="font-size: 1.2em;color: #333;">
+										<i class="fab fa-twitter"></i>
+									</a>
+								{% endif %}
+								
+								{% if volunteer.instagram %}
+									<a href="{{ volunteer.instagram }}" target="_blank" style="font-size: 1.2em;color: #333;">
+										<i class="fab fa-instagram"></i>
+									</a>
+								{% endif %}
+								
+								{% if volunteer.website %}
+									<a href="{{ volunteer.website }}" target="_blank" style="font-size: 1.2em;color: #333;">
+										<i class="fas fa-globe-asia"></i>
+									</a>
+								{% endif %}
+
+								{% if request.user.is_authenticated and request.user.is_superuser %}
+									 | 
+									<a href="#" data-toggle="modal" data-target="#migrateModalVol{{volunteer.id}}"
+										data-backdrop="static" data-keyboard="false" 
+										style="font-size: 1.2em; color: #FF6347;">
+										<i class="fas fa-level-up-alt"></i>
+									</a>
+									<a href="{% url 'team:update-volunteer' volunteer.slug %}" style="font-size: 1.2em; color: #FF6347;">
+										<i class="fas fa-pencil-alt"></i>
+									</a>
+									<a href="#" data-toggle="modal" data-target="#deletionModalVol{{volunteer.id}}"
+										data-backdrop="static" data-keyboard="false" 
+										style="font-size: 1.2em; color: #FF6347;">
+										<i class="fas fa-trash"></i>
+									</a>
+									<!-- Modal -->
+									<div class="modal fade" id="migrateModalVol{{volunteer.id}}" tabindex="-1" role="dialog">
+									  	<div class="modal-dialog modal-dialog-centered" role="document">
+									    	<div class="modal-content">
+									      		<div class="modal-header">
+									        		<h5 class="modal-title">Confirm Volunteer Migration</h5>
+									      		</div>
+									      		<div class="modal-body text-center">
+									        		<p style="font-size: 1.3em;">Are you sure you want to change <strong>{{ volunteer.firstname }} {{ volunteer.lastname }}</strong> from volunteer to a core member?</p>
+									      		</div>
+									      		<div class="modal-footer">
+									        		<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
+									        		<a href="{% url 'team:migrate-volunteer' volunteer.slug %}" class="btn btn-sm btn-danger">Confirm</a>
+									      		</div>
+									    	</div>
+									  	</div>
+									</div>
+									<!-- Modal -->
+									<div class="modal fade" id="deletionModalVol{{volunteer.id}}" tabindex="-1" role="dialog">
+									  	<div class="modal-dialog modal-dialog-centered" role="document">
+									    	<div class="modal-content">
+									      		<div class="modal-header">
+									        		<h5 class="modal-title">Confirm Volunteer Deletion</h5>
+									      		</div>
+									      		<div class="modal-body text-center">
+									        		<p style="font-size: 1.3em;">Are you sure you want to delete <strong>{{ volunteer.firstname }} {{ volunteer.lastname }}</strong>?</p>
+									      		</div>
+									      		<div class="modal-footer">
+									        		<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
+									        		<a href="{% url 'team:delete-volunteer' volunteer.slug %}" class="btn btn-sm btn-danger">Confirm</a>
+									      		</div>
+									    	</div>
+									  	</div>
+									</div>
+								{% endif %}
+					    	</p>
+					  	</div>
+					</div>
+					<div class="modal fade" id="informationModalVol{{volunteer.id}}" tabindex="-1" role="dialog">
+					  	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+					    	<div class="modal-content">
+					      		<div class="modal-header">
+					        		<h5 class="modal-title"><strong>{{ volunteer.name }}</strong></h5>
+					      		</div>
+					      		<div class="modal-body" style="font-size: 1.2em;">
+
+					      			<div class="row">
+					      				<div class="col-sm-6">
+					      					<strong>Description</strong>
+					      					<p>{{ volunteer.description }}</p>
+					      				</div>
+					      				<div class="col-sm-6">
+					      					<strong>Expertise</strong>
+					      					<p>{{ volunteer.expertise }}</p>
+					      				</div>
+					      				<div class="col-sm-12">
+					      					<strong>Email</strong>
+					      					<p>{{ volunteer.email }}</p>
+					      				</div>
+					      				<div class="col-sm-6">
+					      					<strong>Facebook</strong>
+					      					<p>
+					      						{{ volunteer.facebook }} 
+					      						<a href="{{ volunteer.facebook }}" target="_blank" style="font-size: .75em">
+					      							<i class="fas fa-external-link-alt"></i>
+					      						</a>
+					      					</p>
+					      				</div>
+					      				<div class="col-sm-6">
+					      					<strong>Twitter</strong>
+					      					<p>
+					      						{{ volunteer.twitter }} 
+					      						<a href="{{ volunteer.twitter }}" target="_blank" style="font-size: .75em">
+					      							<i class="fas fa-external-link-alt"></i>
+					      						</a>
+					      					</p>
+					      				</div>
+					      				<div class="col-sm-6">
+					      					<strong>Instagram</strong>
+					      					<p>
+					      						{{ volunteer.instagram }} 
+					      						<a href="{{ volunteer.instagram }}" target="_blank" style="font-size: .75em">
+					      							<i class="fas fa-external-link-alt"></i>
+					      						</a>
+					      					</p>
+					      				</div>
+					      				<div class="col-sm-6">
+					      					<strong>Website</strong>
+					      					<p>
+					      						{{ volunteer.website }} 
+					      						<a href="{{ volunteer.website }}" target="_blank" style="font-size: .75em">
+					      							<i class="fas fa-external-link-alt"></i>
+					      						</a>
+					      					</p>
+					      				</div>
+					      				<div class="col-sm-12">
+					      					<div class="row">
+					      						<div class="col-6">
+					      							<div class="row">
+					      								<div class="col-12">
+					      									<strong>Events Volunteered</strong>
+					      								</div>
+					      								{% for event in volunteer.event_set.all %}
+					      									<div class="col-4">
+						      									{{ event.title }}
+						      								</div>
+					      								{% endfor %}
+					      							</div>
+					      						</div>
+					      					</div>
+					      				</div>
+					      			</div>
+					      		</div>
+					    	</div>
+					  	</div>
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+		</small>
+	{% endif %}
+</div>
+{% endblock content %}

@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 # Inner app imports
-from .models import (Member, SiteCarousel, DynamicData,)
+from .models import (SiteCarousel, DynamicData,)
 
 # Constants
 USER_ROLES = {
@@ -15,27 +15,6 @@ USER_ROLES = {
 class LoginForm(AuthenticationForm):
 	username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Username'}))
 	password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}))
-
-
-class MemberForm(forms.ModelForm):
-	class Meta:
-		model = Member
-		fields = (
-			'photo', 'firstname', 'lastname', 'email', 'description',
-			'expertise', 'facebook', 'twitter', 'instagram', 'website',
-		)
-
-		widgets = {
-			'description': forms.Textarea(attrs={'rows': 3, 'cols': 20, 'id': 'member-description',}),
-			'expertise': forms.Textarea(attrs={'rows': 3, 'cols': 20, 'id': 'member-expertise',}),
-			'facebook': forms.URLInput(attrs={'id': 'member-facebook',}),
-			'twitter': forms.URLInput(attrs={'id': 'member-twitter',}),
-			'instagram': forms.URLInput(attrs={'id': 'member-instagram',}),
-			'website': forms.URLInput(attrs={'id': 'member-website',}),
-		}
-
-	def clean_photo(self):
-		return self.cleaned_data['photo'] or None
 
 
 class SubscriberForm(UserCreationForm):
