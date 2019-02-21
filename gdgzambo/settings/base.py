@@ -45,6 +45,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -118,8 +120,27 @@ USE_L10N = True
 
 USE_TZ = True
 
+# CRISPY FORM SETTINGS
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.1/howto/static-files/
-
+# STATIC FILES SETTINGS
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# CLOUDINARY  SETTINGS
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+cloudinary.config( 
+  cloud_name = "**********", 
+  api_key = "**********", 
+  api_secret = "**********" 
+)
+
+# MEETUP API SETTINGS
+import meetup.api
+MEETUP_CLIENT = meetup.api.Client('**********')
