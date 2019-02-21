@@ -75,7 +75,7 @@ def create_volunteer(request):
 
 @user_passes_test(lambda u: u.is_superuser)
 def update_volunteer(request, slug):
-	volunteer = get_object_or_404(Member, slug=slug)
+	volunteer = get_object_or_404(Volunteer, slug=slug)
 	if request.method == 'POST':
 		volunteer_form = VolunteerForm(request.POST, request.FILES, instance=volunteer)
 		if volunteer_form.is_valid():
