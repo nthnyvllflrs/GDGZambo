@@ -13,13 +13,11 @@ from .utils import unique_slug_generator
 from team.models import Member
 
 class Subscriber(models.Model):
-	user = models.OneToOneField(User, on_delete=models.CASCADE)
-	events = models.BooleanField(default=True)
-	blogs = models.BooleanField(default=True)
-	stories = models.BooleanField(default=True)
+	name = models.CharField(max_length=200)
+	email = models.EmailField(max_length=200)
 
 	def __str__(self):
-		return self.user.email
+		return self.name
 
 
 class UserAccount(models.Model):

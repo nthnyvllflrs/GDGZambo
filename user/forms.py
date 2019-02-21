@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 # Inner app imports
-from .models import (SiteCarousel, DynamicData,)
+from .models import (Subscriber, SiteCarousel, DynamicData,)
 
 # Constants
 USER_ROLES = {
@@ -17,15 +17,14 @@ class LoginForm(AuthenticationForm):
 	password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}))
 
 
-class SubscriberForm(UserCreationForm):
-	email = forms.EmailField(widget=forms.EmailInput(attrs={'required': True}))
+class SubscribeForm(forms.ModelForm):
 	class Meta:
-		model = User
-		fields = ('username', 'email', 'password1', 'password2',)
+		model = Subscriber
+		fields = ('name', 'email', )
 
 	def clean_email(self):
 		email = self.cleaned_data.get('email')
-		qs = User.objects.filter(email__iexact=email)
+		qs = Subscriber.objects.filter(email__iexact=email)
 		if qs.exists():
 			raise forms.ValidationError("A subscriber with that email already exists")
 		return email

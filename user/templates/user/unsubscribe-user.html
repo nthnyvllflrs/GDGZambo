@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container mt-5 mb-3">
+	<h5 class="font-italic">
+		<strong>Unsubscribe Form</strong>
+	</h5>
+	<hr />
+	<div class="row">
+		 <div class="col-sm-6 offset-sm-3">
+			<form method="POST">
+					<div class="card">
+						<div class="card-body">
+							{% csrf_token %}
+							<div class="form-group">
+						    <label>Email*</label>
+						    <input type="email" class="form-control" name="email" placeholder="example@example.com" required>
+						    <small class="form-text text-muted font-italic">Enter your email that was used during subscription...</small>
+						  </div>
+		    			<p><small>By unsubscribing to GDG Zamboanga you will no longer receive Event, Blog, and Story Notifications...</small></p>
+						</div>
+					</div>
+		    	<button type="submit" class="btn btn-block btn-dark mt-3" style="letter-spacing: 3px;">Unsubscribe</button>
+		    </form>
+		</div>
+	</div>
+
+	{% if success %}
+    <div class="modal fade" id="successModal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" >
+	  	<div class="modal-dialog modal-dialog-centered" role="document">
+	    	<div class="modal-content">
+      		<div class="modal-header">
+        		<h5 class="modal-title">Unsubscription Successfull</h5>
+      		</div>
+      		<div class="modal-body text-center">
+        		<p style="font-size: 1em;">
+        			See you again!
+        		</p>
+      		</div>
+      		<div class="modal-footer">
+      			<a href="{% url 'landing-page' %}" class="btn btn-sm btn-secondary">Ok</a>
+      		</div>
+	    	</div>
+	  	</div>
+		</div>
+    <script>
+      $(document).ready(function() {
+        $('#successModal').modal('show')
+      });
+    </script>
+	{% endif %}
+
+	{% if NoMatch %}
+    <div class="modal fade" id="successModal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" >
+	  	<div class="modal-dialog modal-dialog-centered" role="document">
+	    	<div class="modal-content">
+      		<div class="modal-header">
+        		<h5 class="modal-title">Email provided doesnt exist.</h5>
+      		</div>
+      		<div class="modal-body text-center">
+		        		<p style="font-size: 1em;">
+		        			The email you've provided did'nt match any existing email in our records.
+		        		</p>
+		      		</div>
+      		<div class="modal-footer">
+      			<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Ok</button>
+      		</div>
+	    	</div>
+	  	</div>
+		</div>
+    <script>
+      $(document).ready(function() {
+        $('#successModal').modal('show')
+      });
+    </script>
+	{% endif %}
+</div>
+{% endblock content %}

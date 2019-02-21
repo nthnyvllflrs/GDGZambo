@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5 mb-3">
+	<h5 class="font-italic">
+		<strong>Site Carousel Gallery</strong>
+	</h5>
+	<hr />
+
+	<form method="POST" enctype="multipart/form-data">
+		{% csrf_token %}
+		{{ site_carousel_formset }}
+		<input type="submit" name="submit" value="Upload Image(s)" 
+			class="btn btn-block btn-sm btn-dark mt-3" style="letter-spacing: 3px;">
+	</form>
+	<hr />
+
+	{% if image_list %}
+		<div class="row mt-3">
+			{% for image in image_list %}
+				<div class="col-sm-3 mb-3">
+					<img src="{{ image.image.url }}" width="100%" height="auto" class="img-thumbnail"/>
+					<a 
+						href="#" 
+						class="btn btn-block btn-sm btn-danger mt-1"
+						data-toggle="modal" data-target="#confirmationModal{{image.id}}"
+					>
+						Remove
+					</a>
+
+					<!-- Modal -->
+					<div class="modal fade" id="confirmationModal{{image.id}}" tabindex="-1" role="dialog">
+					  	<div class="modal-dialog modal-dialog-centered" role="document">
+					    	<div class="modal-content">
+					      		<div class="modal-header">
+					        		<h5 class="modal-title">Confirm Site Carousel Image Deletion</h5>
+					      		</div>
+					      		<div class="modal-body text-center">
+					        		Are you sure you want to delete image?
+					      		</div>
+					      		<div class="modal-footer">
+					        		<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
+					        		<a href="{% url 'user:delete-carousel-image' image.pk %}" class="btn btn-sm btn-danger">Confirm</a>
+					      		</div>
+					    	</div>
+					  	</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	{% endif %}
+</div>
+{% endblock content %}

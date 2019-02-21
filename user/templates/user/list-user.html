@@ -33,7 +33,28 @@
 							Administrator
 						{% endif %}
 						</td>
-						<td><small><a href="#">Remove</a></small></td>
+						<td>
+							<small><a href="#" data-toggle="modal" data-target="#confirmationModal{{user.id}}">
+								Remove
+							</a></small>
+							<!-- Modal -->
+							<div class="modal fade" id="confirmationModal{{user.id}}" tabindex="-1" role="dialog">
+							  	<div class="modal-dialog modal-dialog-centered" role="document">
+							    	<div class="modal-content">
+							      		<div class="modal-header">
+							        		<h5 class="modal-title">Confirm User Deletion</h5>
+							      		</div>
+							      		<div class="modal-body text-center">
+							        		Are you sure you want to delete <strong>{{user.username}}</strong>?
+							      		</div>
+							      		<div class="modal-footer">
+							        		<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
+							        		<a href="{% url 'user:delete-user' user.pk %}" class="btn btn-sm btn-danger">Confirm</a>
+							      		</div>
+							    	</div>
+							  	</div>
+							</div>
+						</td>
 					</tr>
 				{% endfor %}
 				</tbody>

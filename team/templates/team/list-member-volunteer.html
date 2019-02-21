@@ -62,9 +62,9 @@
 
 								{% if request.user.is_authenticated and request.user.is_superuser %}
 									|
-									{% if not member.memberuseraccount %}
+									{% if not member.useraccount %}
 										<a 
-											href="#"
+											href="{% url 'user:create-user' member.slug %}"
 											style="font-size: 1.2em;color: #FF6347;">
 											<i class="fas fa-user-plus"></i>
 										</a>
