@@ -24,8 +24,6 @@ def subscribe_user(request):
 		if subcribe_form.is_valid():
 			subscriber = subcribe_form.save()
 			success = True
-			UserLog.objects.create(user = request.user, description = "New Subscriber Attained. (%s)" % (subscriber.name,),)
-
 			t = threading.Thread(target=send_welcome_email(subscriber))
 			t.setDaemon = True
 			t.start()
@@ -41,7 +39,6 @@ def unsubscribe_user(request):
 		email = request.POST['email']
 		if Subscriber.objects.filter(email=email).exists():
 			subscriber = Subscriber.objects.get(email=email)
-			UserLog.objects.create(user = request.user, description = "A Subscriber Unsubscribed. (%s)" % (subscriber.name,),)
 			subscriber.delete()
 			success = True
 		else:
