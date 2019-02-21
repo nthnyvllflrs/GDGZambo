@@ -5,9 +5,8 @@
 		<h5 class="font-italic">
 			<strong>GDG Zamboanga Users</strong>
 		</h5>
-		<a href="#" class="btn btn-sm btn-info mt-2">User List</a>
-		<a href="#" class="btn btn-sm btn-info mt-2">User Logs</a>
-		<a href="#" class="btn btn-sm btn-info mt-2">Create User</a>
+		<a href="{% url 'user:list-user' %}" class="btn btn-sm btn-info mt-2">User List</a>
+		<a href="{% url 'user:user-logs' %}" class="btn btn-sm btn-info mt-2">User Logs</a>
 		<hr />
 
 		{% if user_list %}

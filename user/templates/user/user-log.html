@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5 mb-3">
+	<h5 class="font-italic">
+		<strong>GDG Zamboanga Users</strong>
+	</h5>
+	<a href="{% url 'user:list-user' %}" class="btn btn-sm btn-info mt-2">User List</a>
+	<a href="{% url 'user:user-logs' %}" class="btn btn-sm btn-info mt-2">User Logs</a>
+	<hr />
+
+	{% if log_list %}
+	<div class="table-responsive">
+		<table class="table table-sm text-center">
+			<thead>
+			    <tr>
+			      	<th scope="col">User</th>
+			      	<th scope="col">Timestamp</th>
+			      	<th scope="col">Description</th>
+			    </tr>
+			</thead>
+			<tbody>
+				{% for log in log_list %}
+				<tr>
+					<td>
+						{% if log.user == null %}
+						    <b>Visitor</b>
+						{% else %}
+							<b>{{ log.user.username|capfirst }}</b>
+						{% endif %}
+					</td>
+			        <td>
+			        	<small>{{ log.timestamp }}</small>
+				    </td>
+			        <td>
+			        	<small>{{ log.description }}</small>
+			        </td>
+			    </tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	{% else %}
+		<div class="card">
+		  	<div class="card-body">
+		    	<p class="card-text font-italic">
+		    		No User Logs are available.
+		    	</p>
+		  	</div>
+		</div>
+		<div style="height: 250px;"></div>
+	{% endif %}
+</div>
+{% endblock content %}

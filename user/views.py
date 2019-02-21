@@ -1,3 +1,5 @@
+import threading
+
 # Django imports
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import user_passes_test, login_required
@@ -9,6 +11,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 # Inner App imports
 from .models import (Subscriber, UserAccount, UserLog, SiteCarousel, DynamicData,)
 from .forms import (UserAccountForm, SubscribeForm, DynamicDataForm)
+from .utils import send_welcome_email
 
 # Outer App Imports
 from team.models import Member
@@ -22,6 +25,10 @@ def subscribe_user(request):
 			subscriber = subcribe_form.save()
 			success = True
 			UserLog.objects.create(user = request.user, description = "New Subscriber Attained. (%s)" % (subscriber.name,),)
+
+			t = threading.Thread(target=send_welcome_email(subscriber))
+			t.setDaemon = True
+			t.start()
 	else:
 		subcribe_form = SubscribeForm()
 	context = {'subcribe_form': subcribe_form, 'success': success}
@@ -56,6 +63,13 @@ def change_password_user(request):
 		form = PasswordChangeForm(request.user)
 	context = {'form': form,}
 	return render(request, 'user/change-password-user.html', context)
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def list_log(request):
+	log_list = UserLog.objects.order_by('-timestamp')
+	context = {'log_list': log_list,}
+	return render(request, 'user/user-log.html', context)
 
 
 @user_passes_test(lambda u: u.is_superuser)

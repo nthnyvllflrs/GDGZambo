@@ -3,23 +3,14 @@ from django.urls import path
 
 # Inner App Imports
 from .views import (
-	list_user,
-	create_user,
-	delete_user,
-	change_password_user,
-
-	subscribe_user,
-	unsubscribe_user,
-
-	change_dynamic_data,
-
-	update_view_site_carousel,
-	delete_site_carousel,
-)
+	list_user, create_user, delete_user, change_password_user, list_log,
+	subscribe_user, unsubscribe_user,
+	change_dynamic_data, update_view_site_carousel, delete_site_carousel,)
 
 urlpatterns = [
 	path('', list_user, name='list-user'),
 	path('dynamic-data/', change_dynamic_data, name='dynamic-data'),
+	path('logs/', list_log, name='user-logs'),
 
 	path('subscribe/', subscribe_user, name='subscribe-user'),
 	path('unsubscribe/', unsubscribe_user, name='unsubscribe-user'),
