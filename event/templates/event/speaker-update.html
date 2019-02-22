@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container mt-5 mb-3">
+	<h5 class="font-italic">
+		<strong>Speaker Update Form</strong>
+	</h5>
+	<hr />
+
+	<div class="row">
+		<div class="col-sm-6 offset-3">
+			<form method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<div class="row mb-2">
+					<div class="col">{{ speaker_form.photo|as_crispy_field }}</div>
+					<div class="col-sm-3 text-center">
+						<img src="{{ speaker.photo.url }}" width="150px" height="auto" class="img-thumbnail">
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6">{{ speaker_form.firstname|as_crispy_field }}</div>
+					<div class="col-sm-6">{{ speaker_form.lastname|as_crispy_field }}</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">{{ speaker_form.description|as_crispy_field }}</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">{{ speaker_form.expertise|as_crispy_field }}</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">{{ speaker_form.email|as_crispy_field }}</div>
+					<div class="col-sm-6">{{ speaker_form.facebook|as_crispy_field }}</div>
+					<div class="col-sm-6">{{ speaker_form.twitter|as_crispy_field }}</div>
+					<div class="col-sm-6">{{ speaker_form.instagram|as_crispy_field }}</div>
+					<div class="col-sm-6">{{ speaker_form.website|as_crispy_field }}</div>
+				</div>
+				<button type="submit" class="btn btn-block btn-dark" style="letter-spacing: 3px;">Update Speaker</button>
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock content %}

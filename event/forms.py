@@ -1,5 +1,5 @@
 # Django imports
-from django import form
+from django import forms
 
 # Inner App imports
 from .models import (
@@ -71,12 +71,12 @@ class EventForm(forms.ModelForm):
 		help_texts ={'registration': '*Complete event registration URL',}
 
 	def clean_meetup_ID(self):
-    meetup_ID = self.cleaned_data.get('meetup_ID')
-    try:
-    	meetup_event = settings.MEETUP_CLIENT.GetEvent({'id': meetup_ID})
-    except:
-    	raise forms.ValidationError("Meetup ID is invalid.")
-    return meetup_ID
+		meetup_ID = self.cleaned_data.get('meetup_ID')
+		try:
+			meetup_event = settings.MEETUP_CLIENT.GetEvent({'id': meetup_ID})
+		except:
+			raise forms.ValidationError("Meetup ID is invalid.")
+		return meetup_ID
 
 	def clean_banner(self):
 		return self.cleaned_data['banner'] or None
@@ -90,13 +90,13 @@ class FeedbackForm(forms.ModelForm):
 
 class EventStatisticForm(forms.ModelForm):
 	class Meta:
-		model = EventStatistic
+		model = EventStatistics
 		fields = ('male', 'female',)
 
 
 class EventStatisticManualCountForm(forms.ModelForm):
 	class Meta:
-		model = EventStatistic
+		model = EventStatistics
 		fields = ('manual_count',)
 
 

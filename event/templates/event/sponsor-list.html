@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container mt-5">
+	<h5><strong class="font-italic">GDG Zamboanga Sponsors</strong></h5>
+	{% if request.user.is_authenticated and request.user.useraccount.is_event_creator or request.user.is_superuser %}
+	    <a href="{% url 'event:sponsor-create' %}" class="btn btn-sm btn-info mt-2">Add Sponsor</a>
+	{% endif %}
+	<hr />
+
+	{% if sponsor_list.count == 0 %}
+		<div class="card">
+		  	<div class="card-body">
+		    	<p class="card-text font-italic">
+		    		Looks like there are no event sponsors added!
+		    	</p>
+		  	</div>
+		</div>
+		<div style="height: 250px;"></div>
+	{% else %}
+	<div id="sponsor-list">
+		<small>
+			<div class="row mt-5">
+				{% for sponsor in sponsor_list %}
+				<div class="col-6 col-lg-3 mb-5">
+					<div class="card text-center border-0">
+						{% if sponsor.photo.url %}
+						    <div class="responsive-image rounded-circle" style="background-image: url({{ sponsor.photo.url }});"></div>
+						{% else %}
+							<div class="responsive-image rounded-circle" style="background-image: url('https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg');"></div>
+						{% endif %}
+					  	<div class="card-body">
+					  		<p class="card-title mb-1">
+					  			<strong style="font-size: 1.3em;">
+						  			{{ sponsor.name }}
+						  			<a 
+						  				href="#" data-toggle="modal" 
+						  				data-target="#informationModal{{sponsor.id}}" 
+						  				style="font-size: .9em;">
+										<i class="fas fa-info-circle"></i>
+									</a>
+						  		</strong>
+					  		</p>
+					    	<p>
+								{% if sponsor.facebook %}
+					    		    <a href="{{ sponsor.facebook }}" target="_blank" style="font-size: 1.2em;color: #333;">
+										<i class="fab fa-facebook-f"></i>
+									</a>
+					    		{% endif %}
+								{% if sponsor.twitter %}
+									<a href="{{ sponsor.twitter }}" target="_blank" style="font-size: 1.2em;color: #333;">
+										<i class="fab fa-twitter"></i>
+									</a>
+								{% endif %}
+								
+								{% if sponsor.instagram %}
+									<a href="{{ sponsor.instagram }}" target="_blank" style="font-size: 1.2em;color: #333;">
+										<i class="fab fa-instagram"></i>
+									</a>
+								{% endif %}
+								
+								{% if sponsor.website %}
+									<a href="{{ sponsor.website }}" target="_blank" style="font-size: 1.2em;color: #333;">
+										<i class="fas fa-globe-asia"></i>
+									</a>
+								{% endif %}
+
+								{% if request.user.is_authenticated and request.user.useraccount.is_event_creator or request.user.is_superuser %}
+									 | 
+									<a href="{% url 'event:sponsor-update' sponsor.slug %}" style="font-size: 1.2em;color: #FF6347;">
+										<i class="fas fa-pencil-alt"></i>
+									</a>
+					  			    <a 
+					  			    	href="#" data-toggle="modal" data-target="#confirmationModal{{sponsor.id}}"
+					  			    	style="font-size: 1.2em;color: #FF6347;">
+										<i class="fas fa-trash"></i>
+									</a>
+
+									<!-- Modal -->
+									<div class="modal fade" id="confirmationModal{{sponsor.id}}" tabindex="-1" role="dialog">
+									  	<div class="modal-dialog modal-dialog-centered" role="document">
+									    	<div class="modal-content">
+									      		<div class="modal-header">
+									        		<h5 class="modal-title">Confirm Sponsor Deletion</h5>
+									      		</div>
+									      		<div class="modal-body text-center">
+								      				<p style="font-size: 1.2em;">Are you sure you want to delete <strong>{{ sponsor.name }}</strong>?</p>
+									      		</div>
+									      		<div class="modal-footer">
+									        		<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
+									        		<a href="{% url 'event:sponsor-delete' sponsor.slug %}" class="btn btn-sm btn-danger">Confirm</a>
+									      		</div>
+									    	</div>
+									  	</div>
+									</div>
+					  			{% endif %}
+					    	</p>
+					  	</div>
+					</div>
+					<div class="modal fade" id="informationModal{{sponsor.id}}" tabindex="-1" role="dialog">
+					  	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+					    	<div class="modal-content">
+					      		<div class="modal-header">
+					        		<h5 class="modal-title"><strong>{{ sponsor.name }}</strong></h5>
+					      		</div>
+					      		<div class="modal-body" style="font-size: 1.2em;">
+
+					      			<div class="row">
+					      				<div class="col-sm-6">
+					      					<strong>Description</strong>
+					      					<p>{{ sponsor.description }}</p>
+					      				</div>
+					      				<div class="col-sm-6">
+					      					<strong>Expertise</strong>
+					      					<p>{{ sponsor.expertise }}</p>
+					      				</div>
+					      				<div class="col-sm-12">
+					      					<strong>Email</strong>
+					      					<p>{{ sponsor.email }}</p>
+					      				</div>
+					      				<div class="col-sm-6">
+					      					<strong>Facebook</strong>
+					      					<p>
+					      						{{ sponsor.facebook }} 
+					      						<a href="{{ sponsor.facebook }}" target="_blank" style="font-size: .75em">
+					      							<i class="fas fa-external-link-alt"></i>
+					      						</a>
+					      					</p>
+					      				</div>
+					      				<div class="col-sm-6">
+					      					<strong>Twitter</strong>
+					      					<p>
+					      						{{ sponsor.twitter }} 
+					      						<a href="{{ sponsor.twitter }}" target="_blank" style="font-size: .75em">
+					      							<i class="fas fa-external-link-alt"></i>
+					      						</a>
+					      					</p>
+					      				</div>
+					      				<div class="col-sm-6">
+					      					<strong>Instagram</strong>
+					      					<p>
+					      						{{ sponsor.instagram }} 
+					      						<a href="{{ sponsor.instagram }}" target="_blank" style="font-size: .75em">
+					      							<i class="fas fa-external-link-alt"></i>
+					      						</a>
+					      					</p>
+					      				</div>
+					      				<div class="col-sm-6">
+					      					<strong>Website</strong>
+					      					<p>
+					      						{{ sponsor.website }} 
+					      						<a href="{{ sponsor.website }}" target="_blank" style="font-size: .75em">
+					      							<i class="fas fa-external-link-alt"></i>
+					      						</a>
+					      					</p>
+					      				</div>
+					      				<div class="col-sm-12">
+					      					<div class="row">
+					      						<div class="col-sm-12">
+					      							<strong>Events</strong>
+					      						</div>
+					      						{% for event in sponsor.event_set.all %}
+					      						<div class="col-sm-6">
+				      								+ {{ event.title }}
+					      						</div>
+					      						{% endfor %}
+					      					</div>
+					      				</div>
+					      			</div>
+					      		</div>
+					    	</div>
+					  	</div>
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+		</small>
+	</div>
+	{% endif %}
+</div>
+{% endblock content %}

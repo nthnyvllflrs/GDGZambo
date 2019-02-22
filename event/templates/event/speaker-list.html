@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container mt-5">
+	<h5><strong class="font-italic">GDG Zamboanga Speakers</strong></h5>
+	{% if request.user.is_authenticated and request.user.useraccount.is_event_creator or request.user.is_superuser %}
+	    <a href="{% url 'event:speaker-create' %}" class="btn btn-sm btn-info mt-2">Add Speaker</a>
+	{% endif %}
+	<hr />
+
+	{% if speaker_list.count == 0 %}
+		<div class="card">
+		  	<div class="card-body">
+		    	<p class="card-text font-italic">
+		    		Looks like there are no event speakers added!
+		    	</p>
+		  	</div>
+		</div>
+		<div style="height: 250px;"></div>
+	{% else %}
+	<div id="speaker-list">
+		<small>
+			<div class="row row-eq-height mt-5">
+				{% for speaker in speaker_list %}
+				<div class="col-6 col-lg-3 mb-5">
+					<div class="card text-center border-0">
+						{% if speaker.photo.url %}
+						    <div class="responsive-image rounded-circle" style="background-image: url({{ speaker.photo.url }});"></div>
+						{% else %}
+							<div class="responsive-image rounded-circle" style="background-image: url('https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg');"></div>
+						{% endif %}
+					  	<div class="card-body">
+					  		<p class="card-title mb-1">
+					  			<strong style="font-size: 1.3em;">
+						  			{{ speaker.firstname }} {{ speaker.lastname }}
+						  			<a 
+						  				href="#" data-toggle="modal" 
+						  				data-target="#informationModal{{speaker.id}}" 
+						  				style="font-size: .9em;">
+										<i class="fas fa-info-circle"></i>
+									</a>
+						  		</strong>
+					  		</p>
+					    	<p>
+					    		{% if speaker.facebook %}
+					    		    <a href="{{ speaker.facebook }}" target="_blank" style="font-size: 1.2em;color: #333;">
+										<i class="fab fa-facebook-f"></i>
+									</a>
+					    		{% endif %}
+								{% if speaker.twitter %}
+									<a href="{{ speaker.twitter }}" target="_blank" style="font-size: 1.2em;color: #333;">
+										<i class="fab fa-twitter"></i>
+									</a>
+								{% endif %}
+								
+								{% if speaker.instagram %}
+									<a href="{{ speaker.instagram }}" target="_blank" style="font-size: 1.2em;color: #333;">
+										<i class="fab fa-instagram"></i>
+									</a>
+								{% endif %}
+								
+								{% if speaker.website %}
+									<a href="{{ speaker.website }}" target="_blank" style="font-size: 1.2em;color: #333;">
+										<i class="fas fa-globe-asia"></i>
+									</a>
+								{% endif %}
+								
+								{% if request.user.is_authenticated and request.user.useraccount.is_event_creator or request.user.is_superuser %}
+									 | 
+									<a href="{% url 'event:speaker-update' speaker.slug %}" style="font-size: 1.2em;color: #FF6347;">
+										<i class="fas fa-pencil-alt"></i>
+									</a>
+					  			    <a 
+					  			    	href="#" data-toggle="modal" data-target="#confirmationModal{{speaker.id}}"
+					  			    	style="font-size: 1.2em;color: #FF6347;">
+										<i class="fas fa-trash"></i>
+									</a>
+
+									<!-- Modal -->
+									<div class="modal fade" id="confirmationModal{{speaker.id}}" tabindex="-1" role="dialog">
+									  	<div class="modal-dialog modal-dialog-centered" role="document">
+									    	<div class="modal-content">
+									      		<div class="modal-header">
+									        		<h5 class="modal-title">Confirm Speaker Deletion</h5>
+									      		</div>
+									      		<div class="modal-body text-center">
+									        		<p style="font-size: 1.2em;">Are you sure you want to delete <strong>{{ speaker.firstname }} {{ speaker.lastname }}</strong>?</p>
+									      		</div>
+									      		<div class="modal-footer">
+									        		<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
+									        		<a href="{% url 'event:speaker-delete' speaker.slug %}" class="btn btn-sm btn-danger">Confirm</a>
+									      		</div>
+									    	</div>
+									  	</div>
+									</div>
+					  			{% endif %}
+					    	</p>
+					  	</div>
+					</div>
+					<div class="modal fade" id="informationModal{{speaker.id}}" tabindex="-1" role="dialog">
+					  	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+					    	<div class="modal-content">
+					      		<div class="modal-header">
+					        		<h5 class="modal-title"><strong>{{ speaker.name }}</strong></h5>
+					      		</div>
+					      		<div class="modal-body" style="font-size: 1.2em;">
+
+					      			<div class="row">
+					      				<div class="col-sm-6">
+					      					<strong>Description</strong>
+					      					<p>{{ speaker.description }}</p>
+					      				</div>
+					      				<div class="col-sm-6">
+					      					<strong>Expertise</strong>
+					      					<p>{{ speaker.expertise }}</p>
+					      				</div>
+					      				<div class="col-sm-12">
+					      					<strong>Email</strong>
+					      					<p>{{ speaker.email }}</p>
+					      				</div>
+					      				<div class="col-sm-6">
+					      					<strong>Facebook</strong>
+					      					<p>
+					      						{{ speaker.facebook }} 
+					      						<a href="{{ speaker.facebook }}" target="_blank" style="font-size: .75em">
+					      							<i class="fas fa-external-link-alt"></i>
+					      						</a>
+					      					</p>
+					      				</div>
+					      				<div class="col-sm-6">
+					      					<strong>Twitter</strong>
+					      					<p>
+					      						{{ speaker.twitter }} 
+					      						<a href="{{ speaker.twitter }}" target="_blank" style="font-size: .75em">
+					      							<i class="fas fa-external-link-alt"></i>
+					      						</a>
+					      					</p>
+					      				</div>
+					      				<div class="col-sm-6">
+					      					<strong>Instagram</strong>
+					      					<p>
+					      						{{ speaker.instagram }} 
+					      						<a href="{{ speaker.instagram }}" target="_blank" style="font-size: .75em">
+					      							<i class="fas fa-external-link-alt"></i>
+					      						</a>
+					      					</p>
+					      				</div>
+					      				<div class="col-sm-6">
+					      					<strong>Website</strong>
+					      					<p>
+					      						{{ speaker.website }} 
+					      						<a href="{{ speaker.website }}" target="_blank" style="font-size: .75em">
+					      							<i class="fas fa-external-link-alt"></i>
+					      						</a>
+					      					</p>
+					      				</div>
+					      				<div class="col-sm-12">
+					      					<div class="row">
+					      						<div class="col-sm-12">
+					      							<strong>Events</strong>
+					      						</div>
+					      						{% for event in speaker.event_set.all %}
+					      						<div class="col-sm-6">
+				      								+ {{ event.title }}
+					      						</div>
+					      						{% endfor %}
+					      					</div>
+					      				</div>
+					      			</div>
+					      		</div>
+					    	</div>
+					  	</div>
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+		</small>
+	</div>
+	{% endif %}
+</div>
+{% endblock content %}
