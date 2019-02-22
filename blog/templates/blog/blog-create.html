@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container mt-5 mb-3">
+	<h5 class="font-italic">
+		<strong>Blog Creation Form</strong>
+	</h5>
+	<hr />
+	<form method="POST" enctype="multipart/form-data">
+		<div class="card">
+			<div class="card-body">
+				<h5 class="card-title font-italic">Blog Details</h5>
+					{% csrf_token %}
+					<div class="row">
+						<div class="col-sm-12">{{ blog_form.title|as_crispy_field }}</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">{{ blog_form.body|as_crispy_field }}</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">{{ blog_form.video_url|as_crispy_field }}</div>
+					</div>
+					<input type="hidden" name="form-TOTAL_FORMS" value="3" id="id_form-TOTAL_FORMS">
+					<input type="hidden" name="form-INITIAL_FORMS" value="0" id="id_form-INITIAL_FORMS">
+					<input type="hidden" name="form-MIN_NUM_FORMS" value="0" id="id_form-MIN_NUM_FORMS">
+					<input type="hidden" name="form-MAX_NUM_FORMS" value="1000" id="id_form-MAX_NUM_FORMS">
+					<div class="row mb-4">
+						{% for form in photo_formset %}
+							<div class="col-sm-4 mt-2">{{ form.image }}</div>
+						{% endfor %}
+					</div>
+					<small class="font-italic mt-1">Note: You may add additional photo(s) after blog creation...</small>
+			</div>
+		</div>
+		<div class="row mt-3">
+			<div class="col-sm-6 mb-3"><input type="submit" name="Draft" value="Draft" class="btn btn-block btn-dark"></div>
+			<div class="col-sm-6 mb-3">
+				<a href="#" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#confirmationModal" class="btn btn-block btn-success">
+					Publish
+				</a>
+			</div>
+		</div>
+		<!-- Modal -->
+		<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog">
+		  	<div class="modal-dialog modal-dialog-centered" role="document">
+		    	<div class="modal-content">
+		      		<div class="modal-header">
+		        		<h5 class="modal-title">Note</h5>
+		      		</div>
+		      		<div class="modal-body text-center">
+		        		<p style="font-size: 1em;">
+		        			This blog will not be published yet for it will pass the administrator for content review. Blog status will be set to <strong>waiting</strong>.
+		        		</p>
+		      		</div>
+		      		<div class="modal-footer">
+		        		<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
+		        		<input type="submit" name="Publish" value="Confirm" class="btn btn-sm btn-success">
+		      		</div>
+		    	</div>
+		  	</div>
+		</div>
+	</form>
+</div>
+{% endblock content %}

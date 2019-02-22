@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5 mb-3">
+	<div class="row">
+		<div class="col-sm">
+			<h5>
+				<strong class="font-italic">{{ blog.title }} Comments</strong>
+			</h5>
+		</div>
+		<div class="col-sm-2">
+			{% if not request.user == blog.author %}
+				<small>
+					<a 
+						href="{% url 'blog:blog-comment' blog.slug %}"
+						class="btn btn-sm btn-block btn-dark">Create A Comment
+					</a>
+				</small>
+			{% endif %}
+		</div>
+	</div>
+	<hr />
+	{% if comment_list %}
+		{% for comment in comment_list %}
+		<small>
+			<div class="card mb-3">
+			  <div class="card-body">
+			  	<h6 class="card-title">
+			  		<strong>{{ comment.name }}</strong> 
+			  		{% if request.user.is_authenticated and request.user.useraccount.is_blog_creator or request.user.is_superuser %}
+		  			    <a href="#" 
+		  			    	style="font-size: .75em;color: #FF6347;"
+		  			    	data-toggle="modal" data-target="#confirmationModal{{comment.id}}">
+							<i class="fas fa-trash"></i>
+						</a>
+		  			{% endif %}
+			  	</h6>
+			  	<small>{{ comment.timestamp|timesince }}</small>
+			  	<p class="card-text text-justify">{{ comment.comment|linebreaksbr }}</p>
+			  </div>
+			</div>
+		</small>
+
+		<!-- Modal -->
+		<div class="modal fade" id="confirmationModal{{comment.id}}" tabindex="-1" role="dialog">
+		  	<div class="modal-dialog modal-dialog-centered" role="document">
+		    	<div class="modal-content">
+		      		<div class="modal-header">
+		        		<h5 class="modal-title">Confirm Blog Comment Deletion</h5>
+		      		</div>
+		      		<div class="modal-body text-center">
+		        		Are you sure you want to delete the comment submitted by <strong>{{ comment.name }}</strong>?
+		      		</div>
+		      		<div class="modal-footer">
+		        		<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
+		        		<a href="{% url 'blog:blog-comment-delete' blog.slug comment.pk %}" class="btn btn-sm btn-danger">Confirm</a>
+		      		</div>
+		    	</div>
+		  	</div>
+		</div>
+		{% endfor %}
+	{% else %}	    
+		<div class="card">
+		  	<div class="card-body">
+		    	<p class="card-text font-italic">
+		    		Looks like there are no comments submitted.
+		    	</p>
+		  	</div>
+		</div>
+		<div style="height: 250px;"></div>
+	{% endif %}
+</div>
+{% endblock content %}

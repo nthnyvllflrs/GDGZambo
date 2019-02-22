@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+	<h5><strong class="font-italic">GDG Zamboanga Stories</strong></h5>
+	{% if request.user.is_authenticated and request.user.useraccount.is_blog_creator or request.user.is_superuser %}
+  	<a href="{% url 'story:story-list' %}" class="btn btn-sm btn-info mt-2">List</a>
+  	<a href="{% url 'story:story-published' %}" class="btn btn-sm btn-info mt-2">Published</a>
+		<a href="{% url 'story:story-draft' %}" class="btn btn-sm btn-info mt-2">Drafted / Waiting</a>
+		<a href="{% url 'story:story-create' %}" class="btn btn-sm btn-info mt-2">Create Story</a>
+		{% if request.user.is_superuser %}
+	    <a href="{% url 'story:story-waiting' %}" class="btn btn-sm btn-info mt-2">Waiting List</a>
+		{% endif %}
+	{% endif %}
+	<hr />
+	{% if story_list.count == 0 %}
+		<div class="card">
+		  	<div class="card-body">
+		    	<p class="card-text font-italic">
+		    		Looks like there are no stories posted yet. Stay tuned!
+		    	</p>
+		  	</div>
+		</div>
+		<div style="height: 250px;"></div>
+	{% else %}
+		{% for story in story_list %}
+			<div class="card mb-4">
+			  	<div class="card-body">
+			  		<h5 class="card-title mb-1">
+			  			<strong>{{ story.title }}</strong>
+			  			<small class="text-muted">
+			  			{% if not story.status == 'Publish' %}
+		  				    ({{ story.status}})
+			  			{% endif %}
+			  			</small>
+			  		</h5>
+			  		<small class="text-muted">Posted {{ story.timestamp|timesince }} ago</small>
+			    	<p class="card-text mt-3 text-justify">
+			    		{{ story.body|truncatechars:350 }}
+			    	</p>
+
+			   		{% if not story.status == 'Publish' %}
+			    		<a href="{% url 'story:story-view' story.slug %}" class="btn btn-sm btn-dark">Show More</a>
+			    		{% if request.user.is_authenticated and request.user.useraccount.is_blog_creator or request.user.is_superuser %}
+					   		<a href="{% url 'story:story-update' story.slug %}" class="btn btn-sm btn-dark">Update</a>
+					   		{% if story.status == 'Draft' %}
+						   		<a href="#" data-toggle="modal" data-backdrop="static" data-keyboard="false" 
+							    	data-target="#publishModal{{ story.id }}" class="btn btn-sm btn-success">
+										Publish
+									</a>
+									{% if not request.user.is_superuser %}
+									    <!-- Modal -->
+										<div class="modal fade" id="publishModal{{ story.id }}" tabindex="-1" role="dialog">
+										  	<div class="modal-dialog modal-dialog-centered" role="document">
+										    	<div class="modal-content">
+										      		<div class="modal-header">
+										        		<h5 class="modal-title">Note</h5>
+										      		</div>
+										      		<div class="modal-body text-center">
+										        		<p style="font-size: 1em;">
+										        			This story will not be published yet for it will pass the administrator for content review. Story status will be set to <strong>waiting</strong>.
+										        		</p>
+										      		</div>
+										      		<div class="modal-footer">
+										        		<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
+										        		<a href="{% url 'story:story-publish' story.slug 0 %}" class="btn btn-sm btn-success">Confirm</a>
+										      		</div>
+										    	</div>
+										  	</div>
+										</div>
+									{% else %}
+								    <div class="modal fade" id="publishModal{{ story.id }}" tabindex="-1" role="dialog">
+									  	<div class="modal-dialog modal-dialog-centered" role="document">
+									    	<div class="modal-content">
+									      		<div class="modal-header">
+									        		<h5 class="modal-title">Notify Story Subscribers?</h5>
+									      		</div>
+									      		<div class="modal-footer">
+															<a href="{% url 'story:story-publish' story.slug 1 %}" class="btn btn-sm btn-success">Yes</a>
+															<a href="{% url 'story:story-publish' story.slug 0 %}" class="btn btn-sm btn-dark">No</a>
+															<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
+									      		</div>
+									    	</div>
+									  	</div>
+										</div>
+									{% endif %}
+								{% endif %}
+					   		<a href="#" class="btn btn-sm btn-danger"
+					   			data-toggle="modal" data-target="#confirmationModal{{story.id}}"
+					   			data-backdrop="static" data-keyboard="false">
+					   			Delete
+					   		</a>
+					   		<!-- Modal -->
+								<div class="modal fade" id="confirmationModal{{story.id}}" tabindex="-1" role="dialog">
+							  	<div class="modal-dialog modal-dialog-centered" role="document">
+							    	<div class="modal-content">
+							      		<div class="modal-header">
+							        		<h5 class="modal-title">Confirm Story Deletion</h5>
+							      		</div>
+							      		<div class="modal-body text-center">
+							        		Are you sure you want to delete <strong>{{ story.title }}</strong>?
+							      		</div>
+							      		<div class="modal-footer">
+							        		<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
+							        		<a href="{% url 'story:story-delete' story.slug %}" class="btn btn-sm btn-danger">Confirm</a>
+							      		</div>
+							    	</div>
+							  	</div>
+							</div>
+						{% endif %}
+			    	{% else %}
+				    	<a href="{% url 'story:story-view' story.slug %}" class="btn btn-sm btn-dark">Show More</a>
+			    	{% endif %}
+			  	</div>
+			</div>
+		{% endfor %}
+	{% endif %}
+</div>
+{% endblock content %}

@@ -1,35 +1,6 @@
-import random, string
-
-from django.utils.text import slugify
-
-DONT_USE = ['create', 'list',]
-def random_string_generator(size=10, chars=string.ascii_lowercase + string.digits):
-	return ''.join(random.choice(chars) for _ in range(size))
-
-def unique_slug_generator(instance, new_slug=None):
-	if new_slug is not None:
-		slug = new_slug
-	else:
-		try: slug = slugify(instance.title)
-		except: slug = slugify(instance.name)
-
-	if slug in DONT_USE:
-		new_slug = "{slug}-{randstr}".format(slug=slug, randstr=random_string_generator(size=4))
-		return unique_slug_generator(instance, new_slug=new_slug)
-	Klass = instance.__class__
-	qs_exists = Klass.objects.filter(slug=slug).exists()
-	if qs_exists:
-		new_slug = "{slug}-{randstr}".format(
-		slug=slug,
-		randstr=random_string_generator(size=4)
-		)
-		return unique_slug_generator(instance, new_slug=new_slug)
-	return slug
-
-
 from django.conf import settings
 from django.core.mail import send_mail 
-
+from .models import Subscriber
 
 def sndml(subject=None, body=None, recipients_list=()):
 	email_subject = subject
@@ -40,29 +11,29 @@ def sndml(subject=None, body=None, recipients_list=()):
 
 
 def send_event_notification(instance):
-	subscriber_list = [ (subscriber.user.email) for subscriber in Subscriber.objects.filter(events=True)]
+	subscriber_list = [ (subscriber.email) for subscriber in Subscriber.objects.all()]
 	recipients_list = tuple(subscriber_list)
 
 	subject = 'New GDG Zamboanga Event <%s>' % (instance.title,)
-	body = instance.description[:200]
+	body = instance.description[:200] + '... Read full event details here https://gdgzambo.herokuapp.com/event/' + instance.slug 
 	sndml(subject, body, recipients_list)
 
 
 def send_blog_notification(instance):
-	subscriber_list = [ (subscriber.user.email) for subscriber in Subscriber.objects.filter(blogs=True)]
+	subscriber_list = [ (subscriber.email) for subscriber in Subscriber.objects.all()]
 	recipients_list = tuple(subscriber_list)
 
 	subject = 'New GDG Zamboanga Blog <%s>' % (instance.title,)
-	body = instance.body[:200]
+	body = instance.body[:200] + '... Read the full blog details here https://gdgzambo.herokuapp.com/blog/' + instance.slug 
 	sndml(subject, body, recipients_list)
 
 
 def send_story_notification(instance):
-	subscriber_list = [ (subscriber.user.email) for subscriber in Subscriber.objects.filter(stories=True)]
+	subscriber_list = [ (subscriber.email) for subscriber in Subscriber.objects.all()]
 	recipients_list = tuple(subscriber_list)
 
 	subject = 'New GDG Zamboanga Story <%s>' % (instance.title,)
-	body = instance.body[:200]
+	body = instance.body[:200] + '... Read full story here details https://gdgzambo.herokuapp.com/story/' + instance.slug 
 	sndml(subject, body, recipients_list)
 
 

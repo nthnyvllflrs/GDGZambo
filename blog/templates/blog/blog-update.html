@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container mt-5 mb-3">
+	<h5 class="font-italic">
+		<strong>Blog Update Form</strong>
+	</h5>
+	<hr />
+	<small>
+		<a href="{% url 'blog:blog-photo' blog.slug %}">Goto Blog Photo Gallery</a>
+	</small>
+	<form method="POST">
+		<div class="card mt-3">
+			<div class="card-body">
+				<h5 class="card-title font-italic">Blog Details</h5>
+					{% csrf_token %}
+					<div class="row">
+						<div class="col-sm-12">{{ blog_form.title|as_crispy_field }}</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">{{ blog_form.body|as_crispy_field }}</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">{{ blog_form.video_url|as_crispy_field }}</div>
+					</div>
+			</div>
+		</div>
+		{% if blog.status == 'Draft' %}
+		    <div class="row">
+				{% comment %}
+				    <div class="col-12 mt-3">
+					    <a href="#" data-toggle="modal" data-backdrop="static" data-keyboard="false" 
+					    	data-target="#confirmationModal" class="btn btn-block btn-dark">
+							Update Blog
+						</a>
+					</div>
+				{% endcomment %}
+				<input type="submit" name="Update" value="Update Blog" class="btn btn-sm btn-dark">
+			</div>
+		{% else %}
+			<div class="row">
+				<div class="col-sm-6 mt-3">
+				    <a href="#" data-toggle="modal" data-backdrop="static" data-keyboard="false" 
+				    	data-target="#confirmationModal" class="btn btn-block btn-dark">
+						Save as Draft
+					</a>
+				</div>
+				<div class="col-sm-6 mt-3">
+					<input type="submit" name="Update" value="Update Blog" class="btn btn-block btn-success">
+				</div>
+				<!-- Modal -->
+				<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+				  	<div class="modal-dialog modal-dialog-centered" role="document">
+				    	<div class="modal-content">
+				      		<div class="modal-header">
+				        		<h5 class="modal-title">Note</h5>
+				      		</div>
+				      		<div class="modal-body text-center">
+				        		<p style="font-size: 1em;">
+				        			Setting this blog as draft will remove its <strong>published/waiting</strong> status. Confirm?
+				        		</p>
+				      		</div>
+				      		<div class="modal-footer">
+				        		<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
+				        		<input type="submit" name="Draft" value="Yes" class="btn btn-sm btn-success">
+				      		</div>
+				    	</div>
+				  	</div>
+				</div>
+			</div>
+		{% endif %}
+	</form>
+
+	{% if updated %}
+        <div class="modal fade" id="updatedModal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" >
+		  	<div class="modal-dialog modal-dialog-centered" role="document">
+		    	<div class="modal-content">
+		      		<div class="modal-header">
+		        		<h5 class="modal-title">Note</h5>
+		      		</div>
+		      		<div class="modal-body text-center">
+		        		<p style="font-size: 1em;">
+		        			You've change the content of your blog. Blog status is now back to <strong>waiting</strong> for administrator to review new content.
+		        		</p>
+		      		</div>
+		      		<div class="modal-footer">
+		      			<a href="{% url 'blog:blog-list' %}" class="btn btn-sm btn-secondary">Ok</a>
+		      		</div>
+		    	</div>
+		  	</div>
+		</div>
+        <script>
+            $(document).ready(function() {
+                $('#updatedModal').modal('show')
+            });
+        </script>
+	{% endif %}
+</div>
+{% endblock content %}

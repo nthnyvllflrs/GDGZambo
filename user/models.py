@@ -6,9 +6,6 @@ from django.db.models.signals import pre_save
 # Import CloudinaryField for image 
 from cloudinary.models import CloudinaryField
 
-# Inner App imports
-from .utils import unique_slug_generator
-
 # Outer App Imports
 from team.models import Member
 

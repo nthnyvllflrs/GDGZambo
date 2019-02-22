@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+	<h1>
+		<strong>{{ blog.title }}</strong>
+	</h1>
+	<hr />
+	<p class="mt-2 text-justify">{{ blog.body|linebreaksbr }}</p>
+
+	{% if blog.status == 'Publish' and request.user != blog.author %}
+	    <a href="{% url 'blog:blog-comment' blog.slug %}" class="font-weight-bold font-italic">Goto Comments Page</a>
+	{% endif %}
+	
+	<h5 class="mt-4 font-italic">
+		<strong>Photos</strong>
+	</h5>
+	<hr />
+	{% if blog.photo_set.all.count == 0 %}
+	    <h6 class="font-weight-bold font-italic">No Photo(s) Uploaded</h6>
+	{% else %}
+	    <div class="row">
+			{% for photo in blog.photo_set.all %}
+				<div class="col-6 col-sm-3 mb-3">
+					<img src="{{ photo.image.url }}" width="250px" height="250px" class="img-thumbnail" />
+				</div>
+			{% endfor %}
+		</div>
+	{% endif %}
+
+	<h5 class="mt-4 font-italic">
+		<strong>Videos</strong>
+	</h5>
+	<hr />
+	{% if not blog.video_url %}
+	    <h6 class="font-weight-bold font-italic">No Video(s) Uploaded</h6>
+	{% else %}
+	    <div class="row">
+			<div class="col-12">
+				<div class="embed-responsive embed-responsive-16by9">
+				  	<iframe class="embed-responsive-item" src="{{ blog.video_url }}" allowfullscreen></iframe>
+				</div>
+			</div>
+		</div>
+	{% endif %}
+
+	<hr />
+	<div class="mb-3">
+		<small class="text-muted">
+			{{ blog.author|capfirst }}, {{ blog.timestamp|date:"d F Y" }}
+		</small> 
+		{% if request.user.is_authenticated and request.user == blog.author %}
+			| 
+			<small>
+				<a 
+					href="{% url 'blog:blog-update' blog.slug %}" 
+					style="font-size: 1em;color: #00F;"
+				>
+					<i class="fas fa-pencil-alt"></i>
+					Edit Blog
+				</a>
+				| 
+				<a 
+					href="#" data-toggle="modal" data-target="#confirmationModal"
+					data-backdrop="static" data-keyboard="false" 
+					style="font-size: 1em;color: #00F;"
+				>
+					<i class="fas fa-trash"></i>
+					Delete Blog
+				</a>
+			</small>
+			<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog">
+			  	<div class="modal-dialog modal-dialog-centered" role="document">
+			    	<div class="modal-content">
+			      		<div class="modal-header">
+			        		<h5 class="modal-title">Confirm Blog Deletion</h5>
+			      		</div>
+			      		<div class="modal-body text-center">
+			        		Are you sure you want to delete <strong>{{ blog.title }}</strong>?
+			      		</div>
+			      		<div class="modal-footer">
+			        		<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
+			        		<a href="{% url 'blog:blog-delete' blog.slug %}" class="btn btn-sm btn-danger">Confirm</a>
+			      		</div>
+			    	</div>
+			  	</div>
+			</div>
+		{% endif %}
+	</div>
+</div>
+{% endblock content %}

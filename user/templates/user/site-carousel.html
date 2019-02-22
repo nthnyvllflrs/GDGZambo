@@ -9,6 +9,7 @@
 
 	<form method="POST" enctype="multipart/form-data">
 		{% csrf_token %}
+		<p><small class="font-italic font-weight-bold">Note: Preferred image size is 1280x720 pixels</small></p>
 		{{ site_carousel_formset }}
 		<input type="submit" name="submit" value="Upload Image(s)" 
 			class="btn btn-block btn-sm btn-dark mt-3" style="letter-spacing: 3px;">

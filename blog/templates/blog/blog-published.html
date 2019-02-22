@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+	<h5><strong class="font-italic">GDG Zamboanga Blogs</strong></h5>
+	{% if request.user.is_authenticated and request.user.useraccount.is_blog_creator or request.user.is_superuser %}
+		<a href="{% url 'blog:blog-list' %}" class="btn btn-sm btn-info mt-2">List</a>
+	  	<a href="{% url 'blog:blog-published' %}" class="btn btn-sm btn-info mt-2">Published</a>
+		<a href="{% url 'blog:blog-draft' %}" class="btn btn-sm btn-info mt-2">Drafted / Saved</a>
+		<a href="{% url 'blog:blog-create' %}" class="btn btn-sm btn-info mt-2">Create Blog</a>
+		{% if request.user.is_superuser %}
+		    <a href="{% url 'blog:blog-waiting' %}" class="btn btn-sm btn-info mt-2">Waiting List</a>
+		{% endif %}
+	{% endif %}
+	<hr />
+	{% if blog_list.count == 0 %}
+		<div class="card">
+		  	<div class="card-body">
+		    	<p class="card-text font-italic">
+		    		Looks like there are no blogs published yet.
+		    	</p>
+		  	</div>
+		</div>
+		<div style="height: 250px;"></div>
+	{% else %}
+		{% for blog in blog_list %}
+			<div class="card mb-4">
+			  	<div class="card-body">
+			  		<h5 class="card-title mb-1">
+			  			<strong>{{ blog.title }}</strong>
+			  			<small class="text-muted">
+				  			<a 
+		  						href="{% url 'blog:blog-comment' blog.slug %}" 
+		  						class="font-weight-bold">
+		  						<span class="badge badge-primary">{{ blog.comment_set.count }}</span>
+		  					</a>
+			  			</small>
+			  		</h5>
+			  		<small class="text-muted">Posted {{ blog.timestamp|timesince }} ago</small>
+			    	<p class="card-text mt-3 text-justify">
+			    		{{ blog.body|truncatechars:350 }}
+			    	</p>
+	    			<a href="{% url 'blog:blog-view' blog.slug %}" class="btn btn-sm btn-dark">Show More</a>
+			   		<a href="{% url 'blog:blog-update' blog.slug %}" class="btn btn-sm btn-dark">Update</a>
+			   		<a 
+			   			href="#" data-toggle="modal" data-target="#confirmationModal{{blog.id}}"
+			   			data-backdrop="static" data-keyboard="false" 
+			   			class="btn btn-sm btn-danger"
+			   		>
+			   			Delete
+			   		</a>
+
+			   		<!-- Modal -->
+					<div class="modal fade" id="confirmationModal{{blog.id}}" tabindex="-1" role="dialog">
+					  	<div class="modal-dialog modal-dialog-centered" role="document">
+					    	<div class="modal-content">
+					      		<div class="modal-header">
+					        		<h5 class="modal-title">Confirm Blog Deletion</h5>
+					      		</div>
+					      		<div class="modal-body text-center">
+					        		Are you sure you want to delete <strong>{{ blog.title }}</strong>?
+					      		</div>
+					      		<div class="modal-footer">
+					        		<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
+					        		<a href="{% url 'blog:blog-delete' blog.slug %}" class="btn btn-sm btn-danger">Confirm</a>
+					      		</div>
+					    	</div>
+					  	</div>
+					</div>
+			  	</div>
+			</div>
+		{% endfor %}
+	{% endif %}
+</div>
+{% endblock content %}

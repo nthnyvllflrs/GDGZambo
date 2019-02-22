@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+	<h5><strong class="font-italic">GDG Zamboanga Stories</strong></h5>
+	{% if request.user.is_authenticated and request.user.useraccount.is_blog_creator or request.user.is_superuser %}
+	 	<a href="{% url 'story:story-list' %}" class="btn btn-sm btn-info mt-2">List</a>
+  	<a href="{% url 'story:story-published' %}" class="btn btn-sm btn-info mt-2">Published</a>
+		<a href="{% url 'story:story-draft' %}" class="btn btn-sm btn-info mt-2">Drafted / Waiting</a>
+		<a href="{% url 'story:story-create' %}" class="btn btn-sm btn-info mt-2">Create Story</a>
+		{% if request.user.is_superuser %}
+	    <a href="{% url 'story:story-waiting' %}" class="btn btn-sm btn-info mt-2">Waiting List</a>
+		{% endif %}
+	{% endif %}
+	<hr />
+	{% if story_list.count == 0 %}
+		<div class="card">
+		  	<div class="card-body">
+		    	<p class="card-text font-italic">
+		    		Looks like there are no strories that are on waiting status. Stay tuned!
+		    	</p>
+		  	</div>
+		</div>
+		<div style="height: 250px;"></div>
+	{% else %}
+		<div class="table-responsive">
+			<table class="table table-sm text-center">
+				<thead>
+				    <tr>
+				      	<th scope="col">Story Title</th>
+				      	<th scope="col">Author</th>
+				      	<th scope="col">---</th>
+				    </tr>
+				</thead>
+				<tbody>
+					{% for story in story_list %}
+					<tr>
+						<td>
+							{{ story.title }}
+						</td>
+				        <td>
+				        	{{ story.author }}
+					    </td>
+				        <td>
+				        	<a href="{% url 'story:story-view' story.slug %}" class="btn btn-sm btn-dark">Details</a>
+				        	<a href="#" data-toggle="modal" data-backdrop="static" data-keyboard="false" 
+						    	data-target="#confirmationModal" class="btn btn-sm btn-dark">
+								Publish
+							</a>
+
+				        	<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" 
+						    	data-backdrop="static" data-keyboard="false">
+							  	<div class="modal-dialog modal-dialog-centered" role="document">
+							    	<div class="modal-content">
+							      		<div class="modal-body text-center">
+							      			<div class="modal-header">
+								        		<h5 class="modal-title">Notify Story Subscribers?</h5>
+								      		</div>
+							      		</div>
+							      		<div class="modal-footer">
+							      			<a href="{% url 'story:story-publish' story.slug 1 %}" class="btn btn-sm btn-success">Yes</a>
+							      			<a href="{% url 'story:story-publish' story.slug 0 %}" class="btn btn-sm btn-secondary">No</a>
+							      			<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
+							      		</div>
+							    	</div>
+							  	</div>
+							</div>
+				        </td>
+				    </tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	{% endif %}
+</div>
+{% endblock content %}
