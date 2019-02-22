@@ -5,13 +5,13 @@ from bs4 import BeautifulSoup
 
 from django.contrib.auth.models import User
 from django.conf import settings
-from django.contrib.auth.decorators import login_required
-from django.db.models import Q
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.db.models import Q, Count, Sum
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
 from .models import (Sponsor, Speaker, Event, Feedback, EventStatistics, EventAttendance, Info,)
-from .forms import (SponsorForm, SpeakerForm, EventForm, FeedbackForm, EventStatisticForm,)
+from .forms import (SponsorForm, SpeakerForm, EventForm, FeedbackForm, EventStatisticForm, EventStatisticManualCountForm)
 
 from user.models import UserLog
 from user.utils import send_event_notification
@@ -208,7 +208,7 @@ def create_event(request, meetup_id):
 
 			EventStatistics.objects.create(event=event)
 			UserLog.objects.create(description = "New Event Created. (%s)" % (event.title,),)
-			if event.status == 'Publish':
+			if ('Yes' in request.POST) and event.status == 'Publish':
 				t = threading.Thread(target=send_event_notification(event))
 				t.setDaemon = True
 				t.start()
@@ -436,3 +436,123 @@ def list_published(request):
 	event_list = Event.objects.filter(author=request.user, status='Publish')
 	context = {'event_list': event_list}
 	return render(request, 'event/event-published.html', context)
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def event_data(request):
+	date_now = datetime.datetime.now().date()
+	date_from = request.GET.get('from')
+	date_to = request.GET.get('to')
+
+	event_list = Event.objects.filter(Q(date__range=(date_from, date_to)) & Q(date_to__lt=date_now))
+	top_attendee = EventAttendance.objects.values('member_name').annotate(num_events=Count('member_id')).order_by('-num_events', 'member_name')[:8]
+	gender_count = EventStatistics.objects.aggregate(Sum('manual_count'), Sum('male'), Sum('female'))
+
+	if not (gender_count['manual_count__sum'] == None or gender_count['manual_count__sum'] == 0):
+		gender_percentage = {
+			'male': round((int(gender_count['male__sum'])/int(gender_count['manual_count__sum']))*100, 2),
+			'female': round((int(gender_count['female__sum'])/int(gender_count['manual_count__sum']))*100, 2),}
+	else:
+		gender_percentage = {'male': 0, 'female': 0,}
+		gender_count['male__sum'], gender_count['female__sum'], gender_count['manual_count__sum'] = 0, 0, 0
+
+	context = {'gender_count': gender_count, 'gender_percentage': gender_percentage, 'top_attendee':top_attendee,'event_list': event_list,}
+	return render(request, 'event/event-data.html', context)
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def event_data_sync(request, id):
+	event = Event.objects.get(id=id)
+	meetup_event_attendance = settings.MEETUP_CLIENT.GetGroupEventsAttendance({'id': event.meetup_ID, 'urlname': 'gdgzamboanga'})
+	meetup_event_rsvps = settings.MEETUP_CLIENT.GetRsvps({'event_id': event.meetup_ID})
+
+	if EventStatistics.objects.filter(event=event).exists():
+		event_statistic = get_object_or_404(EventStatistics, event=event)
+		event_statistic.yes_rsvp = meetup_event_rsvps.results[0]['tallies']['yes']
+		event_statistic.no_rsvp = meetup_event_rsvps.results[0]['tallies']['no']
+		event_statistic.manual_count = meetup_event_rsvps.results[0]['tallies']['yes']
+		event_statistic.save()
+	else:
+		event_statistic = get_object_or_404(EventStatistics, event=event)
+		event_statistic.yes_rsvp = meetup_event_rsvps.results[0]['tallies']['yes']
+		event_statistic.no_rsvp = meetup_event_rsvps.results[0]['tallies']['no']
+		event_statistic.save()
+	
+	if EventAttendance.objects.filter(event_statistic=event_statistic).exists():
+		existing_attendace = EventAttendance.objects.filter(event_statistic=event_statistic)
+		member_id_list = [ member.member_id for member in existing_attendace ]
+
+		for member in meetup_event_attendance.items:
+			if not str(member['member']['id']) in member_id_list:
+				EventAttendance.objects.create(
+					event_statistic = event_statistic,
+					member_id = member['member']['id'],
+					member_name = member['member']['name'],
+				)
+	else:
+		for member in meetup_event_attendance.items:
+			EventAttendance.objects.create(
+				event_statistic = event_statistic,
+				member_id = member['member']['id'],
+				member_name = member['member']['name'],
+			)
+	return redirect('event:event-data-details', id=id) 
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def event_data_details(request, id):
+	event = Event.objects.get(id=id)
+	event_statistic = get_object_or_404(EventStatistics, event=event)
+	event_attendance = EventAttendance.objects.filter(event_statistic=event_statistic)
+	gender_percentage = {
+		'male': round((int(event_statistic.male)/int(event_statistic.manual_count))*100, 2),
+		'female': round((int(event_statistic.female)/int(event_statistic.manual_count))*100, 2),}
+	context = { 'event': event, 'event_statistic': event_statistic, 'event_attendance': event_attendance, 'gender_percentage': gender_percentage,}
+	return render(request, 'event/event-data-details.html', context)
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def attendees_list(request):
+	attendee_list = EventAttendance.objects.values('member_name').annotate(num_events=Count('member_id')).order_by('-num_events', 'member_name')
+	context = {'attendee_list': attendee_list,}
+	return render(request, 'event/event-data-attendees.html', context)
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def event_gender_count_update(request, id):
+	event = Event.objects.get(id=id)
+	event_statistic = get_object_or_404(EventStatistics, event=event)
+	error_message = None
+	if request.method == 'POST':
+		form = EventStatisticForm(request.POST, instance=event_statistic)
+		if form.is_valid():
+			statistic = form.save(commit=False)
+			if int(event_statistic.manual_count) == (int(statistic.male) + int(statistic.female)):
+				statistic.save()
+				return redirect('event:event-data-details', id=id)
+			else:
+				error_message = "Ooops! Total number of Males and Females does'nt match with the total RSVP/Manual Count."
+	else:
+		form = EventStatisticForm(instance=event_statistic)
+	context = {'error_message': error_message, 'event_statistic': event_statistic,'form': form,}
+	return render(request, 'event/event-data-gender-count.html', context)
+
+
+def event_manual_count_update(request, id):
+	event = Event.objects.get(id=id)
+	event_statistic = get_object_or_404(EventStatistics, event=event)
+	error_message = None
+	if request.method == 'POST':
+		form = EventStatisticManualCountForm(request.POST, instance=event_statistic)
+		if form.is_valid():
+			statistic = form.save(commit=False)
+			print(int(event_statistic.yes_rsvp), int(statistic.manual_count))
+			if int(event_statistic.yes_rsvp) <= int(statistic.manual_count):
+				statistic.save()
+				return redirect('event:event-data-details', id=id)
+			else:
+				error_message = "Ooops! Manual count is less than RSVP."
+	else:
+		form = EventStatisticManualCountForm(instance=event_statistic)
+	context = {'error_message': error_message, 'event_statistic': event_statistic, 'form': form,}
+	return render(request, 'event/event-data-manual-count.html', context)

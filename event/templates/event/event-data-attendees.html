@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+	<h5 class="font-italic">
+		<strong>Attendee List</strong>
+	</h5>
+	<hr />
+	<div class="row">
+		{% for attendee in attendee_list %}
+			<div class="col-4">
+				<div class="media">
+				  	<div class="media-body">
+					    <p>
+					    	<span class="badge badge-info">{{ attendee.num_events }}</span>
+						    &nbsp {{ attendee.member_name|title }}
+						</p>
+				  	</div>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+</div>
+{% endblock content %}

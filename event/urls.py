@@ -2,12 +2,11 @@ from django.urls import path
 
 from .views import(
 	list_speaker, create_speaker, update_speaker, delete_speaker,
-
 	list_sponsor, create_sponsor, update_sponsor, delete_sponsor,
-
+	event_data, event_data_sync, event_data_details, attendees_list, event_gender_count_update, event_manual_count_update,
 	list_upcoming_events, list_past_events, list_published, list_draft,
 	view_event, create_pre_event, create_event, update_event, delete_event,
-	publish_event,
+	publish_event, 
 )
 
 from .api import (
@@ -27,6 +26,13 @@ urlpatterns = [
 	path('sponsor/create/', create_sponsor, name='sponsor-create'),
 	path('sponsor/<slug:slug>/update/', update_sponsor, name='sponsor-update'),
 	path('sponsor/<slug:slug>/delete/', delete_sponsor, name='sponsor-delete'),
+
+	path('data/', event_data, name='event-data'),
+	path('data/<int:id>/sync/', event_data_sync, name='event-data-sync'),
+	path('data/<int:id>/', event_data_details, name='event-data-details'),
+	path('data/attendee-list/', attendees_list, name='event-data-attendees'),
+	path('data/<int:id>/gender/', event_gender_count_update, name='event-data-gender-count'),
+	path('data/<int:id>/manual-count/', event_manual_count_update, name='event-data-manual-count'),
 
 	path('upcoming/', list_upcoming_events, name='event-upcoming'),
 	path('past/', list_past_events, name='event-past'),

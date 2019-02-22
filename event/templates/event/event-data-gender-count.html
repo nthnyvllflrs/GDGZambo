@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container mt-5 mb-3">
+	<h5 class="font-italic">
+		<strong>Event Gender Count Update Form</strong>
+	</h5>
+	<hr />
+
+	<div class="row">
+		 <div class="col-sm-8 offset-sm-2">
+			<form method="POST">
+		    	{% csrf_token %}
+		    	<div class="row mt-3">
+					<div class="col-sm-6">
+						<label>Event Name:</label>
+						<h4>{{ event_statistic.event }}</h4>
+					</div>
+					<div class="col-sm-6">
+						<label>Attendee Count:</label>
+						<div class="row text-center">
+							<div class="col-6">
+								<h4>{{ event_statistic.yes_rsvp }}</h4>
+								<span>RSVP</span>
+							</div>
+							<div class="col-6">
+								<h4>{{ event_statistic.manual_count }}</h4>
+								<span>Manual Count</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<hr />
+		    	<div class="row">
+					<div class="col-sm-6">{{ form.male|as_crispy_field }}</div>
+					<div class="col-sm-6">{{ form.female|as_crispy_field }}</div>
+				</div>
+				<small class='text-danger'>
+					{% if error_message %}
+						{{ error_message }}
+					{% endif %}
+				</small>
+				<button type="submit" class="btn btn-block btn-dark mt-3" style="letter-spacing: 3px;">UPDATE GENDER COUNT</button>
+		    </form>
+		</div>
+	</div>
+</div>
+{% endblock content %}

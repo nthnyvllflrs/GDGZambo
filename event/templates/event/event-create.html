@@ -193,7 +193,25 @@
 
 		<div class="row mt-3">
 			<div class="col-sm-6 mb-3"><input type="submit" name="Draft" value="Draft" class="btn btn-block btn-dark"></div>
-			<div class="col-sm-6 mb-3"><input type="submit" name="Publish" value="Publish"  class="btn btn-block btn-success"></div>
+			<div class="col-sm-6 mb-3">
+				<a href="#" data-toggle="modal" data-target="#notifyModal" class="btn btn-block btn-success">
+					Publish
+				</a>
+			</div>
+			
+			<div class="modal fade" id="notifyModal" tabindex="-1" role="dialog">
+		  	<div class="modal-dialog modal-dialog-centered" role="document">
+		    	<div class="modal-content">
+	      		<div class="modal-header">
+	        		<h5 class="modal-title">Notify Event Subscribers?</h5>
+	      		</div>
+	      		<div class="modal-footer">
+	      			<input type="submit" name="No" value="No" class="btn btn-sm btn-dark">
+	      			<input type="submit" name="Yes" value="Yes" class="btn btn-sm btn-success">
+	      		</div>
+		    	</div>
+		  	</div>
+			</div>
 		</div>
 	</form>
 

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container mt-5 mb-3">
+	<h5 class="font-italic">
+		<strong>Event Manual Count Update Form</strong>
+	</h5>
+	<hr />
+
+	<div class="row">
+		 <div class="col-sm-6 offset-sm-3">
+			<form method="POST">
+		    	{% csrf_token %}
+		    	<div class="row mt-3">
+					<div class="col-sm-12">
+						<label>Event Name:</label>
+						<h4>{{ event_statistic.event }}</h4>
+					</div>
+				</div>
+				<hr />
+		    	<div class="row">
+					<div class="col-sm-6 text-center">
+						<div class="card text-center">
+							<div class="card-body">
+								<h6 class="card-title font-italic">RSVP</h6>
+								<strong style="font-size: 1.5em;">{{ event_statistic.yes_rsvp }}</strong>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-6">{{ form.manual_count|as_crispy_field }}</div>
+				</div>
+				<small class='text-danger'>
+					{% if error_message %}
+						{{ error_message }}
+					{% endif %}
+				</small>
+				<button type="submit" class="btn btn-block btn-dark mt-3" style="letter-spacing: 3px;">Update Manual Count</button>
+		    </form>
+		</div>
+	</div>
+</div>
+{% endblock content %}

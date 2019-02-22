@@ -15,7 +15,7 @@
 	{% endif %}
 
 	{% if request.user.is_superuser %}
-	    <a href="#" class="btn btn-sm btn-info mt-2">Statistics</a>
+	    <a href="{% url 'event:event-data' %}" class="btn btn-sm btn-info mt-2">Event Data</a>
 	{% endif %}
 	<hr />
 	{% if event_list.count == 0 %}

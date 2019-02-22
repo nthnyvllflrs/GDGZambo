@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-5">
+	<div class="row mb-3">
+		<div class="col-sm-6">
+			<div class="row">
+				<div class="col-sm-12">
+					<h5 class="font-italic">
+						<strong>Top Attendees</strong>
+						<small><a href="{% url 'event:event-data-attendees' %}">View All</a></small>
+					</h5>
+					<hr />
+				</div>
+				{% if top_attendee %}
+					{% for attendee in top_attendee %}
+						<div class="col-6 mb-3">
+							<p style="font-size: .80em;">{{ attendee.member_name|title }} ({{ attendee.num_events }})</p>
+						</div>
+					{% endfor %}
+				{% else %}
+					<div class="col-12">
+						<div class="card">
+						  	<div class="card-body">
+						    	<p class="card-text font-italic">
+						    		No event attendee data available
+						    	</p>
+						  	</div>
+						</div>
+					</div>
+				{% endif %}
+			</div>
+		</div>
+		<div class="col">
+			<div class="row">
+				<div class="col-12">
+					<h5 class="font-italic">
+						<strong>Gender Statistics</strong>
+					</h5>
+					<hr />
+				</div>
+				<div class="col-12">
+					<canvas id="genderChart" width="200" height="75"></canvas>	
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<hr />
+
+	<div class="container mt-5">
+		<form method="GET">
+			<div class="row text-center mb-3">
+				<div class="col-sm-12 mb-3 text-center">
+					<h3>List Of GDG Zamboanga Events</h3>
+				</div>
+				
+					<div class="col-sm-3">
+			  			<div class="form-group row text-center">
+			  				<label class="col-sm-2 col-form-label">From</label>
+			  				<div class="col-sm-10">
+			  					<input type="date" name="from" class="form-control" 
+									value="{% if request.GET.from %}{{ request.GET.from }}{% else %}{% now 'Y-m-d' %}{% endif %}">
+			  				</div>
+			  			</div>
+					</div>
+					<div class="col-sm-3">
+						<div class="form-group row text-center">
+			  				<label class="col-sm-2 col-form-label">To</label>
+			  				<div class="col-sm-10">
+			  					<input type="date" name="to" class="form-control" 
+									value="{% if request.GET.to %}{{ request.GET.to }}{% else %}{% now 'Y-m-d' %}{% endif %}">
+			  				</div>
+			  			</div>
+					</div>
+					<div class="col-sm-3">
+						<input type="submit" value="Search" class="btn btn-block btn-dark">
+					</div>
+				
+				<div class="col-sm-3">
+					<div class="form-group row">
+		  				<label class="col-sm-12 col-form-label">
+			  				<strong>{{ event_list.count }} Event(s) was retrieved.</strong>
+			  			</label>
+		  			</div>
+				</div>
+			</div>
+		</form>
+		{% if event_list %}
+			<table class="table table-sm">
+				<thead>
+					<tr>
+						<th scope="col" class="text-center">Date</th>
+						<th scope="col" class="text-center">Meetup ID</th>
+						<th scope="col" class="text-center">Event Name</th>
+						<th scope="col" class="text-center">RSVP</th>
+						<th scope="col" class="text-center">Manual Count</th>
+						<th scope="col" class="text-center">---</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for event in event_list %}
+					<tr>
+						<td class="text-center">{{ event.date|date:'m/d/Y' }}</td>
+						<td class="text-center">{{ event.meetup_ID }}</td>
+						<td>{{ event.title }}</td>
+						<td class="text-center">{{ event.eventstatistic.yes_rsvp }}</td>
+						<td class="text-center">{{ event.eventstatistic.manual_count }}</td>
+						<td class="text-center">
+							<a href="{% url 'event:event-data-sync' event.id %}">Sync</a>
+				      		&nbsp | &nbsp
+				      		<a href="{% url 'event:event-data-details' event.id %}">Details</a>
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		{% endif %}
+	</div>
+</div>
+
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+<script type="text/javascript">
+	var ctx = document.getElementById("genderChart").getContext('2d');
+	var myChart = new Chart(ctx, {
+	    type: 'doughnut',
+	    data: {
+	        labels: ["Girls", "Boys"],
+	        datasets: [{
+	            data: [parseInt("{{ gender_count.female__sum }}"), parseInt("{{ gender_count.male__sum }}")],
+	            backgroundColor: [
+	                'rgba(255, 99, 132, 0.2)',
+	                'rgba(54, 162, 235, 0.2)'
+	            ],
+	            borderColor: [
+	                'rgba(255,99,132,1)',
+	                'rgba(54, 162, 235, 1)'
+	            ],
+	            borderWidth: 2
+	        }]
+	    },
+	    options: {
+	        legend: {
+	            display: true,
+	            position: 'bottom',
+	            labels: {
+	                fontColor: 'rgb(255, 99, 132)'
+	            }
+	        }
+		}
+	});
+
+	var ctx = document.getElementById("attendanceChart").getContext('2d');
+	var myChart = new Chart(ctx, {
+	    type: 'line',
+	    data: {
+	        datasets: [{
+	        	fill: false,
+	        	showLine: true,
+	            data: [10,20,50,100,2,200],
+	            backgroundColor: [
+	                'rgba(255, 99, 132, 0.2)',
+	                'rgba(54, 162, 235, 0.2)'
+	            ],
+	            borderColor: [
+	                'rgba(255,99,132,1)',
+	                'rgba(54, 162, 235, 1)'
+	            ],
+	            borderWidth: 1
+	        }]
+	    },
+	    options: {}
+	});
+</script>
+{% endblock content %}
