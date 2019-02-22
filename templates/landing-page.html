@@ -166,7 +166,7 @@
 				<div class="card">
 				  	<div class="card-body">
 				    	<p class="card-text font-italic">
-				    		Looks like there are no upcoming events yet. Stay tuned!
+				    		Looks like there are no upcoming events yet. Stay tuned, or subscribe to be notified.
 				    	</p>
 				  	</div>
 				</div>
@@ -183,17 +183,27 @@
 					<hr />
 				</div>
 				<div class="col-sm-12">
-					{% with blog_list|first as latest_blog %}
-					<div class="card">
-				  	<div class="card-body">
-				    	<h6 class="card-title font-weight-bold">{{ latest_blog.title }}</h6>
-				    	<p class="card-text">
-				    		{{ latest_blog.body|truncatechars:200 }}... 
-				    	</p>
-				    	<a href="#" class="btn btn-sm btn-dark">Read More</a>
-					 	</div>
-					</div>
-					{% endwith %}
+					{% if  %}
+				    {% with blog_list|first as latest_blog %}
+						<div class="card">
+					  	<div class="card-body">
+					    	<h6 class="card-title font-weight-bold">{{ latest_blog.title }}</h6>
+					    	<p class="card-text">
+					    		{{ latest_blog.body|truncatechars:200 }}... 
+					    	</p>
+					    	<a href="{% url 'blog:blog-view' latest_blog.slug %}" class="btn btn-sm btn-dark">Read More</a>
+						 	</div>
+						</div>
+						{% endwith %}
+					{% else %}
+					    <div class="card">
+						  	<div class="card-body">
+						    	<p class="card-text font-italic">
+						    		Looks like there are no blogs yet. Stay tuned, or subscribe to notified.
+						    	</p>
+						  	</div>
+						</div>
+					{% endif %}
 				</div>
 			</div>
 		</div>
@@ -204,17 +214,27 @@
 					<hr />
 				</div>
 				<div class="col-sm-12">
-					{% with story_list|first as latest_story %}
-					<div class="card">
-				  	<div class="card-body">
-				    	<h6 class="card-title font-weight-bold">{{ latest_story.title }}</h6>
-				    	<p class="card-text">
-				    		{{ latest_story.body|truncatechars:200 }}... 
-				    	</p>
-				    	<a href="{% url 'story:story-view' latest_story.slug %}" class="btn btn-sm btn-dark">Read More</a>
-					 	</div>
-					</div>
-					{% endwith %}
+					{% if  %}
+					  	{% with story_list|first as latest_story %}
+						<div class="card">
+					  	<div class="card-body">
+					    	<h6 class="card-title font-weight-bold">{{ latest_story.title }}</h6>
+					    	<p class="card-text">
+					    		{{ latest_story.body|truncatechars:200 }}... 
+					    	</p>
+					    	<a href="{% url 'story:story-view' latest_story.slug %}" class="btn btn-sm btn-dark">Read More</a>
+						 	</div>
+						</div>
+						{% endwith %}
+					{% else %}
+					    <div class="card">
+						  	<div class="card-body">
+						    	<p class="card-text font-italic">
+						    		Looks like there are no stories yet. Stay tuned, or subscribe to notified.
+						    	</p>
+						  	</div>
+						</div>
+					{% endif %}
 				</div>
 			</div>
 		</div>
