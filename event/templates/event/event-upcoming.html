@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+	<h5><strong class="font-italic">GDG Zamboanga Events</strong></h5>
+	<div class="btn-group mt-2" role="group">
+	  <a href="{% url 'event:event-upcoming' %}" class="btn btn-sm btn-dark">Upcoming</a>
+		<a href="{% url 'event:event-past' %}" class="btn btn-sm btn-dark">Past</a>
+	</div>
+
+	{% if request.user.is_authenticated and request.user.useraccount.is_event_creator or request.user.is_superuser %}
+		<a href="{% url 'event:event-published' %}" class="btn btn-sm btn-info mt-2">Published</a>
+	    <a href="{% url 'event:event-draft' %}" class="btn btn-sm btn-info mt-2">Drafted / Saved</a>
+	    <a href="{% url 'event:event-pre-create' %}" class="btn btn-sm btn-info mt-2">Create Event</a>
+	{% endif %}
+
+	{% if request.user.is_superuser %}
+	    <a href="#" class="btn btn-sm btn-info mt-2">Statistics</a>
+	{% endif %}
+
+	<hr />
+
+	{% if e_events %}
+		{% for event in e_events %}
+			<div class="card mb-4">
+			  	<div class="card-body">
+			  		<h5 class="card-title mb-1">
+			  			<strong>{{ event.title }}</strong>
+			  			<small class="text-muted">
+		  					<a 
+		  						href="#" 
+		  						class="font-weight-bold">
+		  						<span class="badge badge-primary">{{ event.feedback_set.count }}</span>
+		  					</a>
+			  			</small>
+			  		</h5>
+			  		<small class="card-subtitle text-muted">{{ event.location }}</small>
+			  		, <small class="card-subtitle text-muted">{{ event.attendees }} Attendee(s)</small>
+			    	<p class="card-text mt-3 text-justify">
+			    		{{ event.description|truncatechars:350 }}
+			    	</p>
+			    	<a href="{% url 'event:event-view' event.slug %}" class="btn btn-sm btn-dark">Show More</a>
+		    		<a href="https://www.meetup.com/gdgzamboanga/events/{{ event.meetup_ID}}" target="_blank" class="btn btn-sm btn-primary">View On Meetup</a>
+			  	</div>
+			</div>
+		{% endfor %}
+		<hr />
+	{% endif %}
+
+
+	{% if event_list.count == 0 %}
+		<div class="card">
+		  	<div class="card-body">
+		    	<p class="card-text font-italic">
+		    		Looks like there are no upcoming events yet. Stay tuned!
+		    	</p>
+		  	</div>
+		</div>
+		<div style="height: 250px;"></div>
+	{% else %}
+		{% for event in event_list %}
+			<div class="card mb-4">
+			  	<div class="card-body">
+			  		<h5 class="card-title mb-1">
+			  			<strong>{{ event.title }}</strong>
+			  			<small class="text-muted">
+		  					<a 
+		  						href="#" 
+		  						class="font-weight-bold">
+		  						<span class="badge badge-primary">{{ event.feedback_set.count }}</span>
+		  					</a>
+			  			</small>
+			  		</h5>
+			  		<small class="card-subtitle text-muted">{{ event.location }}</small>
+			  		, <small class="card-subtitle text-muted">{{ event.attendees }} Attendee(s)</small>
+			    	<p class="card-text mt-3 text-justify">
+			    		{{ event.description|truncatechars:350 }}
+			    	</p>
+			    	<a href="{% url 'event:event-view' event.slug %}" class="btn btn-sm btn-dark">Show More</a>
+			    	{% if event.meetup_ID %}
+			    		<a href="https://www.meetup.com/gdgzamboanga/events/{{ event.meetup_ID}}" target="_blank" class="btn btn-sm btn-primary">View On Meetup</a>
+			    	{% endif %}
+			    	{% if event.registration %}
+			    		<a href="{{ event.registration }}" target="_blank" class="btn btn-sm btn-info">Register</a>
+			    	{% endif %}
+			  	</div>
+			</div>
+		{% endfor %}
+	{% endif %}
+</div>
+{% endblock content %}

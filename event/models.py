@@ -64,6 +64,7 @@ def speaker_pre_save_receiver(sender, instance, *args, **kwargs):
 		instance.slug = unique_slug_generator(instance)
 pre_save.connect(speaker_pre_save_receiver, sender=Speaker)
 
+
 class Event(models.Model):
 	meetup_ID 				= models.CharField(max_length=120)
 	author 						= models.ForeignKey(User, on_delete=models.CASCADE)
@@ -105,6 +106,7 @@ class Event(models.Model):
 def event_pre_save_receiver(sender, instance, *args, **kwargs):
 	if not instance.slug:
 		instance.slug = unique_slug_generator(instance)
+pre_save.connect(event_pre_save_receiver, sender=Event)
 
 
 class Feedback(models.Model):
@@ -152,3 +154,4 @@ class Info(models.Model):
 def info_pre_save_receiver(sender, instance, *args, **kwargs):
 	if not instance.slug:
 		instance.slug = unique_slug_generator(instance)
+pre_save.connect(info_pre_save_receiver, sender=Info)

@@ -70,14 +70,6 @@ class EventForm(forms.ModelForm):
 			'longitude': forms.TextInput(attrs={'readonly': 'readonly', 'hidden': 'hidden'}),}
 		help_texts ={'registration': '*Complete event registration URL',}
 
-	def clean_meetup_ID(self):
-		meetup_ID = self.cleaned_data.get('meetup_ID')
-		try:
-			meetup_event = settings.MEETUP_CLIENT.GetEvent({'id': meetup_ID})
-		except:
-			raise forms.ValidationError("Meetup ID is invalid.")
-		return meetup_ID
-
 	def clean_banner(self):
 		return self.cleaned_data['banner'] or None
 

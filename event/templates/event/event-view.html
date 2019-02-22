@@ -1,0 +1,265 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+	{% if banner_list.count != 0 %}
+	    {% for banner in banner_list %}
+			<img src="{{ banner.image.url }}" class="img-fluid" width="100%">
+		{% endfor %}
+	{% endif %}
+
+	<img src="{{ event.banner.url }}" class="img-fluid" width="100%">
+
+	<h3 class="mt-3">
+		<strong>{{ event.title }}</strong>
+	</h3>
+	<hr />
+
+	<div class="row">
+		<div class="col-sm-6">
+			<small class="font-weight-bold font-italic">
+				<i class="fas fa-table"></i>
+				WHEN
+			</small>
+			{% if event.date == event.date_to %}
+				<p class="mt-2"> {{ event.date|date:'l, F d, Y'}} <br /> {{ event.time|time:'f A' }} - {{ event.time_to|time:'f A' }}</p>
+			{% else %}
+				<p class="mt-2"> 
+					{{ event.date|date:'l, F d, Y'}}, {{ event.time|time:'f A' }} - <br />
+					{{ event.date_to|date:'l, F d, Y'}}, {{ event.time_to|time:'f A' }}
+				</p>
+			{% endif %}
+		</div>
+		<div class="col-sm-6">
+			<small class="font-weight-bold font-italic">
+				<i class="fas fa-map-marker-alt"></i>
+				WHERE
+			</small>
+			<p class="mt-2">{{ event.location }} 
+				<small>
+					({{ event.latitude|floatformat:2 }}, {{ event.longitude|floatformat:2 }})
+					<a href="#" data-toggle="modal" data-target="#locationMap">
+					  	<i class="fas fa-location-arrow"></i>
+					</a>
+				</small>
+			</p>
+		</div>
+	</div>
+
+	<small class="font-weight-bold font-italic">
+		<i class="fas fa-info-circle"></i>
+		DESCRIPTION
+	</small>
+	<p class="mt-2 text-justify">{{ event.description|linebreaksbr }}</p>
+
+	<h5 class="mt-4 font-italic">
+		<strong>Speakers</strong>
+	</h5>
+	<hr />
+
+	{% if event.speakers.count > 0 or event.member_speaker.count > 0 %}
+		<div class="row mb-3">
+	    	{% for speaker in event.speakers.all %}
+				<div class="col-12 col-sm-4 mb-3">
+					<div class="media">
+						{% if not speaker.photo %}
+							<img class="mr-3 img-fluid rounded-circle" src="https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg" width="60px" height="60px" />
+						{% else %}
+							<img class="mr-3 img-fluid rounded-circle" src="{{ speaker.photo.url }}" width="60px" height="60px" />
+						{% endif %}
+					  	<div class="media-body">
+						    <strong>{{ speaker.name }}</strong> <br>
+							<small>
+								{{ speaker.expertise }}
+				  			</small>
+					  	</div>
+					</div>
+				</div>
+			{% endfor %}
+			{% for member in event.member_speaker.all %}
+				<div class="col-12 col-sm-4 mb-3">
+					<div class="media">
+						{% if not member.photo %}
+							<img class="mr-3 img-fluid rounded-circle" src="https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg" width="60px" height="60px" />
+						{% else %}
+							<img class="mr-3 img-fluid rounded-circle" src="{{ member.photo.url }}" width="60px" height="60px" />
+						{% endif %}
+					  	<div class="media-body">
+						    <strong>{{ member.name }}</strong> <br>
+							<small>
+								{{ member.expertise }}
+				  			</small>
+					  	</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	{% else %}
+	    <h6 class="font-weight-bold font-italic mb-5">No Speakers Added</h6> 
+	{% endif %}
+
+	<h5 class="mt-4 font-italic">
+		<strong>Sponsors</strong>
+	</h5>
+	<hr />
+
+	{% if event.sponsors.count > 0 or event.member_sponsor.count > 0 %}
+		<div class="row mb-3">
+	    	{% for sponsor in event.sponsors.all %}
+				<div class="col-12 col-sm-4 mb-3">
+					<div class="media">
+						{% if not sponsor.photo %}
+							<img class="mr-3 img-fluid rounded-circle" src="https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg" width="60px" height="60px" />
+						{% else %}
+							<img class="mr-3 img-fluid rounded-circle" src="{{ sponsor.photo.url }}" width="60px" height="60px" />
+						{% endif %}
+					  	<div class="media-body">
+						    <strong>{{ sponsor.name }}</strong> <br>
+							<small>
+								{{ sponsor.description }}
+				  			</small>
+					  	</div>
+					</div>
+				</div>
+			{% endfor %}
+			{% for member in event.member_sponsor.all %}
+				<div class="col-12 col-sm-4 mb-3">
+					<div class="media">
+						{% if not member.photo %}
+							<img class="mr-3 img-fluid rounded-circle" src="https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg" width="60px" height="60px" />
+						{% else %}
+							<img class="mr-3 img-fluid rounded-circle" src="{{ member.photo.url }}" width="60px" height="60px" />
+						{% endif %}
+					  	<div class="media-body">
+						    <strong>{{ member.name }}</strong> <br>
+							<small>
+								{{ member.expertise }}
+				  			</small>
+					  	</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	{% else %}
+	    <h6 class="font-weight-bold font-italic mb-5">No Speakers Added</h6> 
+	{% endif %}
+
+	<h5 class="mt-4 font-italic">
+		<strong>Volunteers</strong>
+	</h5>
+	<hr />
+
+	{% if event.volunteers.count > 0 or event.member_volunteer.count > 0 %}
+		<div class="row mb-3">
+	    	{% for volunteer in event.volunteers.all %}
+				<div class="col-12 col-sm-4 mb-3">
+					<div class="media">
+						{% if not volunteer.photo %}
+							<img class="mr-3 img-fluid rounded-circle" src="https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg" width="60px" height="60px" />
+						{% else %}
+							<img class="mr-3 img-fluid rounded-circle" src="{{ volunteer.photo.url }}" width="60px" height="60px" />
+						{% endif %}
+					  	<div class="media-body">
+						    <strong>{{ volunteer.name }}</strong> <br>
+							<small>
+								{{ volunteer.description }}
+				  			</small>
+					  	</div>
+					</div>
+				</div>
+			{% endfor %}
+			{% for volunteer in event.member_volunteer.all %}
+				<div class="col-12 col-sm-4 mb-3">
+					<div class="media">
+						{% if not volunteer.photo %}
+							<img class="mr-3 img-fluid rounded-circle" src="https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg" width="60px" height="60px" />
+						{% else %}
+							<img class="mr-3 img-fluid rounded-circle" src="{{ volunteer.photo.url }}" width="60px" height="60px" />
+						{% endif %}
+					  	<div class="media-body">
+						    <strong>{{ volunteer.name }}</strong> <br>
+							<small>
+								{{ volunteer.expertise }}
+				  			</small>
+					  	</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	{% else %}
+	    <h6 class="font-weight-bold font-italic mb-5">No Volunteers Added</h6> 
+	{% endif %}
+
+	<a href="#" class="font-weight-bold font-italic">Goto Feedback Page</a>
+	<hr />
+	<div class="mb-3">
+		<small class="text-muted">{{ event.author|capfirst }}, {{ event.timestamp|date:"d F Y" }}</small> 
+		{% if request.user.is_authenticated and request.user.useraccount.is_event_creator or request.user.is_superuser %}
+		    | 
+			<small>
+				<a 
+					href="{% url 'event:event-update' event.slug %}" 
+					style="font-size: 1em;color: #00F;"
+				>
+					<i class="fas fa-pencil-alt"></i>
+					Edit Event
+				</a>
+				| 
+				<a 
+					href="#" data-toggle="modal" data-target="#confirmationModal"
+					style="font-size: 1em;color: #00F;"
+				>
+					<i class="fas fa-trash"></i>
+					Delete Event
+				</a>
+			</small>
+			<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog">
+			  	<div class="modal-dialog modal-dialog-centered" role="document">
+			    	<div class="modal-content">
+			      		<div class="modal-header">
+			        		<h5 class="modal-title">Confirm Event Deletion</h5>
+			      		</div>
+			      		<div class="modal-body text-center">
+			        		Are you sure you want to delete <strong>{{ event.title }}</strong>?
+			      		</div>
+			      		<div class="modal-footer">
+			        		<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
+			        		<a href="{% url 'event:event-delete' event.slug %}" class="btn btn-sm btn-danger">Confirm</a>
+			      		</div>
+			    	</div>
+			  	</div>
+			</div>
+		{% endif %}
+	</div>
+</div>
+
+<!-- GOOGLE MAP Modal -->
+<div class="modal fade" id="locationMap" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-center">
+      <div class="modal-body">
+      	<div id="map" style="width: 100%; height: 400px"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+    function displayMap() {
+    	var myLatlng = new google.maps.LatLng('{{event.latitude}}', '{{event.longitude}}');
+        var map = new google.maps.Map(document.getElementById('map'), {
+              center: myLatlng,
+              zoom: 18,
+              mapTypeId: 'roadmap',
+              disableDefaultUI: true,
+        });
+
+        var myMarker = new google.maps.Marker({
+		    position: myLatlng,
+		    map: map,
+		});
+    }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBLvHFeixDacvhmdX-L_0EoG4of6n0pM1A&libraries=places&callback=displayMap" async defer></script>
+{% endblock content %}

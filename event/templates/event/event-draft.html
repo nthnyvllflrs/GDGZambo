@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+	<h5><strong class="font-italic">GDG Zamboanga Events</strong></h5>
+	<div class="btn-group mt-2" role="group">
+	  <a href="{% url 'event:event-upcoming' %}" class="btn btn-sm btn-dark">Upcoming</a>
+		<a href="{% url 'event:event-past' %}" class="btn btn-sm btn-dark">Past</a>
+	</div>
+
+	{% if request.user.is_authenticated and request.user.useraccount.is_event_creator or request.user.is_superuser %}
+		<a href="{% url 'event:event-published' %}" class="btn btn-sm btn-info mt-2">Published</a>
+	    <a href="{% url 'event:event-draft' %}" class="btn btn-sm btn-info mt-2">Drafted / Saved</a>
+	    <a href="{% url 'event:event-pre-create' %}" class="btn btn-sm btn-info mt-2">Create Event</a>
+	{% endif %}
+
+	{% if request.user.is_superuser %}
+	    <a href="#" class="btn btn-sm btn-info mt-2">Statistics</a>
+	{% endif %}
+	
+	<hr />
+	{% if event_list.count == 0 %}
+		<div class="card">
+		  	<div class="card-body">
+		    	<p class="card-text font-italic">
+		    		Looks like there are no drafted/saved events yet.
+		    	</p>
+		  	</div>
+		</div>
+		<div style="height: 250px;"></div>
+	{% else %}
+		{% for event in event_list %}
+			<div class="card mb-4">
+			  	<div class="card-body">
+			  		<h5 class="card-title mb-1">
+			  			<strong>{{ event.title }}</strong>
+			  			<small class="text-muted">
+		  					({{ event.status }})
+			  			</small>
+			  		</h5>
+			  		<small class="card-subtitle text-muted">{{ event.location }}</small>
+			    	<p class="card-text mt-3 text-justify">
+			    		{{ event.description|truncatechars:350 }}
+			    	</p>
+			    	{% if request.user.is_authenticated and request.user.useraccount.is_event_creator or request.user.is_superuser %}
+				    	<a href="{% url 'event:event-view' event.slug %}" class="btn btn-sm btn-dark">Show More</a>
+				   		<a href="{% url 'event:event-update' event.slug %}" class="btn btn-sm btn-dark">Update</a>
+				   		<a href="#" data-toggle="modal" data-backdrop="static" data-keyboard="false" 
+					    	data-target="#subscriptionModal{{ event.id }}" class="btn btn-sm btn-info">
+							Publish
+						</a>
+
+			        	<div class="modal fade" id="subscriptionModal{{ event.id }}" tabindex="-1" role="dialog" 
+					    	data-backdrop="static" data-keyboard="false">
+						  	<div class="modal-dialog modal-dialog-centered" role="document">
+						    	<div class="modal-content">
+						      		<div class="modal-body text-center">
+						      			<div class="modal-header">
+							        		<h5 class="modal-title">Notify Blog Subscribers?</h5>
+							      		</div>
+						      		</div>
+						      		<div class="modal-footer">
+						      			<a href="{% url 'event:event-publish' event.slug 1 %}" class="btn btn-sm btn-success">Yes</a>
+						      			<a href="{% url 'event:event-publish' event.slug 0 %}" class="btn btn-sm btn-secondary">No</a>
+						      			<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
+						      		</div>
+						    	</div>
+						  	</div>
+						</div>
+
+				   		<a 
+				   			href="#" data-toggle="modal" data-target="#confirmationModal{{event.id}}"
+				   			class="btn btn-sm btn-danger">
+				   			Delete
+				   		</a>
+
+				   		<!-- Modal -->
+						<div class="modal fade" id="confirmationModal{{event.id}}" tabindex="-1" role="dialog">
+						  	<div class="modal-dialog modal-dialog-centered" role="document">
+						    	<div class="modal-content">
+						      		<div class="modal-header">
+						        		<h5 class="modal-title">Confirm Event Deletion</h5>
+						      		</div>
+						      		<div class="modal-body text-center">
+						        		Are you sure you want to delete <strong>{{ event.title }}</strong>?
+						      		</div>
+						      		<div class="modal-footer">
+						        		<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
+						        		<a href="{% url 'event:event-delete' event.slug %}" class="btn btn-sm btn-danger">Confirm</a>
+						      		</div>
+						    	</div>
+						  	</div>
+						</div>
+					{% endif %}
+			  	</div>
+			</div>
+		{% endfor %}
+	{% endif %}
+</div>
+{% endblock content %}

@@ -1,0 +1,421 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container mt-5 mt-3">
+	<h5 class="font-italic">
+		<strong>
+			Event Update Form 
+		</strong>
+	</h5>
+	<hr />
+	
+	<form method="POST" enctype="multipart/form-data">
+		{% csrf_token %}
+		<div class="card">
+			<div class="card-body">
+				<h5 class="card-title font-italic">Event Details</h5>
+				<div class="row">
+					<div class="col-sm-9">{{ event_form.title|as_crispy_field }}</div>
+					<div class="col-sm-3">{{ event_form.meetup_ID|as_crispy_field }}</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">{{ event_form.location|as_crispy_field }}</div>
+					<div class="col-sm-12">{{ event_form.latitude }}</div>
+					<div class="col-sm-12">{{ event_form.longitude }}</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label>From</label>
+							<div class="row">
+								<div class="col-sm-6">{{ event_form.date|as_crispy_field }}</div>
+								<div class="col-sm-6">{{ event_form.time|as_crispy_field }}</div>
+							</div>
+						</div>
+						
+					</div>
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label>To</label>
+							<div class="row">
+								<div class="col-sm-6">{{ event_form.date_to|as_crispy_field }}</div>
+								<div class="col-sm-6">{{ event_form.time_to|as_crispy_field }}</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">{{ event_form.description|as_crispy_field }}</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="card mt-3">
+			<div class="card-body">
+				<h5 class="card-title font-italic">Other Details</h5>
+				<div class="row">
+					<div class="col-sm-6">{{ event_form.registration|as_crispy_field }}</div>
+					<div class="col-sm-6">
+						{{ event_form.banner|as_crispy_field }}
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="card mt-3">
+			<div class="card-body">
+				<h5 class="card-title font-italic">
+					Event Speakers 
+					<a href="#" class="btn btn-sm" data-toggle="modal" data-target="#speakerModal">Add New Speaker</a>
+				</h5>
+
+				<div class="form-check">
+					<div class="row" id="speaker-checkgroup">
+						{% for speaker in speaker_list_2 %}
+							<div class="col-sm-4 mt-3">
+								<input type="checkbox" name="checked_speakers" id="option{{speaker.id}}" value={{speaker.id}} checked/>
+								<label for="speaker{{speaker.id}}">{{speaker.name}} </label><br />
+								<label for="speaker{{speaker.id}}">({{ speaker.description|truncatechars:30 }})</label>
+							</div>
+						{% endfor %}
+						{% for speaker in speaker_list %}
+							<div class="col-sm-4 mt-3">
+								<input type="checkbox" name="unchecked_speakers" id="option{{speaker.id}}" value={{speaker.id}} />
+								<label for="speaker{{speaker.id}}">{{speaker.name}}</label><br />
+								<label for="speaker{{speaker.id}}">({{ speaker.description|truncatechars:30 }})</label>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+				<hr />
+				<div class="form-check">
+					<div class="row" id="member-speaker-checkgroup">
+						{% for member in member_speaker_list_2 %}
+							<div class="col-sm-4 mt-3">
+								<input type="checkbox" name="checked_member_speakers" id="option{{member.id}}" value={{member.id}} checked/>
+								<label for="member{{member.id}}">{{member.name}}</label><br />
+								<label for="member{{member.id}}">({{ member.description|truncatechars:30 }})</label>
+							</div>
+						{% endfor %}
+						{% for member in member_speaker_list %}
+							<div class="col-sm-4 mt-3">
+								<input type="checkbox" name="unchecked_member_speakers" id="option{{member.id}}" value={{member.id}} />
+								<label for="member{{member.id}}">{{member.name}}</label><br />
+								<label for="member{{member.id}}">({{ member.description|truncatechars:30 }})</label>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="card mt-3">
+			<div class="card-body">
+				<h5 class="card-title font-italic">
+					Event Sponsors 
+					<a href="#" class="btn btn-sm" data-toggle="modal" data-target="#sponsorModal">Add New Sponsor</a>
+				</h5>
+
+				<div class="form-check">
+					<div class="row" id="sponsor-checkgroup">
+						{% for sponsor in sponsor_list_2 %}
+							<div class="col-sm-4 mt-3">
+								<input type="checkbox" name="checked_sponsors" id="option{{sponsor.id}}" value={{sponsor.id}} checked/>
+								<label for="sponsor{{sponsor.id}}">{{sponsor.name}}</label><br />
+								<label for="sponsor{{sponsor.id}}">({{ sponsor.description|truncatechars:30 }})</label>
+							</div>
+						{% endfor %}
+						{% for sponsor in sponsor_list %}
+							<div class="col-sm-4 mt-3">
+								<input type="checkbox" name="unchecked_sponsors" id="option{{sponsor.id}}" value={{sponsor.id}} />
+								<label for="sponsor{{sponsor.id}}">{{sponsor.name}}</label><br />
+								<label for="sponsor{{sponsor.id}}">({{ sponsor.description|truncatechars:30 }})</label>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+				<hr />
+				<div class="form-check">
+					<div class="row" id="member-sponsor-checkgroup">
+						{% for member in member_sponsor_list_2 %}
+							<div class="col-sm-4 mt-3">
+								<input type="checkbox" name="checked_member_sponsors" id="option{{member.id}}" value={{member.id}} checked/>
+								<label for="member{{member.id}}">{{member.name}}</label><br />
+								<label for="member{{member.id}}">({{ member.description|truncatechars:30 }})</label>
+							</div>
+						{% endfor %}
+						{% for member in member_sponsor_list %}
+							<div class="col-sm-4 mt-3">
+								<input type="checkbox" name="unchecked_member_sponsors" id="option{{member.id}}" value={{member.id}} />
+								<label for="member{{member.id}}">{{member.name}}</label><br />
+								<label for="member{{member.id}}">({{ member.description|truncatechars:30 }})</label>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="card mt-3">
+			<div class="card-body">
+				<h5 class="card-title font-italic">
+					Event Volunteers 
+					<a href="#" class="btn btn-sm" data-toggle="modal" data-target="#volunteerModal">Add New Volunteer</a>
+				</h5>
+
+				<div class="form-check">
+					<div class="row" id="volunteer-checkgroup">
+						{% for volunteer in volunteer_list_2 %}
+							<div class="col-sm-4 mt-3">
+								<input type="checkbox" name="checked_volunteers" id="option{{volunteer.id}}" value={{volunteer.id}} checked/>
+								<label for="volunteer{{volunteer.id}}">{{volunteer.name}}</label><br />
+								<label for="volunteer{{volunteer.id}}">({{ volunteer.description|truncatechars:30 }})</label>
+							</div>
+						{% endfor %}
+						{% for volunteer in volunteer_list %}
+							<div class="col-sm-4 mt-3">
+								<input type="checkbox" name="unchecked_volunteers" id="option{{volunteer.id}}" value={{volunteer.id}} />
+								<label for="volunteer{{volunteer.id}}">{{volunteer.name}}</label><br />
+								<label for="volunteer{{volunteer.id}}">({{ volunteer.description|truncatechars:30 }})</label>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+				<hr />
+				<div class="form-check">
+					<div class="row" id="member-volunteer-checkgroup">
+						{% for member in member_volunteer_list_2 %}
+							<div class="col-sm-4 mt-3">
+								<input type="checkbox" name="checked_member_volunteers" id="option{{member.id}}" value={{member.id}} checked/>
+								<label for="member{{member.id}}">{{member.name}}</label><br />
+								<label for="member{{member.id}}">({{ member.description|truncatechars:30 }})</label>
+							</div>
+						{% endfor %}
+						{% for member in member_volunteer_list %}
+							<div class="col-sm-4 mt-3">
+								<input type="checkbox" name="unchecked_member_volunteers" id="option{{member.id}}" value={{member.id}} />
+								<label for="member{{member.id}}">{{member.name}}</label><br />
+								<label for="member{{member.id}}">({{ member.description|truncatechars:30 }})</label>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+		<button type="submit" class="btn btn-block btn-dark mt-3" style="letter-spacing: 3px;">Update Event</button>
+	</form>
+</div>
+
+	<!-- Modal Form for Speakers -->
+	<div class="modal fade" id="speakerModal" tabindex="-1" role="dialog">
+	  	<div class="modal-dialog modal-dialog-centered" role="document">
+	    	<div class="modal-content">
+	      		<div class="modal-header">
+	        		<h5 class="modal-title">Add New Event Speaker</h5>
+	      		</div>
+	      		<div class="modal-body">
+	      			<form method="POST" id="speaker-form" enctype="multipart/form-data">
+	      				<div class="row">
+		      				<div class="col-sm-6">{{ speaker_form.firstname|as_crispy_field }}</div>
+		      				<div class="col-sm-6">{{ speaker_form.lastname|as_crispy_field }}</div>
+		      			</div>
+		      			<div class="row">
+		      				<div class="col-sm-12">{{ speaker_form.email|as_crispy_field }}</div>
+		      			</div>
+		      			<div class="row">
+		      				<div class="col-sm-12">{{ speaker_form.description|as_crispy_field }}</div>
+		      				<div class="col-sm-12">{{ speaker_form.expertise|as_crispy_field }}</div>
+		      			</div>
+		      			<div class="row">
+		      				<div class="col-sm-6">{{ speaker_form.facebook|as_crispy_field }}</div>
+		      				<div class="col-sm-6">{{ speaker_form.twitter|as_crispy_field }}</div>
+		      			</div>
+		      			<div class="row">
+		      				<div class="col-sm-6">{{ speaker_form.instagram|as_crispy_field }}</div>
+		      				<div class="col-sm-6">{{ speaker_form.website|as_crispy_field }}</div>
+		      			</div>
+		      			<div class="row">
+		      				<div class="col-sm-12">
+		      					<input type="submit" name="submit" value="Submit" class="btn btn-block btn-dark">
+		      				</div>
+		      			</div>
+	      			</form>
+	      		</div>
+	    	</div>
+	  	</div>
+	</div>
+
+	<!-- Modal Form for Sponsors -->
+	<div class="modal fade" id="sponsorModal" tabindex="-1" role="dialog">
+	  	<div class="modal-dialog modal-dialog-centered" role="document">
+	    	<div class="modal-content">
+	      		<div class="modal-header">
+	        		<h5 class="modal-title">Add New Event Sponsor</h5>
+	      		</div>
+	      		<div class="modal-body">
+	      			<form method="POST" id="sponsor-form">
+		        		<div class="row">
+		      				<div class="col-sm-12">{{ sponsor_form.name|as_crispy_field }}</div>
+		      				<div class="col-sm-12">{{ sponsor_form.email|as_crispy_field }}</div>
+		      				<div class="col-sm-12">{{ sponsor_form.description|as_crispy_field }}</div>
+		      			</div>
+		      			<div class="row">
+		      				<div class="col-sm-6">{{ sponsor_form.facebook|as_crispy_field }}</div>
+		      				<div class="col-sm-6">{{ sponsor_form.twitter|as_crispy_field }}</div>
+		      			</div>
+		      			<div class="row">
+		      				<div class="col-sm-6">{{ sponsor_form.instagram|as_crispy_field }}</div>
+		      				<div class="col-sm-6">{{ sponsor_form.website|as_crispy_field }}</div>
+		      			</div>
+		      			<div class="row">
+		      				<div class="col-sm-12">
+		      					<input type="submit" name="submit" value="Submit" class="btn btn-block btn-dark">
+		      				</div>
+		      			</div>
+	      			</form>
+	      		</div>
+	    	</div>
+	  	</div>
+	</div>
+
+	<!-- Modal Form for Volunteers -->
+	<div class="modal fade" id="volunteerModal" tabindex="-1" role="dialog">
+	  	<div class="modal-dialog modal-dialog-centered" role="document">
+	    	<div class="modal-content">
+	      		<div class="modal-header">
+	        		<h5 class="modal-title">Add New Event Volunteer</h5>
+	      		</div>
+	      		<div class="modal-body">
+	      			<form method="POST" id="volunteer-form" enctype="multipart/form-data">
+	      				<div class="row">
+		      				<div class="col-sm-6">{{ volunteer_form.firstname|as_crispy_field }}</div>
+		      				<div class="col-sm-6">{{ volunteer_form.lastname|as_crispy_field }}</div>
+		      			</div>
+		      			<div class="row">
+		      				<div class="col-sm-12">{{ volunteer_form.email|as_crispy_field }}</div>
+		      			</div>
+		      			<div class="row">
+		      				<div class="col-sm-12">{{ volunteer_form.description|as_crispy_field }}</div>
+		      				<div class="col-sm-12">{{ volunteer_form.expertise|as_crispy_field }}</div>
+		      			</div>
+		      			<div class="row">
+		      				<div class="col-sm-6">{{ volunteer_form.facebook|as_crispy_field }}</div>
+		      				<div class="col-sm-6">{{ volunteer_form.twitter|as_crispy_field }}</div>
+		      			</div>
+		      			<div class="row">
+		      				<div class="col-sm-6">{{ volunteer_form.instagram|as_crispy_field }}</div>
+		      				<div class="col-sm-6">{{ volunteer_form.website|as_crispy_field }}</div>
+		      			</div>
+		      			<div class="row">
+		      				<div class="col-sm-12">
+		      					<input type="submit" name="submit" value="Submit" class="btn btn-block btn-dark">
+		      				</div>
+		      			</div>
+	      			</form>
+	      		</div>
+	    	</div>
+	  	</div>
+	</div>
+
+	<script type="text/javascript">
+		function getCookie(name) {
+		    var cookieValue = null;
+		    if (document.cookie && document.cookie !== '') {
+		        var cookies = document.cookie.split(';');
+		        for (var i = 0; i < cookies.length; i++) {
+		            var cookie = jQuery.trim(cookies[i]);
+		            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+		                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+		                break;
+		            }
+		        }
+		    }
+		    return cookieValue;
+		}
+
+		$('#speaker-form').on('submit', function(event){
+		    event.preventDefault();
+		    $.ajax({
+				url: "{% url 'event:speaker-create-api' %}",
+				type: "POST",
+				data: {
+					'csrfmiddlewaretoken': getCookie('csrftoken'),
+					'firstname': $('#speaker-firstname').val(),
+					'lastname': $('#speaker-lastname').val(),
+					'email': $('#speaker-email').val(),
+					'description': $('#speaker-description').val(),
+					'expertise': $('#speaker-expertise').val(),
+					'facebook': $('#speaker-facebook').val(),
+					'twitter': $('#speaker-twitter').val(),
+					'instagram': $('#speaker-instagram').val(),
+					'website': $('#speaker-website').val(),
+				},
+				success: function(json) {
+					console.log(json)
+					console.log(json.id + ", " + json.name)
+					$("#speaker-checkgroup").append("<div class='col-sm-4 mt-3'><input type=checkbox name=unchecked_speakers id=option" + json.id + " value=" + json.id + " /> <label for='speaker" + json.id + "'>" + json.name + "</label><br /><small>(" + json.description + ")</small></div>");
+					$('#speakerModal').modal('toggle');
+				},
+				error: function(err) {
+					console.log(err)
+				}
+			})
+		});
+
+		$('#sponsor-form').on('submit', function(event){
+		    event.preventDefault();
+		    $.ajax({
+				url: "{% url 'event:sponsor-create-api' %}",
+				type: "POST",
+				data: {
+					'csrfmiddlewaretoken': getCookie('csrftoken'),
+					'name': $('#sponsor-name').val(),
+					'description': $('#sponsor-description').val(),
+					'facebook': $('#sponsor-facebook').val(),
+					'twitter': $('#sponsor-twitter').val(),
+					'instagram': $('#sponsor-instagram').val(),
+					'website': $('#sponsor-website').val(),
+				},
+				success: function(json) {
+					console.log(json)
+					console.log(json.id + ", " + json.name)
+					$("#sponsor-checkgroup").append("<div class='col-sm-4 mt-3'><input type=checkbox name=unchecked_sponsors id=option" + json.id + " value=" + json.id + " /> <label for='sponsor" + json.id + "'>" + json.name + "</label><br /><small>(" + json.description + ")</small></div>");
+					$('#sponsorModal').modal('toggle');
+				},
+				error: function(err) {
+					console.log(err)
+				}
+			})
+		});
+
+		$('#volunteer-form').on('submit', function(event){
+		    event.preventDefault();
+		    $.ajax({
+				url: "{% url 'team:create-volunteer-api' %}",
+				type: "POST",
+				data: {
+					'csrfmiddlewaretoken': getCookie('csrftoken'),
+					'firstname': $('#volunteer-firstname').val(),
+					'lastname': $('#volunteer-lastname').val(),
+					'email': $('#volunteer-email').val(),
+					'description': $('#volunteer-description').val(),
+					'expertise': $('#volunteer-expertise').val(),
+					'facebook': $('#volunteer-facebook').val(),
+					'twitter': $('#volunteer-twitter').val(),
+					'instagram': $('#volunteer-instagram').val(),
+					'website': $('#volunteer-website').val(),
+				},
+				success: function(json) {
+					console.log(json)
+					console.log(json.id + ", " + json.name)
+					$("#volunteer-checkgroup").append("<div class='col-sm-4 mt-3'><input type=checkbox name=unchecked_volunteers id=option" + json.id + " value=" + json.id + " /> <label for='volunteer" + json.id + "'>" + json.name + "</label>><br /><small>(" + json.description + ")</small></div>");
+					$('#volunteerModal').modal('toggle');
+				},
+				error: function(err) {
+					console.log(err)
+				}
+			})
+		});
+	</script>
+{% endblock content %}

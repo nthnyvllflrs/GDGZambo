@@ -2,19 +2,18 @@ from django.urls import path
 
 from .views import (
 	list_member_volunteer,
+	create_member, update_member, delete_member,
+	create_volunteer, update_volunteer, delete_volunteer, migrate_volunteer,
+)
 
-	create_member,
-	update_member,
-	delete_member,
-
-	create_volunteer,
-	update_volunteer,
-	delete_volunteer,
-	migrate_volunteer,
+from .api import (
+	create_volunteer_api
 )
 
 urlpatterns = [
 	path('', list_member_volunteer, name='list-member-volunteer'),
+
+	path('api/volunteer/create/', create_volunteer_api, name='create-volunteer-api'),
 
 	path('create/', create_member, name='create-member'),
 	path('<slug:slug>/update/', update_member, name='update-member'),
