@@ -176,14 +176,14 @@
 
 	<!-- BLOGS -->
 	<div class="row">
-		<div class="col-sm-6">
+		<div class="col-12 col-sm-6">
 			<div class="row">
 				<div class="col-sm-12">
 					<h5 class="mt-5"><strong class="font-italic">Latest Blog</strong></h5>
 					<hr />
 				</div>
 				<div class="col-sm-12">
-					{% if  %}
+					{% if blog_list %}
 				    {% with blog_list|first as latest_blog %}
 						<div class="card">
 					  	<div class="card-body">
@@ -207,14 +207,14 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-sm-6">
+		<div class="col-12 col-sm-6">
 			<div class="row">
 				<div class="col-sm-12">
 					<h5 class="mt-5"><strong class="font-italic">Latest Story</strong></h5>
 					<hr />
 				</div>
 				<div class="col-sm-12">
-					{% if  %}
+					{% if story_list %}
 					  	{% with story_list|first as latest_story %}
 						<div class="card">
 					  	<div class="card-body">

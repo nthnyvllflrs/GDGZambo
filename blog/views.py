@@ -170,7 +170,7 @@ def delete_blog(request, slug):
 	blog = get_object_or_404(Blog, slug=slug)
 	UserLog.objects.create(user = request.user, description = "Blog Removed. (%s)" % (blog.title,),)
 	blog.delete()
-	return redirect('blog:list')
+	return redirect('blog:blog-list')
 
 
 @login_required

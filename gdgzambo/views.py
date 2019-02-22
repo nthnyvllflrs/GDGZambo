@@ -10,8 +10,10 @@ def landing_page(request):
 	date_now = datetime.datetime.now().date()
 	gt_event = Event.objects.filter(date__gt=date_now)[:1]
 	e_event = Event.objects.filter(date=date_now)[:1]
-	blog_list = Blog.objects.order_by('-timestamp')[:1]
-	story_list = Story.objects.order_by('-timestamp')[:1]
+
+	blog_list = Blog.objects.filter(status='Publish').order_by('-timestamp')[:1]
+	story_list = Story.objects.filter(status='Publish').order_by('-timestamp')[:1]
+
 	image_list = SiteCarousel.objects.all()
 	dynamic = DynamicData.objects.filter(pk=1)
 	if dynamic:
