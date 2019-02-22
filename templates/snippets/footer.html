@@ -1,0 +1,85 @@
+{% load user_tags %}
+
+<div class="jumbotron jumbotron-fluid mb-0 mt-5" style="color: white; background-color: #092c30;">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-3 mt-2">
+				<p class="font-weight-bold mb-0">About GDG Zamboanga</p>
+				<ul style="list-style: none;padding: 0;font-size: .90em;" class="mb-0">
+					<li><a href="#" style="color: #FFF;">About</a></li>
+					<li><a href="#" style="color: #FFF;">Blogs</a></li>
+					<li><a href="#" style="color: #FFF;">Events</a></li>
+					<li><a href="#" style="color: #FFF;">Speakers</a></li>
+					<li><a href="#" style="color: #FFF;">Team</a></li>
+					<li><a href="#" style="color: #FFF;">Code Of Conduct</a></li>
+					{# <li><a href="#" style="color: #FFF;">Google Developers Page</a></li> #}
+				</ul>
+			</div>
+			<div class="col-sm-3 mt-2">
+				<p class="font-weight-bold mb-0">Get Involved</p>
+				<ul style="list-style: none;padding: 0;font-size: .90em;" class="mb-0">
+					<li><a href="{% become_a_sponsor_url %}" target="_blank" style="color: #FFF;">Become a Sponsor</a></li>
+					<li><a href="{% become_a_volunteer_url %}" target="_blank" style="color: #FFF;">Become a Volunteer</a></li>
+					<li><a href="{% speaker_request_url %}" target="_blank" style="color: #FFF;">Speaker Request</a></li>
+				</ul>
+			</div>
+			<div class="col-sm-3 mt-2">
+				<p class="font-weight-bold mb-0">Resources</p>
+				<ul style="list-style: none;padding: 0;font-size: .90em;" class="mb-0">
+					<li><a href="{% media_kit_url %}" target="_blank" style="color: #FFF;">Media Kit</a></li>
+					<li><a href="{% photo_gallery_url %}" target="_blank" style="color: #FFF;">Photo Gallery</a></li>
+				</ul>
+			</div>
+			<div class="col-sm-3 mt-2">
+				<p class="font-weight-bold mb-0">Contact Us</p>
+				<p>
+					<a href="{% google_plus_link %}" target="_blank" style="font-size: 1.5em;color: #FFF;">
+						<i class="fab fa-google-plus"></i>
+					</a>
+					
+					<a href="{% facebook_link %}" target="_blank" style="font-size: 1.5em;color: #FFF;">
+						<i class="fab fa-facebook-f"></i>
+					</a>
+					
+					<a href="{% twitter_link %}" target="_blank" style="font-size: 1.5em;color: #FFF;">
+						<i class="fab fa-twitter"></i>
+					</a>
+					
+					<a href="{% youtube_link %}" target="_blank" style="font-size: 1.5em;color: #FFF;">
+						<i class="fab fa-youtube"></i>
+					</a>
+					
+					<a href="{% instagram_link %}" target="_blank" style="font-size: 1.5em;color: #FFF;">
+						<i class="fab fa-instagram"></i>
+					</a>
+					
+					<a href="{% meetup_link %}" target="_blank" style="font-size: 1.5em;color: #FFF;">
+						<i class="fab fa-meetup"></i>
+					</a>
+				</p>
+				<ul style="list-style: none;padding: 0;font-size: .90em;" class="mb-0">
+					{% if request.user.is_authenticated %} 
+						{% if request.user.is_superuser %}
+							<li><a href="{% url 'user:site-carousel' %}" style="color: #FFF;">Site Carousel</a></li>
+						    <li><a href="{% url 'user:dynamic-data' %}" style="color: #FFF;">Change Dynamic Data</a></li>
+						{% endif %}
+						<li><a href="{% url 'user:change-password-user' %}" style="color: #FFF;">Change Password</a></li>
+						<li><a href="{% url 'logout' %}" style="color: #FFF;">Logout ({{ request.user.username }})</a></li>
+					{% else %}
+						<li><a href="{% url 'login' %}" style="color: #FFF;">Site Login</a></li>
+					{% endif %}
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+  	<a class="navbar-brand" href="#">
+    <img 
+        src="https://raw.githubusercontent.com/gdgphilippines/main-files/master/images/gdg-icon_large.png" 
+        style="margin: 10px 0px;" 
+        height="20px"
+      />
+    <strong style="letter-spacing: 2px;">GDG Zamboanga</strong>
+  </a>
+</nav>

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mt-5">
+        <div class="col-sm-4 offset-sm-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Site User Login</h5>
+                    <form method="post">
+                        {% csrf_token %}
+                        {% if form.errors %}
+                            <p>Your username and password didn't match. Please try again.</p>
+                        {% endif %}
+                        {% for field in form %}
+                            <div class="form-group">
+                                {{ field }}
+                            </div>
+                        {% endfor %}
+                        <button type="submit"  class="btn btn-block btn-dark" style="letter-spacing: 3px;">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

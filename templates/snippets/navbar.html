@@ -1,0 +1,49 @@
+<nav class="navbar navbar-expand-lg fixed-top navbar-dark navbar-custom">
+  <a class="navbar-brand" href="#">
+    <img 
+        src="https://raw.githubusercontent.com/gdgphilippines/main-files/master/images/gdg-icon_large.png" 
+        style="margin: 20px 0px;" 
+        height="25px"
+      />
+    <strong style="letter-spacing: 2px;">GDG Zamboanga</strong>
+  </a>
+  <button 
+    class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" 
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+  </button>
+  
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto"><!-- Intentionaly Blank --></ul>
+    <ul class="navbar-nav">
+      <li class="nav-item active mr-2">
+        <a class="nav-link red-border" href="#" style="letter-spacing: 1.5px;">
+          <span class="">Home</span>  
+        </a>
+      </li>
+      <li class="nav-item active mr-2">
+        <a class="nav-link blue-border" href="#" style="letter-spacing: 1.5px;">Events</a>
+      </li>
+      <li class="nav-item active mr-2">
+        <a class="nav-link green-border" href="#" style="letter-spacing: 1.5px;">Blogs</a>
+      </li>
+      <li class="nav-item active mr-2">
+        <a class="nav-link yellow-border" href="#" style="letter-spacing: 1.5px;">Stories</a>
+      </li>
+      <li class="nav-item active mr-2">
+        <a class="nav-link red-border" href="#" style="letter-spacing: 1.5px;">Speakers</a>
+      </li>
+      <li class="nav-item active mr-2">
+        <a class="nav-link blue-border" href="#" style="letter-spacing: 1.5px;">Sponsors</a>
+      </li>
+      <li class="nav-item active mr-2">
+        <a class="nav-link green-border" href="{% url 'team:list-member-volunteer' %}" style="letter-spacing: 1.5px;">Team</a>
+      </li>
+      {% if user.is_superuser %}
+        <li class="nav-item active mr-2">
+          <a class="nav-link yellow-border" href="{% url 'user:list-user' %}" style="letter-spacing: 1.5px;">Users</a>
+        </li>
+      {% endif %}
+    </ul>
+  </div>
+</nav>
