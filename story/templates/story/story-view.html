@@ -18,7 +18,7 @@
 	    <div class="row">
 			{% for image in story.image_set.all %}
 				<div class="col-6 col-sm-3 mb-3">
-					<img src="{{ image.photo.url }}" width="250px" height="250px" class="img-fluid img-thumbnail"/>
+					<img src="{{ image.photo.secure_url }}" width="250px" height="250px" class="img-fluid img-thumbnail"/>
 				</div>
 			{% endfor %}
 		</div>

@@ -45,7 +45,7 @@
 		<div class="row mt-3">
 			{% for image in image_set %}
 				<div class="col-6 col-sm-3">
-					<img src="{{ image.photo.url }}" width="250px" height="250px" class="img-fluid img-thumbnail"/>
+					<img src="{{ image.photo.secure_url }}" width="250px" height="250px" class="img-fluid img-thumbnail"/>
 					<a href="#" class="btn btn-block btn-sm btn-danger mt-1"
 						data-toggle="modal" data-target="#confirmationModal{{image.id}}"
 						data-backdrop="static" data-keyboard="false" >

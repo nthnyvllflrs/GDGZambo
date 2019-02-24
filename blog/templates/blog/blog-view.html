@@ -22,7 +22,7 @@
 	    <div class="row">
 			{% for photo in blog.photo_set.all %}
 				<div class="col-6 col-sm-3 mb-3">
-					<img src="{{ photo.image.url }}" width="250px" height="250px" class="img-thumbnail" />
+					<img src="{{ photo.image.secure_url }}" width="250px" height="250px" class="img-thumbnail" />
 				</div>
 			{% endfor %}
 		</div>
