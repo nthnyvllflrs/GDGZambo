@@ -12,7 +12,7 @@ from team.models import Member
 class Subscriber(models.Model):
 	name = models.CharField(max_length=200)
 	email = models.EmailField(max_length=200)
-	code = models.CharField(max_length=100, null=True, blank=True)
+	code = models.CharField(max_length=100)
 
 	def __str__(self):
 		return self.name
