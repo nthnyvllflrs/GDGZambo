@@ -402,7 +402,7 @@ def delete_event(request, slug):
 	event = get_object_or_404(Event, slug=slug)
 	UserLog.objects.create(user = request.user, description = "Event Removed. (%s)" % (event.title,),)
 	event.delete()
-	return redirect('event:list-event')
+	return redirect('event:event-upcoming')
 
 
 @login_required

@@ -6,7 +6,7 @@
 	{% if request.user.is_authenticated and request.user.useraccount.is_blog_creator or request.user.is_superuser %}
 		<a href="{% url 'blog:blog-list' %}" class="btn btn-sm btn-info mt-2">List</a>
 	  	<a href="{% url 'blog:blog-published' %}" class="btn btn-sm btn-info mt-2">Published</a>
-		<a href="{% url 'blog:blog-draft' %}" class="btn btn-sm btn-info mt-2">Drafted / Saved</a>
+		<a href="{% url 'blog:blog-draft' %}" class="btn btn-sm btn-info mt-2">Drafts / Waiting</a>
 		<a href="{% url 'blog:blog-create' %}" class="btn btn-sm btn-info mt-2">Create Blog</a>
 		{% if request.user.is_superuser %}
 		    <a href="{% url 'blog:blog-waiting' %}" class="btn btn-sm btn-info mt-2">Waiting List</a>

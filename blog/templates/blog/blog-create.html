@@ -36,9 +36,15 @@
 		<div class="row mt-3">
 			<div class="col-sm-6 mb-3"><input type="submit" name="Draft" value="Draft" class="btn btn-block btn-dark"></div>
 			<div class="col-sm-6 mb-3">
-				<a href="#" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#confirmationModal" class="btn btn-block btn-success">
-					Publish
-				</a>
+				{% if request.user.is_superuser %}
+			 		<a href="#" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#notifyModal" class="btn btn-block btn-success">
+						Publish
+					</a>
+				{% else %}
+			    <a href="#" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#confirmationModal" class="btn btn-block btn-success">
+						Publish
+					</a>
+				{% endif %}
 			</div>
 		</div>
 		<!-- Modal -->
@@ -46,7 +52,7 @@
 		  	<div class="modal-dialog modal-dialog-centered" role="document">
 		    	<div class="modal-content">
 		      		<div class="modal-header">
-		        		<h5 class="modal-title">Note</h5>
+		        		<h5 class="modal-title">Publish Blog</h5>
 		      		</div>
 		      		<div class="modal-body text-center">
 		        		<p style="font-size: 1em;">
@@ -56,6 +62,27 @@
 		      		<div class="modal-footer">
 		        		<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
 		        		<input type="submit" name="Publish" value="Confirm" class="btn btn-sm btn-success">
+		      		</div>
+		    	</div>
+		  	</div>
+		</div>
+
+		<!-- Modal -->
+		<div class="modal fade" id="notifyModal" tabindex="-1" role="dialog">
+		  	<div class="modal-dialog modal-dialog-centered" role="document">
+		    	<div class="modal-content">
+		      		<div class="modal-header">
+		        		<h5 class="modal-title">Publish Blog</h5>
+		      		</div>
+		      		<div class="modal-body text-center">
+		        		<p style="font-size: 1em;">
+		        			Do you want to notify site subscribers?
+		        		</p>
+		      		</div>
+		      		<div class="modal-footer">
+		      			<input type="submit" name="Yes" value="Yes" class="btn btn-sm btn-success">
+		        		<input type="submit" name="No" value="No" class="btn btn-sm btn-secondary">
+		        		<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
 		      		</div>
 		    	</div>
 		  	</div>

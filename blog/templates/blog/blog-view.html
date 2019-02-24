@@ -8,7 +8,7 @@
 	<hr />
 	<p class="mt-2 text-justify">{{ blog.body|linebreaksbr }}</p>
 
-	{% if blog.status == 'Publish' and request.user != blog.author %}
+	{% if blog.status == 'Publish' %}
 	    <a href="{% url 'blog:blog-comment' blog.slug %}" class="font-weight-bold font-italic">Goto Comments Page</a>
 	{% endif %}
 	

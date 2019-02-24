@@ -42,7 +42,7 @@ def create_comment(request, slug):
 				UserLog.objects.create(description = "New Blog Comment. (%s)" % (blog.title,),)
 			else:
 				UserLog.objects.create(user = request.user, description = "New Blog Comment. (%s)" % (blog.title,),)
-			return redirect('blog:comment-list', blog.slug)
+			return redirect('blog:blog-comment', blog.slug)
 	else:
 		comment_form = CommentForm()
 	context = {'comment_form': comment_form, 'blog': blog,}
@@ -125,6 +125,17 @@ def create_blog(request):
 					photo.save()
 				except Exception as e:
 					continue
+
+			if 'Yes' in request.POST:
+				blog.status = 'Publish'
+				blog.save()
+				t = threading.Thread(target=send_blog_notification(blog))
+				t.setDaemon = True
+				t.start()
+			elif 'No' in request.POST:
+				blog.status = 'Publish'
+				blog.save()
+
 			return redirect('blog:blog-draft')
 	else:
 		blog_form = BlogForm()
@@ -151,9 +162,17 @@ def update_blog(request, slug):
 			else:
 				if not (old_blog.title == blog_form.cleaned_data['title'] and 
 					old_blog.body == blog_form.cleaned_data['body'] and old_blog.video_url == blog_form.cleaned_data['video_url']):
-					updated_blog.status = 'Waiting'
-					updated_blog.save()
-					updated = True
+					if blog.status != 'Draft':
+						if request.user.is_superuser:
+							updated_blog.save()
+							return redirect('blog:blog-published')
+						else:
+							updated_blog.status = 'Waiting'
+							updated_blog.save()
+							updated = True
+					else:
+						updated_blog.save()
+						return redirect('blog:blog-draft')
 					UserLog.objects.create(user = request.user, description = "Blog Updated. (%s)" % (updated_blog.title,),)
 				else:
 					return redirect('blog:blog-published')
@@ -190,13 +209,14 @@ def add_view_photos(request, slug):
 					updated = True
 				except Exception as e:
 					continue
-			if updated:
+			if updated and not request.user.is_superuser and not blog.status == 'Draft':
 				blog.status = 'Waiting'
 				blog.save()
 			UserLog.objects.create(user = request.user, description = "New Blog Photo Uploaded. (%s)" % (blog.title,),)
+			return redirect('blog:blog-photo', slug=blog.slug)
 	photo_formset = PhotoFormSet(queryset=Photo.objects.none())
 	photo_set = Photo.objects.filter(blog=blog)
-	context = {'photo_formset': photo_formset, 'photo_set': photo_set, 'updated': updated,}
+	context = {'photo_formset': photo_formset, 'photo_set': photo_set, 'updated': updated, 'blog': blog}
 	return render(request, 'blog/blog-photo.html', context)
 
 

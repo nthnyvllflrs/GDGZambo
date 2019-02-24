@@ -28,15 +28,9 @@
 		</div>
 		{% if blog.status == 'Draft' %}
 		    <div class="row">
-				{% comment %}
-				    <div class="col-12 mt-3">
-					    <a href="#" data-toggle="modal" data-backdrop="static" data-keyboard="false" 
-					    	data-target="#confirmationModal" class="btn btn-block btn-dark">
-							Update Blog
-						</a>
-					</div>
-				{% endcomment %}
-				<input type="submit" name="Update" value="Update Blog" class="btn btn-sm btn-dark">
+		    	<div class="col-12 mt-3">
+		    		<button type="submit" class="btn btn-block btn-dark" style="letter-spacing: 3px;">Update Blog</button>
+		    	</div>
 			</div>
 		{% else %}
 			<div class="row">
@@ -72,7 +66,7 @@
 		{% endif %}
 	</form>
 
-	{% if updated %}
+	{% if updated and not blog.status == 'Draft' %}
         <div class="modal fade" id="updatedModal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" >
 		  	<div class="modal-dialog modal-dialog-centered" role="document">
 		    	<div class="modal-content">
@@ -85,7 +79,7 @@
 		        		</p>
 		      		</div>
 		      		<div class="modal-footer">
-		      			<a href="{% url 'blog:blog-list' %}" class="btn btn-sm btn-secondary">Ok</a>
+		      			<a href="{% url 'blog:blog-draft' %}" class="btn btn-sm btn-secondary">Ok</a>
 		      		</div>
 		    	</div>
 		  	</div>

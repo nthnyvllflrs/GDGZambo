@@ -127,9 +127,13 @@ def update_story(request, slug):
 				if not (old_story.title == story_form.cleaned_data['title'] and 
 					old_story.body == story_form.cleaned_data['body'] and old_story.video_url == story_form.cleaned_data['video_url']):
 					if story.status != 'Draft':
-						updated_story.status = 'Waiting'
-						updated = True
-						updated_story.save()
+						if request.user.is_superuser:
+							updated_story.save()
+							return redirect('story:story-published')
+						else:
+							updated_story.status = 'Waiting'
+							updated_story.save()
+							updated = True
 					else:
 						updated_story.save()
 						return redirect('story:story-draft')
