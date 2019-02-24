@@ -275,13 +275,14 @@
 									</a>
 								{% endif %}
 
-								{% if request.user.is_authenticated and request.user.is_superuser %}
-									 | 
-									<a href="#" data-toggle="modal" data-target="#migrateModalVol{{volunteer.id}}"
-										data-backdrop="static" data-keyboard="false" 
-										style="font-size: 1.2em; color: #FF6347;">
-										<i class="fas fa-level-up-alt"></i>
-									</a>
+								{% if request.user.is_authenticated and request.user.is_superuser and request.user.useraccount.is_event_creator %}
+									| 
+									{% if request.user.is_superuser %}
+									    <a href="#" data-toggle="modal" data-target="#migrateModalVol{{volunteer.id}}"
+										data-backdrop="static" data-keyboard="false" style="font-size: 1.2em; color: #FF6347;">
+											<i class="fas fa-level-up-alt"></i>
+										</a>
+									{% endif %}
 									<a href="{% url 'team:update-volunteer' volunteer.slug %}" style="font-size: 1.2em; color: #FF6347;">
 										<i class="fas fa-pencil-alt"></i>
 									</a>
