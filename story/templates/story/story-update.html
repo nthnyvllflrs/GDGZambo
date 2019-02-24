@@ -34,40 +34,39 @@
 			</div>
 		{% else %}
 		    <div class="row">
-				<div class="col-sm-6 mt-3">
+					<div class="col-sm-6 mt-3">
 				    <a href="#" data-toggle="modal" data-backdrop="static" data-keyboard="false" 
 				    	data-target="#confirmationModal" class="btn btn-block btn-dark">
-						Save as Draft
-					</a>
-				</div>
-				<div class="col-sm-6 mt-3">
-					<input type="submit" name="Update" value="Update Story" class="btn btn-block btn-success">
-				</div>
-				<!-- Modal -->
-				<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+							Save as Draft
+						</a>
+					</div>
+					<div class="col-sm-6 mt-3">
+						<input type="submit" name="Update" value="Update Story" class="btn btn-block btn-success">
+					</div>
+					<!-- Modal -->
+					<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
 				  	<div class="modal-dialog modal-dialog-centered" role="document">
 				    	<div class="modal-content">
-				      		<div class="modal-header">
-				        		<h5 class="modal-title">Note</h5>
-				      		</div>
-				      		<div class="modal-body text-center">
-				        		<p style="font-size: 1em;">
-				        			Setting this story as draft will remove its <strong>published/waiting</strong> status. Confirm?
-				        		</p>
-				      		</div>
-				      		<div class="modal-footer">
-				        		<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
-				        		<input type="submit" name="Draft" value="Yes" class="btn btn-sm btn-success">
-				      		</div>
-				    	</div>
-				  	</div>
+			      		<div class="modal-header">
+			        		<h5 class="modal-title">Note</h5>
+			      		</div>
+			      		<div class="modal-body text-center">
+			        		<p style="font-size: 1em;">
+			        			Setting this story as draft will remove its <strong>published/waiting</strong> status. Confirm?
+			        		</p>
+			      		</div>
+			      		<div class="modal-footer">
+			        		<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
+			        		<input type="submit" name="Draft" value="Yes" class="btn btn-sm btn-success">
+			      		</div>
+			    	</div>
+			  	</div>
 				</div>
 			</div>
 		{% endif %}
-		
 	</form>
 
-	{% if updated %}
+	{% if updated and not story.status == 'Draft' %}
         <div class="modal fade" id="updatedModal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" >
 		  	<div class="modal-dialog modal-dialog-centered" role="document">
 		    	<div class="modal-content">
@@ -80,7 +79,7 @@
 		        		</p>
 		      		</div>
 		      		<div class="modal-footer">
-		      			<a href="{% url 'story:story-waiting' %}" class="btn btn-sm btn-secondary">Ok</a>
+		      			<a href="{% url 'story:story-draft' %}" class="btn btn-sm btn-secondary">Ok</a>
 		      		</div>
 		    	</div>
 		  	</div>

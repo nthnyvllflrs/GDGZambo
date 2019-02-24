@@ -89,6 +89,17 @@ def create_story(request):
 					image.save()
 				except Exception as e:
 					continue
+
+			if 'Yes' in request.POST:
+				story.status = 'Publish'
+				story.save()
+				t = threading.Thread(target=send_story_notification(story))
+				t.setDaemon = True
+				t.start()
+			elif 'No' in request.POST:
+				story.status = 'Publish'
+				story.save()
+
 			return redirect('story:story-draft')
 	else:
 		story_form = StoryForm()
@@ -115,9 +126,13 @@ def update_story(request, slug):
 			else:
 				if not (old_story.title == story_form.cleaned_data['title'] and 
 					old_story.body == story_form.cleaned_data['body'] and old_story.video_url == story_form.cleaned_data['video_url']):
-					updated_story.status = 'Waiting'
-					updated_story.save()
-					updated = True
+					if story.status != 'Draft':
+						updated_story.status = 'Waiting'
+						updated = True
+						updated_story.save()
+					else:
+						updated_story.save()
+						return redirect('story:story-draft')
 					UserLog.objects.create(user = request.user, description = "Story Updated. (%s)" % (story.title,),)
 				else:
 					return redirect('story:story-published')
@@ -154,13 +169,14 @@ def add_view_images(request, slug):
 					updated = True
 				except Exception as e:
 					continue
-			if updated:
+			if updated and not request.user.is_superuser and not story.status == 'Draft':
 				story.status = 'Waiting'
 				story.save()
 			UserLog.objects.create(user = request.user, description = "New Story Image Uploaded. (%s)" % (story.title,),)
+			return redirect('story:story-image', slug=story.slug)
 	image_formset = ImageFormSet(queryset=Image.objects.none())
 	image_set = Image.objects.filter(story=story)
-	context = {'image_formset': image_formset, 'image_set': image_set, 'updated': updated,}
+	context = {'image_formset': image_formset, 'image_set': image_set, 'updated': updated, 'story': story,}
 	return render(request, 'story/story-image.html', context)
 
 

@@ -152,12 +152,12 @@ def create_pre_event(request):
 	error = None
 	if request.method == 'POST':
 		if request.POST['meetupId']:
-			# try:
-			meetup_id = request.POST['meetupId']
-			meetup_event = settings.MEETUP_CLIENT.GetEvent({'id': meetup_id})
-			return redirect('event:event-create', meetup_id=meetup_id)
-			# except Exception as e:
-			error = 'Invalid Meetup ID. Please enter a valid Event Meetup ID to proceed.'
+			try:
+				meetup_id = request.POST['meetupId']
+				meetup_event = settings.MEETUP_CLIENT.GetEvent({'id': meetup_id})
+				return redirect('event:event-create', meetup_id=meetup_id)
+			except Exception as e:
+				error = 'Invalid Meetup ID. Please enter a valid Event Meetup ID to proceed.'
 	context = {'error': error,}
 	return render(request, 'event/event-pre-create.html', context)
 

@@ -9,11 +9,34 @@
 	<form method="POST" enctype="multipart/form-data">
 		{% csrf_token %}
 		{{ image_formset.as_table }}
-		<button type="submit" 
-			class="btn btn-block btn-sm btn-dark mt-3" 
-			style="letter-spacing: 3px;">
-			Upload Image(s)
-		</button>
+
+		{% if story.status == 'Publish' %}
+	    <a href="#" class="btn btn-block btn-sm btn-dark mt-1"
+				data-toggle="modal" data-target="#noteModal"
+				data-backdrop="static" data-keyboard="false" >
+				Upload Image(s)
+			</a>
+			<!-- Modal -->
+			<div class="modal fade" id="noteModal" tabindex="-1" role="dialog">
+			  	<div class="modal-dialog modal-dialog-centered" role="document">
+			    	<div class="modal-content">
+			      		<div class="modal-header">
+			        		<h5 class="modal-title">Note</h5>
+			      		</div>
+			      		<div class="modal-body text-center">
+			        		Uploading a new image will set story status to <strong>waiting</strong> for administrator to review new photo(s). Comfirm?
+			      		</div>
+			      		<div class="modal-footer">
+			        		<a href="#" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</a>
+			        		<button type="submit" class="btn btn-sm btn-success">Confirm</button>
+			      		</div>
+			    	</div>
+			  	</div>
+			</div>
+		{% else %}
+			  <button type="submit" class="btn btn-block btn-sm btn-dark mt-1">Upload Image(s)</button>
+		{% endif %}
+		
 	</form>
 	<hr /> 
 	{% if story.image_set.all.count == 0 %}
@@ -23,11 +46,9 @@
 			{% for image in image_set %}
 				<div class="col-6 col-sm-3">
 					<img src="{{ image.photo.url }}" width="250px" height="250px" class="img-fluid img-thumbnail"/>
-					<a 
-						href="#" class="btn btn-block btn-sm btn-danger mt-1"
+					<a href="#" class="btn btn-block btn-sm btn-danger mt-1"
 						data-toggle="modal" data-target="#confirmationModal{{image.id}}"
-						data-backdrop="static" data-keyboard="false" 
-					>
+						data-backdrop="static" data-keyboard="false" >
 						Remove
 					</a>
 				</div>
@@ -44,7 +65,7 @@
 				      		</div>
 				      		<div class="modal-footer">
 				        		<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
-				        		<a href="{% url 'story:story-image-delete' %}" class="btn btn-sm btn-danger">Confirm</a>
+				        		<a href="{% url 'story:story-image-delete' story.slug image.id %}" class="btn btn-sm btn-danger">Confirm</a>
 				      		</div>
 				    	</div>
 				  	</div>

@@ -2,7 +2,11 @@
 
 {% block content %}
 <div class="container mt-5">
-	<h5><strong class="font-italic">GDG Zamboanga Stories</strong></h5>
+	<h5><strong class="font-italic">GDG Zamboanga Stories
+		{% if request.get_full_path|urlencode == '/story/draft/' %}
+			<small>(Draft)</small>
+		{% endif %}
+	</strong></h5>
 	{% if request.user.is_authenticated and request.user.useraccount.is_blog_creator or request.user.is_superuser %}
   	<a href="{% url 'story:story-list' %}" class="btn btn-sm btn-info mt-2">List</a>
   	<a href="{% url 'story:story-published' %}" class="btn btn-sm btn-info mt-2">Published</a>
@@ -73,7 +77,7 @@
 									  	<div class="modal-dialog modal-dialog-centered" role="document">
 									    	<div class="modal-content">
 									      		<div class="modal-header">
-									        		<h5 class="modal-title">Notify Story Subscribers?</h5>
+									        		<h5 class="modal-title">Notify Site Subscribers?</h5>
 									      		</div>
 									      		<div class="modal-footer">
 															<a href="{% url 'story:story-publish' story.slug 1 %}" class="btn btn-sm btn-success">Yes</a>
