@@ -47,7 +47,7 @@
 	<hr />
 	<div class="mb-3">
 		<small class="text-muted">
-			{{ blog.author|capfirst }}, {{ blog.timestamp|date:"d F Y" }}
+			{{ blog.author|capfirst }}, {{ blog.updated|date:"d F Y" }}
 		</small> 
 		{% if request.user.is_authenticated and request.user == blog.author %}
 			| 

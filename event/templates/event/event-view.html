@@ -196,7 +196,7 @@
 	
 	<hr />
 	<div class="mb-3">
-		<small class="text-muted">{{ event.author|capfirst }}, {{ event.timestamp|date:"d F Y" }}</small> 
+		<small class="text-muted">{{ event.author|capfirst }}, Posted {{ event.timestamp|date:"d F Y" }}</small> 
 		{% if request.user.is_authenticated and request.user.useraccount.is_event_creator or request.user.is_superuser %}
 		    | 
 			<small>

@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    </head>
+    <body>
+        <p>Story Title: {{ story.title }}</p>
+        <p>Story Author: {{ story.author }}</p>
+        <p>{{ story.body|truncatechars:350 }}</p>
+        <p>Read More Here https://gdgzambo.herokuapp.com/story/{{ story.slug }}</p>
+    </body>
+</html>

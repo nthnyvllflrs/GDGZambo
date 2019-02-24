@@ -7,6 +7,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
 from django.forms import modelformset_factory
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.crypto import get_random_string
 
 # Inner App imports
 from .models import (Subscriber, UserAccount, UserLog, SiteCarousel, DynamicData,)
@@ -22,7 +23,9 @@ def subscribe_user(request):
 	if request.method == 'POST':
 		subcribe_form = SubscribeForm(request.POST)
 		if subcribe_form.is_valid():
-			subscriber = subcribe_form.save()
+			subscriber = subcribe_form.save(commit=False)
+			subscriber.code = get_random_string(length=20)
+			subscriber.save()
 			success = True
 			t = threading.Thread(target=send_welcome_email(subscriber))
 			t.setDaemon = True
@@ -37,8 +40,9 @@ def unsubscribe_user(request):
 	success, NoMatch = None, None
 	if request.method == 'POST':
 		email = request.POST['email']
-		if Subscriber.objects.filter(email=email).exists():
-			subscriber = Subscriber.objects.get(email=email)
+		code = request.POST['code']
+		if Subscriber.objects.filter(email=email, code=code).exists():
+			subscriber = Subscriber.objects.get(email=email, code=code)
 			subscriber.delete()
 			success = True
 		else:
@@ -97,8 +101,8 @@ def delete_user(request, pk):
 	user = get_object_or_404(User, pk=pk)
 	useraccount = get_object_or_404(UserAccount, user=user)
 	UserLog.objects.create(user = request.user, description = "User Account Removed. (%s)" % (user.username,),)
-	user.delete()
 	useraccount.delete()
+	user.delete()
 	return redirect('user:list-user')
 
 

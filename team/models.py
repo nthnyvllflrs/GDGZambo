@@ -14,7 +14,7 @@ class Member(models.Model):
 	name 				= models.CharField(max_length=120)
 	description = models.TextField()
 	expertise 	= models.TextField(null=True, blank=True)
-	email 			= models.EmailField(null=True, blank=True)
+	email 			= models.EmailField()
 	facebook 		= models.URLField(max_length=500, null=True, blank=True)
 	twitter 		= models.URLField(max_length=500, null=True, blank=True)
 	instagram 	= models.URLField(max_length=500, null=True, blank=True)

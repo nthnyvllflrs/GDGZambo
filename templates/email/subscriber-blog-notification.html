@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    </head>
+    <body>
+        <p>Blog Title: {{ blog.title }}</p>
+        <p>Blog Author: {{ blog.author }}</p>
+        <p>{{ blog.body|truncatechars:350 }}</p>
+        <p>Read More Here https://gdgzambo.herokuapp.com/blog/{{ blog.slug }}</p>
+    </body>
+</html>

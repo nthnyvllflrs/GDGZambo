@@ -29,7 +29,7 @@
 			  		<h5 class="card-title mb-1">
 			  			<strong>{{ story.title }}</strong>
 			  		</h5>
-			  		<small class="text-muted">Posted {{ story.timestamp|timesince }} ago</small>
+			  		<small class="text-muted">Published {{ story.updated|date:"d F Y" }} ago</small>
 			    	<p class="card-text mt-3 text-justify">
 			    		{{ story.body|truncatechars:350 }}
 			    	</p>

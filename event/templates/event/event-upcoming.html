@@ -7,7 +7,6 @@
 	  <a href="{% url 'event:event-upcoming' %}" class="btn btn-sm btn-dark">Upcoming</a>
 		<a href="{% url 'event:event-past' %}" class="btn btn-sm btn-dark">Past</a>
 	</div>
-
 	{% if request.user.is_authenticated and request.user.useraccount.is_event_creator or request.user.is_superuser %}
 		<a href="{% url 'event:event-published' %}" class="btn btn-sm btn-info mt-2">Published</a>
 	    <a href="{% url 'event:event-draft' %}" class="btn btn-sm btn-info mt-2">Drafts</a>

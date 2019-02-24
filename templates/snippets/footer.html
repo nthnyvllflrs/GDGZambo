@@ -17,12 +17,23 @@
 				</ul>
 			</div>
 			<div class="col-sm-3 mt-2">
-				<p class="font-weight-bold mb-0">Get Involved</p>
-				<ul style="list-style: none;padding: 0;font-size: .90em;" class="mb-0">
-					<li><a href="{% become_a_sponsor_url %}" target="_blank" style="color: #FFF;">Become a Sponsor</a></li>
-					<li><a href="{% become_a_volunteer_url %}" target="_blank" style="color: #FFF;">Become a Volunteer</a></li>
-					<li><a href="{% speaker_request_url %}" target="_blank" style="color: #FFF;">Speaker Request</a></li>
-				</ul>
+				<div class="row">
+					<div class="col-sm-12">
+						<p class="font-weight-bold mb-0">Get Involved</p>
+						<ul style="list-style: none;padding: 0;font-size: .90em;" class="mb-0">
+							<li><a href="{% become_a_sponsor_url %}" target="_blank" style="color: #FFF;">Become a Sponsor</a></li>
+							<li><a href="{% become_a_volunteer_url %}" target="_blank" style="color: #FFF;">Become a Volunteer</a></li>
+							<li><a href="{% speaker_request_url %}" target="_blank" style="color: #FFF;">Speaker Request</a></li>
+						</ul>
+					</div>
+					<div class="col-sm-12 mt-3">
+						<p class="font-weight-bold mb-0">Subscription</p>
+						<ul style="list-style: none;padding: 0;font-size: .90em;" class="mb-0">
+							<li><a href="{% url 'user:subscribe-user' %}" target="_blank" style="color: #FFF;">Subscribe </a></li>
+							<li><a href="{% url 'user:unsubscribe-user' %}" target="_blank" style="color: #FFF;">Unsubscribe</a></li>
+						</ul>
+					</div>
+				</div>
 			</div>
 			<div class="col-sm-3 mt-2">
 				<p class="font-weight-bold mb-0">Resources</p>

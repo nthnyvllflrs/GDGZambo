@@ -43,7 +43,7 @@
 	<hr />
 	<div class="mb-3">
 		<small class="text-muted">
-			{{ story.author|capfirst }}, Posted {{ story.timestamp|date:"d F Y" }}
+			{{ story.author|capfirst }}, Published {{ story.updated|date:"d F Y" }}
 		</small> 
 		{% if request.user.is_authenticated and request.user == story.author %}
 		    | 

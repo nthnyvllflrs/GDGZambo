@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    </head>
+    <body>
+        <p>Event Title: {{ event.title }}</p>
+        <p>Event Author: {{ event.author }}</p>
+        <p>{{ event.description|truncatechars:350 }}</p>
+        <p>Read More Here https://gdgzambo.herokuapp.com/event/{{ event.slug }}</p>
+    </body>
+</html>

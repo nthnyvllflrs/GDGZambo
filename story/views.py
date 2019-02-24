@@ -2,6 +2,7 @@ import threading
 
 from django import forms
 from django.contrib.auth.decorators import user_passes_test, login_required
+from django.contrib.auth.models import User
 from django.forms import modelformset_factory
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -9,7 +10,7 @@ from .models import Story, Image
 from .forms import StoryForm
 
 from user.models import UserLog
-from user.utils import send_story_notification
+from user.utils import send_story_notification, send_story_published_notification
 
 
 def view_story(request, slug):
@@ -29,13 +30,18 @@ def publish_story(request, slug, notif):
 	if not request.user.is_superuser and not request.user.useraccount.is_blog_creator:
 		return redirect('landing-page')
 	story = get_object_or_404(Story, slug=slug)
+	user = get_object_or_404(User, username=story.author.username)
 	if request.user.is_superuser:
 		story.status = 'Publish'
 		description = "Story Publish"
+
+		member_notif_thread = threading.Thread(target=send_story_published_notification(user.useraccount.member, story))
+		member_notif_thread.setDaemon = True
+		member_notif_thread.start()
 		if notif == 1:
-			t = threading.Thread(target=send_story_notification(story))
-			t.setDaemon = True
-			t.start()
+			story_notif_thread = threading.Thread(target=send_story_notification(story))
+			story_notif_thread.setDaemon = True
+			story_notif_thread.start()
 	else:
 		story.status = 'Waiting'
 		description = "Story Waiting Status"

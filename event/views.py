@@ -15,7 +15,7 @@ from .models import (Sponsor, Speaker, Event, Feedback, EventStatistics, EventAt
 from .forms import (SponsorForm, SpeakerForm, EventForm, FeedbackForm, EventStatisticForm, EventStatisticManualCountForm)
 
 from user.models import UserLog
-from user.utils import send_event_notification
+from user.utils import send_event_notification, send_feedback_notification
 from team.models import Member, Volunteer
 from team.forms import VolunteerForm
 
@@ -521,6 +521,11 @@ def create_feedback(request, slug):
 				UserLog.objects.create(description = "New Event Feedback. (%s)" % (event.title,),)
 			else:
 				UserLog.objects.create(user = request.user,description = "New Event Feedback. (%s)" % (event.title,),)
+
+			feedback_notif_thread = threading.Thread(target=send_feedback_notification(feedback))
+			feedback_notif_thread.setDaemon = True
+			feedback_notif_thread.start()
+
 			return redirect('event:event-feedback', event.slug)
 	else:
 		feedback_form = FeedbackForm()

@@ -1,10 +1,11 @@
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 
 from .models import Member, Volunteer
 from .forms import MemberForm, VolunteerForm
 
-from user.models import UserLog
+from user.models import UserLog, UserAccount
 
 
 def list_member_volunteer(request):
@@ -51,7 +52,11 @@ def update_member(request, slug):
 @user_passes_test(lambda u: u.is_superuser)
 def delete_member(request, slug):
 	member = get_object_or_404(Member, slug=slug)
+	useraccount = get_object_or_404(UserAccount, member=member)
+	user = get_object_or_404(User, username=useraccount.user.username)
 	UserLog.objects.create(user = request.user, description = "Member Removed. (%s)" % (member.name,),)
+	user.delete()
+	useraccount.delete()
 	member.delete()
 	return redirect('team:list-member-volunteer')
 

@@ -36,7 +36,7 @@
 		  					</a>
 			  			</small>
 			  		</h5>
-			  		<small class="text-muted">Posted {{ blog.timestamp|timesince }} ago</small>
+			  		<small class="text-muted">Published {{ blog.updated|date:"d F Y" }} ago</small>
 			    	<p class="card-text mt-3 text-justify">
 			    		{{ blog.body|truncatechars:350 }}
 			    	</p>

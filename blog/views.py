@@ -2,14 +2,15 @@ import threading
 
 from django import forms
 from django.contrib.auth.decorators import user_passes_test, login_required
+from django.contrib.auth.models import User
 from django.forms import modelformset_factory
 from django.shortcuts import render, redirect, get_object_or_404
 
 from .models import (Blog, Photo, Comment,)
 from .forms import (BlogForm, PhotoForm, CommentForm,)
 
-from user.models import UserLog
-from user.utils import send_blog_notification
+from user.models import UserLog, UserAccount
+from user.utils import send_blog_notification, send_blog_published_notification, send_comment_notification
 
 def view_blog(request, slug):
 	blog = get_object_or_404(Blog, slug=slug)
@@ -42,6 +43,11 @@ def create_comment(request, slug):
 				UserLog.objects.create(description = "New Blog Comment. (%s)" % (blog.title,),)
 			else:
 				UserLog.objects.create(user = request.user, description = "New Blog Comment. (%s)" % (blog.title,),)
+
+			comment_notif_thread = threading.Thread(target=send_comment_notification(comment))
+			comment_notif_thread.setDaemon = True
+			comment_notif_thread.start()
+
 			return redirect('blog:blog-comment', blog.slug)
 	else:
 		comment_form = CommentForm()
@@ -65,13 +71,18 @@ def publish_blog(request, slug, notif):
 	if not request.user.is_superuser and not request.user.useraccount.is_blog_creator:
 		return redirect('landing-page')
 	blog = get_object_or_404(Blog, slug=slug)
+	user = get_object_or_404(User, username=blog.author.username)
 	if request.user.is_superuser:
 		blog.status = 'Publish'
 		description = "Blog Publish"
+
+		member_notif_thread = threading.Thread(target=send_blog_published_notification(user.useraccount.member, blog))
+		member_notif_thread.setDaemon = True
+		member_notif_thread.start()
 		if notif == 1:
-			t = threading.Thread(target=send_blog_notification(blog))
-			t.setDaemon = True
-			t.start()
+			blog_notif_thread = threading.Thread(target=send_blog_notification(blog))
+			blog_notif_thread.setDaemon = True
+			blog_notif_thread.start()
 	else:
 		blog.status = 'Waiting'
 		description = "Blog Waiting Status"
