@@ -110,7 +110,7 @@ def migrate_volunteer(request, slug):
 	member = Member.objects.create(
 		photo = volunteer.photo, name = volunteer.name, firstname = volunteer.firstname, lastname = volunteer.lastname,
 		email = volunteer.email, description = volunteer.description, expertise = volunteer.expertise, facebook = volunteer.facebook,
-		twitter = volunteer.twitter, instagram = volunteer.instagram, website = volunteer.website,)
+		twitter = volunteer.twitter, instagram = volunteer.instagram, website = volunteer.website, position = 'Volunteer')
 	for event in volunteered_events:
 		event.member_volunteer.add(member)
 	volunteer.delete()

@@ -30,6 +30,8 @@
 					  		<p class="card-title mb-1">
 					  			<strong style="font-size: 1.3em;">
 						  			{{ member.firstname }} {{ member.lastname }}
+						  			<br>
+						  			<small>({{ member.position }})</small>
 						  			<a 
 						  				href="#" data-toggle="modal" 
 						  				data-target="#informationModal{{member.id}}" 
@@ -115,9 +117,13 @@
 					      					<strong>Expertise</strong>
 					      					<p>{{ member.expertise }}</p>
 					      				</div>
-					      				<div class="col-sm-12">
+					      				<div class="col-sm-6">
 					      					<strong>Email</strong>
 					      					<p>{{ member.email }}</p>
+					      				</div>
+					      				<div class="col-sm-6">
+					      					<strong>Position</strong>
+					      					<p>{{ member.position }}</p>
 					      				</div>
 					      				<div class="col-sm-6">
 					      					<strong>Facebook</strong>

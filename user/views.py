@@ -12,10 +12,26 @@ from django.utils.crypto import get_random_string
 # Inner App imports
 from .models import (Subscriber, UserAccount, UserLog, SiteCarousel, DynamicData,)
 from .forms import (UserAccountForm, SubscribeForm, DynamicDataForm)
-from .utils import send_welcome_email
+from .utils import send_welcome_email, send_removed_email, send_goodbye_email
 
 # Outer App Imports
 from team.models import Member
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def list_subscriber(request):
+	subscriber_list = Subscriber.objects.all()
+	context = {'subscriber_list': subscriber_list,}
+	return render(request, 'user/subscriber-list.html', context)
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def delete_subscriber(request, pk):
+	subcriber = get_object_or_404(Subscriber, pk=pk)
+	send_removed_email(subcriber)
+	UserLog.objects.create(user = request.user, description = "Subscriber Removed. (%s)" % (Subscriber.name,),)
+	subcriber.delete()
+	return redirect('user:subscriber-list')
 
 
 def subscribe_user(request):
@@ -43,6 +59,7 @@ def unsubscribe_user(request):
 		code = request.POST['code']
 		if Subscriber.objects.filter(email=email, code=code).exists():
 			subscriber = Subscriber.objects.get(email=email, code=code)
+			send_goodbye_email(subscriber)
 			subscriber.delete()
 			success = True
 		else:

@@ -46,6 +46,24 @@ def send_welcome_email(instance):
 	send_mail(email_subject, email_body, email_from, (recipient_list,), html_message=html_message)
 
 
+def send_removed_email(instance):
+	email_subject = "Removed by GDG Zamboanga Administrator"
+	email_body = ''
+	html_message = loader.render_to_string('email/removed-notification.html',{'subscriber': instance})
+	recipient_list = instance.email
+	email_from = settings.EMAIL_HOST_USER
+	send_mail(email_subject, email_body, email_from, (recipient_list,), html_message=html_message)
+
+
+def send_goodbye_email(instance):
+	email_subject = "Goodbye From GDG Zamboanga"
+	email_body = ''
+	html_message = loader.render_to_string('email/goodbye-notification.html',{'subscriber': instance})
+	recipient_list = instance.email
+	email_from = settings.EMAIL_HOST_USER
+	send_mail(email_subject, email_body, email_from, (recipient_list,), html_message=html_message)
+
+
 def send_blog_published_notification(member, instance):
 	email_subject = "%s is now published." % (instance.title)
 	email_body = ''

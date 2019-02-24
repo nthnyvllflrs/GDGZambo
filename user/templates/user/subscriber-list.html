@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5 mb-3">
+	<h5 class="font-italic">
+		<strong>GDG Zamboanga Subscribers</strong>
+	</h5>
+	<a href="{% url 'user:list-user' %}" class="btn btn-sm btn-info mt-2">User List</a>
+	<a href="{% url 'user:user-logs' %}" class="btn btn-sm btn-info mt-2">User Logs</a>
+	<a href="{% url 'user:subscriber-list' %}" class="btn btn-sm btn-info mt-2">Subscribers</a>
+	<hr />
+
+	{% if subscriber_list %}
+	<div class="table-responsive">
+		<table class="table table-sm text-center">
+			<thead>
+			    <tr>
+			      	<th scope="col">Name</th>
+			      	<th scope="col">Email</th>
+			      	<th scope="col">Subscription Date</th>
+			      	<th scope="col">Option</th>
+			    </tr>
+			</thead>
+			<tbody>
+				{% for subscriber in subscriber_list %}
+				<tr>
+					<td>{{ subscriber.name }}</td>
+		      <td>{{ subscriber.email }}</td>
+	        <td>{{ subscriber.timestamp|date:"d F Y" }}</td>
+	        <td>
+	        	<small><a href="#" data-toggle="modal" data-target="#confirmationModal{{subscriber.id}}">
+							Remove
+						</a></small>
+						<!-- Modal -->
+						<div class="modal fade" id="confirmationModal{{subscriber.id}}" tabindex="-1" role="dialog">
+						  	<div class="modal-dialog modal-dialog-centered" role="document">
+						    	<div class="modal-content">
+						      		<div class="modal-header">
+						        		<h5 class="modal-title">Confirm Subscriber Deletion</h5>
+						      		</div>
+						      		<div class="modal-body text-center">
+						        		Are you sure you want to delete <strong>{{subscriber.name}}</strong>?
+						      		</div>
+						      		<div class="modal-footer">
+						        		<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
+						        		<a href="{% url 'user:subscriber-delete' subscriber.pk %}" class="btn btn-sm btn-danger">Confirm</a>
+						      		</div>
+						    	</div>
+						  	</div>
+						</div>
+	        </td>
+			  </tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	{% else %}
+		<div class="card">
+		  	<div class="card-body">
+		    	<p class="card-text font-italic">
+		    		No Site Subcribers Yet.
+		    	</p>
+		  	</div>
+		</div>
+		<div style="height: 250px;"></div>
+	{% endif %}
+</div>
+{% endblock content %}

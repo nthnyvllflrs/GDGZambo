@@ -13,6 +13,7 @@ class Subscriber(models.Model):
 	name = models.CharField(max_length=200)
 	email = models.EmailField(max_length=200)
 	code = models.CharField(max_length=100)
+	timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
 
 	def __str__(self):
 		return self.name
