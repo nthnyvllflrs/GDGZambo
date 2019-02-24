@@ -1,6 +1,7 @@
 import datetime
 import json
 import threading
+import cloudinary
 from bs4 import BeautifulSoup
 
 from django.contrib.auth.models import User
@@ -125,6 +126,7 @@ def delete_sponsor(request, slug):
 
 def view_event(request, slug):
 	event = get_object_or_404(Event, slug=slug)
+	print(event.banner.__dict__.keys())
 	context = {'event': event,}
 	return render(request, 'event/event-view.html', context)
 
@@ -164,9 +166,9 @@ def create_pre_event(request):
 
 @login_required
 def create_event(request, meetup_id):
+	photo_url = None
 	if request.method == 'POST':
 		event_status = 'Draft' if('Draft' in request.POST) else 'Publish'
-
 		speakers = request.POST.getlist('speakers')
 		sponsors = request.POST.getlist('sponsors')
 		volunteers = request.POST.getlist('volunteers')
@@ -204,6 +206,15 @@ def create_event(request, meetup_id):
 			if member_volunteers:
 				for volunteer in member_volunteers:
 					event.member_volunteer.add(Member.objects.get(pk=volunteer))
+
+			if not ('overwrite' in request.POST) and 'meetup_photo_url' in request.POST:
+				if request.POST['meetup_photo_url'] != None:
+					meetup_photo_url = request.POST['meetup_photo_url']
+					meetup_banner = cloudinary.uploader.upload(meetup_photo_url)
+					result = cloudinary.CloudinaryResource(public_id=meetup_banner['public_id'], type=meetup_banner['type'], 
+						resource_type=meetup_banner['resource_type'], version=meetup_banner['version'], format=meetup_banner['format'])
+					str_result = result.get_prep_value()
+					event.banner = str_result
 			event.save()
 
 			EventStatistics.objects.create(event=event)
@@ -215,24 +226,44 @@ def create_event(request, meetup_id):
 			return redirect('event:event-upcoming')
 	else:
 		meetup_event = settings.MEETUP_CLIENT.GetEvent({'id': meetup_id})
-		try:
-			event_location = meetup_event.venue['name'] + ', ' + meetup_event.venue['address_1'] + ', ' + meetup_event.venue['address_2'] + ', ' + meetup_event.venue['city']
-		except Exception as e:
-			event_location = meetup_event.venue['name'] + ', ' + meetup_event.venue['address_1'] + ', ' + meetup_event.venue['city']
+		if 'photo_url' in meetup_event.__dict__:
+			photo_url = meetup_event.photo_url
+
+		if 'venue' in meetup_event.__dict__:
+			try:
+				event_location = meetup_event.venue['name'] + ', ' + meetup_event.venue['address_1'] + ', ' + meetup_event.venue['address_2'] + ', ' + meetup_event.venue['city']
+			except Exception as e:
+				event_location = meetup_event.venue['name'] + ', ' + meetup_event.venue['address_1'] + ', ' + meetup_event.venue['city']
+			event_lat = meetup_event.venue['lat']
+			event_lng = meetup_event.venue['lon']
+		else:
+			event_location = 'No event venue was set'
+			event_lat = 6.9214
+			event_lng = 122.0790
+
+		if 'duration' in  meetup_event.__dict__:
+			event_duration = meetup_event.duration
+		else:
+			event_duration = 0
+
+		if 'description' in  meetup_event.__dict__:
+			event_description = meetup_event.description
+		else:
+			event_description = 'No Description'
 			
 		event_start = datetime.datetime.fromtimestamp(meetup_event.time/1000.0)
 		event_start_date = event_start.strftime("%Y-%m-%d")
 		event_start_time = event_start.strftime("%H:%M:%S")
-		event_end = datetime.datetime.fromtimestamp(meetup_event.time/1000.0) + datetime.timedelta(hours=meetup_event.duration/3600000)
+		event_end = datetime.datetime.fromtimestamp(meetup_event.time/1000.0) + datetime.timedelta(hours=event_duration/3600000)
 		event_end_date = event_end.strftime("%Y-%m-%d")
 		event_end_time = event_end.strftime("%H:%M:%S")
 
-		event_description = BeautifulSoup(meetup_event.description, features='html.parser').get_text(separator='\n')
+		event_description = BeautifulSoup(event_description, features='html.parser').get_text(separator='\n')
 
 		form = EventForm(initial={
-			'author': request.user, 'title': meetup_event.name, 'location': event_location, 'latitude': meetup_event.venue['lat'],
-			'longitude': meetup_event.venue['lon'], 'date': event_start_date, 'time': event_start_time, 'date_to': event_end_date,
-			'time_to': event_end_time, 'description': event_description, 'meetup_ID': meetup_id, })
+			'author': request.user, 'title': meetup_event.name, 'location': event_location, 'latitude': event_lat,
+			'longitude': event_lng, 'date': event_start_date, 'time': event_start_time, 'date_to': event_end_date,
+			'time_to': event_end_time, 'description': event_description, 'meetup_ID': meetup_id,})
 
 	speaker_form = SpeakerForm()
 	sponsor_form = SponsorForm()
@@ -244,8 +275,8 @@ def create_event(request, meetup_id):
 	volunteer_list = Volunteer.objects.all()
 
 	context = {
-		'form': form, 'speaker_form': speaker_form, 'sponsor_form': sponsor_form, 'volunteer_form': volunteer_form,
-		'speaker_list': speaker_list, 'sponsor_list': sponsor_list, 'member_list': member_list, 'volunteer_list': volunteer_list,}
+		'form': form, 'speaker_form': speaker_form, 'sponsor_form': sponsor_form, 'volunteer_form': volunteer_form, 'speaker_list': speaker_list, 
+		'sponsor_list': sponsor_list, 'member_list': member_list, 'volunteer_list': volunteer_list, 'photo_url': photo_url}
 	return render(request, 'event/event-create.html', context)
 
 
@@ -254,6 +285,7 @@ def update_event(request, slug):
 	if not request.user.is_superuser and not request.user.useraccount.is_event_creator:
 		return redirect('landing-page')
 	event = get_object_or_404(Event, slug=slug)
+	meetup_id = event.meetup_ID
 	if request.method == 'POST':
 		event_form = EventForm(request.POST, request.FILES, instance=event)
 		if event_form.is_valid():
@@ -324,12 +356,51 @@ def update_event(request, slug):
 			if checked_member_volunteers:
 				for member in checked_member_volunteers:
 					event.member_volunteer.add(Member.objects.get(pk=member))
+
+			if 'Draft' in request.POST: event.status = 'Draft'
 			event.save()
 
 			UserLog.objects.create(description = "Event Updated. (%s)" % (event.title,),)
 			return redirect('event:event-view', event.slug)
 	else:
-		event_form = EventForm(instance=event)
+		# event_form = EventForm(instance=event)
+		meetup_event = settings.MEETUP_CLIENT.GetEvent({'id': meetup_id})
+		if 'venue' in meetup_event.__dict__:
+			try:
+				event_location = meetup_event.venue['name'] + ', ' + meetup_event.venue['address_1'] + ', ' + meetup_event.venue['address_2'] + ', ' + meetup_event.venue['city']
+			except Exception as e:
+				event_location = meetup_event.venue['name'] + ', ' + meetup_event.venue['address_1'] + ', ' + meetup_event.venue['city']
+			event_lat = meetup_event.venue['lat']
+			event_lng = meetup_event.venue['lon']
+		else:
+			event_location = 'No event venue was set'
+			event_lat = 6.9214
+			event_lng = 122.0790
+
+		if 'duration' in  meetup_event.__dict__:
+			event_duration = meetup_event.duration
+		else:
+			event_duration = 0
+
+		if 'description' in  meetup_event.__dict__:
+			event_description = meetup_event.description
+		else:
+			event_description = 'No Description'
+			
+		event_start = datetime.datetime.fromtimestamp(meetup_event.time/1000.0)
+		event_start_date = event_start.strftime("%Y-%m-%d")
+		event_start_time = event_start.strftime("%H:%M:%S")
+		event_end = datetime.datetime.fromtimestamp(meetup_event.time/1000.0) + datetime.timedelta(hours=event_duration/3600000)
+		event_end_date = event_end.strftime("%Y-%m-%d")
+		event_end_time = event_end.strftime("%H:%M:%S")
+
+		event_description = BeautifulSoup(event_description, features='html.parser').get_text(separator='\n')
+
+		event_form = EventForm(initial={
+			'author': request.user, 'title': meetup_event.name, 'location': event_location, 'latitude': event_lat,
+			'longitude': event_lng, 'date': event_start_date, 'time': event_start_time, 'date_to': event_end_date,
+			'time_to': event_end_time, 'description': event_description, 'meetup_ID': meetup_id, })
+
 		error_message = None
 
 	if event.speakers.all():
@@ -436,6 +507,43 @@ def list_published(request):
 	event_list = Event.objects.filter(author=request.user, status='Publish')
 	context = {'event_list': event_list}
 	return render(request, 'event/event-published.html', context)
+
+
+def create_feedback(request, slug):
+	event = get_object_or_404(Event, slug=slug)
+	if request.method == 'POST':
+		feedback_form = FeedbackForm(request.POST)
+		if feedback_form.is_valid():
+			feedback = feedback_form.save(commit=False)
+			feedback.event = event
+			feedback.save()
+			if request.user.is_anonymous:
+				UserLog.objects.create(description = "New Event Feedback. (%s)" % (event.title,),)
+			else:
+				UserLog.objects.create(user = request.user,description = "New Event Feedback. (%s)" % (event.title,),)
+			return redirect('event:event-feedback', event.slug)
+	else:
+		feedback_form = FeedbackForm()
+	context = {'feedback_form': feedback_form,'event': event,}
+	return render(request, 'event/event-feedback-create.html', context)
+
+
+def list_feedback(request, slug):
+	event = get_object_or_404(Event, slug=slug)
+	feedback_list = Feedback.objects.filter(event=event).order_by('-timestamp')
+	context = {'feedback_list': feedback_list,'event': event,}
+	return render(request, 'event/event-feedback.html', context)
+
+
+@login_required
+def delete_feedback(request, slug, pk):
+	if not request.user.is_superuser and not request.user.useraccount.is_event_creator:
+		return redirect('landing-page')
+	event = Event.objects.get(slug=slug)
+	feedback = get_object_or_404(Feedback, event = event, pk = pk)
+	UserLog.objects.create(user = request.user,description = "Event Feedback Removed. (%s)" % (event.title,),)
+	feedback.delete()
+	return redirect('event:event-feedback', slug=slug)
 
 
 @user_passes_test(lambda u: u.is_superuser)

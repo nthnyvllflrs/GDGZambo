@@ -203,7 +203,21 @@
 				</div>
 			</div>
 		</div>
-		<button type="submit" class="btn btn-block btn-dark mt-3" style="letter-spacing: 3px;">Update Event</button>
+
+		{% if event.status == 'Publish' %}
+	    <div class="row">
+				<div class="col-sm-6 mt-3">
+					<input type="submit" name="Draft" value="Draft" class="btn btn-block btn-dark">
+				</div>
+				<div class="col-sm-6 mt-3">
+					<input type="submit" name="Update" value="Update" class="btn btn-block btn-success">
+				</div>
+			</div>
+		{% else %}
+			<button type="submit" class="btn btn-block btn-dark mt-3" style="letter-spacing: 3px;">Update Event</button>
+		{% endif %}
+
+		
 	</form>
 </div>
 
@@ -409,7 +423,7 @@
 				success: function(json) {
 					console.log(json)
 					console.log(json.id + ", " + json.name)
-					$("#volunteer-checkgroup").append("<div class='col-sm-4 mt-3'><input type=checkbox name=unchecked_volunteers id=option" + json.id + " value=" + json.id + " /> <label for='volunteer" + json.id + "'>" + json.name + "</label>><br /><small>(" + json.description + ")</small></div>");
+					$("#volunteer-checkgroup").append("<div class='col-sm-4 mt-3'><input type=checkbox name=unchecked_volunteers id=option" + json.id + " value=" + json.id + " /> <label for='volunteer" + json.id + "'>" + json.name + "</label><br /><small>(" + json.description + ")</small></div>");
 					$('#volunteerModal').modal('toggle');
 				},
 				error: function(err) {

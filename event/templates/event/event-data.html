@@ -35,7 +35,7 @@
 			<div class="row">
 				<div class="col-12">
 					<h5 class="font-italic">
-						<strong>Gender Statistics</strong>
+						<strong>Gender Total</strong>
 					</h5>
 					<hr />
 				</div>
@@ -126,7 +126,7 @@
 	var myChart = new Chart(ctx, {
 	    type: 'doughnut',
 	    data: {
-	        labels: ["Girls", "Boys"],
+	        labels: ["Girls ({{ gender_count.female__sum }})", "Boys ({{ gender_count.male__sum }})"],
 	        datasets: [{
 	            data: [parseInt("{{ gender_count.female__sum }}"), parseInt("{{ gender_count.male__sum }}")],
 	            backgroundColor: [

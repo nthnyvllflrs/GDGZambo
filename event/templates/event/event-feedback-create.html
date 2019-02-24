@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container mt-5 mb-3">
+	<h5 class="font-italic">
+		<strong>{{ event.title }} Feedback Creation</strong>
+	</h5>
+	<hr />
+	<form method="POST">
+	{% csrf_token %}
+	<div class="row">
+		<div class="col-sm-12">
+			{{ feedback_form.name|as_crispy_field }}
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12">
+			{{ feedback_form.feedback|as_crispy_field }}
+		</div>
+	</div>
+	<button type="submit" class="btn btn-block btn-dark" style="letter-spacing: 3px;">Submit Feedback</button>
+</form>
+</div>
+{% endblock content %}

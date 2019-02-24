@@ -1,4 +1,5 @@
 # Django imports
+from datetime import date
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
@@ -97,6 +98,10 @@ class Event(models.Model):
 
 	def __str__(self):
 		return self.title
+
+	@property
+	def is_past_event(self):
+		return date.today() > self.date
 
 	@property
 	def attendees(self):

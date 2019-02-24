@@ -54,7 +54,16 @@
 				<h5 class="card-title font-italic">Other Details</h5>
 				<div class="row">
 					<div class="col-sm-6">{{ form.registration|as_crispy_field }}</div>
-					<div class="col-sm-6">{{ form.banner|as_crispy_field }}</div>
+					<div class="col-sm-6">
+						{{ form.banner|as_crispy_field }}
+						{% if photo_url %}
+					    <small class="font-italic">
+					    	Note: A banner was retrieve via Meetup. Overwrite?
+					    	<input type="checkbox" name="overwrite" />
+					    </small>
+						{% endif %}	
+					</div>
+					<input type="text" name="meetup_photo_url" value="{{photo_url}}" hidden="True">
 				</div>
 			</div>
 		</div>
@@ -203,7 +212,7 @@
 		  	<div class="modal-dialog modal-dialog-centered" role="document">
 		    	<div class="modal-content">
 	      		<div class="modal-header">
-	        		<h5 class="modal-title">Notify Event Subscribers?</h5>
+	        		<h5 class="modal-title">Notify Site Subscribers?</h5>
 	      		</div>
 	      		<div class="modal-footer">
 	      			<input type="submit" name="No" value="No" class="btn btn-sm btn-dark">

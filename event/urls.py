@@ -7,6 +7,7 @@ from .views import(
 	list_upcoming_events, list_past_events, list_published, list_draft,
 	view_event, create_pre_event, create_event, update_event, delete_event,
 	publish_event, 
+	list_feedback, create_feedback, delete_feedback,
 )
 
 from .api import (
@@ -44,4 +45,8 @@ urlpatterns = [
 	path('<slug:slug>/update/', update_event, name='event-update'),
 	path('<slug:slug>/delete/', delete_event, name='event-delete'),
 	path('<slug:slug>/publish/<int:notif>/', publish_event, name='event-publish'),
+
+	path('<slug:slug>/feedback/', list_feedback, name='event-feedback'),
+	path('<slug:slug>/feedback/create/', create_feedback, name='event-feedback-create'),
+	path('<slug:slug>/feedback/<int:pk>/delete/', delete_feedback, name='event-feedback-delete'),
 ]
