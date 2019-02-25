@@ -135,7 +135,7 @@ def view_event(request, slug):
 
 def list_upcoming_events(request):
 	date_now = datetime.datetime.now().date()
-	e_event = Event.objects.filter(Q(date__lte=date_now) & Q(date_to__gte=date_now))
+	e_event = Event.objects.filter(Q(date__lte=date_now) & Q(date_to__gte=date_now) & Q(status='Publish'))
 	event_list = Event.objects.filter(date__gt=date_now, status='Publish').order_by('date')
 	context = {'e_event': e_event, 'event_list': event_list,}
 	return render(request, 'event/event-upcoming.html', context)
@@ -558,7 +558,8 @@ def event_data(request):
 	date_from = request.GET.get('from')
 	date_to = request.GET.get('to')
 
-	event_list = Event.objects.filter(Q(date__range=(date_from, date_to)) & Q(date_to__lt=date_now))
+	# event_list = Event.objects.filter(Q(date__range=(date_from, date_to)) & Q(date_to__lt=date_now))
+	event_list = Event.objects.filter(Q(date__range=(date_from, date_to)))
 	top_attendee = EventAttendance.objects.values('member_name').annotate(num_events=Count('member_id')).order_by('-num_events', 'member_name')[:8]
 	gender_count = EventStatistics.objects.aggregate(Sum('manual_count'), Sum('male'), Sum('female'))
 

@@ -62,10 +62,10 @@ class EventForm(forms.ModelForm):
 			'location': forms.TextInput(attrs={'readonly': 'readonly'},),
 			'description': forms.Textarea(attrs={'readonly': 'readonly'},),
 			'meetup_ID': forms.TextInput(attrs={'readonly': 'readonly'},),
-			'date': forms.DateInput(attrs={'type': 'date', 'readonly': 'readonly'},),
-			'time': forms.TimeInput(attrs={'type': 'time', 'readonly': 'readonly'},),
-			'date_to': forms.DateInput(attrs={'type': 'date', 'readonly': 'readonly'},),
-			'time_to': forms.TimeInput(attrs={'type': 'time', 'readonly': 'readonly'},),
+			'date': forms.DateInput(attrs={'type': 'date',},),
+			'time': forms.TimeInput(attrs={'type': 'time',},),
+			'date_to': forms.DateInput(attrs={'type': 'date',},),
+			'time_to': forms.TimeInput(attrs={'type': 'time',},),
 			'latitude': forms.TextInput(attrs={'readonly': 'readonly', 'hidden': 'hidden'}),
 			'longitude': forms.TextInput(attrs={'readonly': 'readonly', 'hidden': 'hidden'}),}
 		help_texts ={'registration': '*Complete event registration URL',}

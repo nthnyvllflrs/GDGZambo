@@ -103,7 +103,12 @@
 					<tr>
 						<td class="text-center">{{ event.date|date:'m/d/Y' }}</td>
 						<td class="text-center">{{ event.meetup_ID }}</td>
-						<td>{{ event.title }}</td>
+						<td>
+							{{ event.title }}
+							<small>
+								{% if event.is_past_event %}(Past){% else %}(Upcoming){% endif %}
+							</small>
+						</td>
 
 						<td class="text-center">{{ event.eventstatistics.yes_rsvp }}</td>
 						<td class="text-center">{{ event.eventstatistics.manual_count }}</td>
