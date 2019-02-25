@@ -39,7 +39,7 @@ class Photo(models.Model):
 
 class Comment(models.Model):
 	blog 			= models.ForeignKey('Blog', on_delete=models.CASCADE)
-	name 			= models.CharField(max_length=120, default="Anonymous", blank=True, null=True)
+	name 			= models.CharField(max_length=120, default="GDG Believer", blank=True, null=True)
 	comment 	= models.TextField()
 	timestamp = models.DateTimeField(auto_now_add=True)
 
