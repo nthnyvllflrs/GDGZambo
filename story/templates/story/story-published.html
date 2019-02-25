@@ -29,18 +29,22 @@
 			  		<h5 class="card-title mb-1">
 			  			<strong>{{ story.title }}</strong>
 			  		</h5>
-			  		<small class="text-muted">Published {{ story.updated|date:"d F Y" }} ago</small>
+			  		<small class="text-muted">Published {{ story.updated|date:"d F Y" }}</small>
 			    	<p class="card-text mt-3 text-justify">
 			    		{{ story.body|truncatechars:350 }}
 			    	</p>
-	    			<a href="{% url 'story:story-view' story.slug %}" class="btn btn-sm btn-dark">Show More</a>
-			   		<a href="{% url 'story:story-update' story.slug %}" class="btn btn-sm btn-dark">Update</a>
-			   		<a 
-			   			href="#" data-toggle="modal" data-target="#confirmationModal{{story.id}}"
-			   			data-backdrop="static" data-keyboard="false" 
-			   			class="btn btn-sm btn-danger"
-			   		>
-			   			Delete
+	    			<a href="{% url 'story:story-view' story.slug %}" class="btn btn-sm btn-info"
+	    				data-toggle="tooltip" data-placement="top" title="Story Details">
+				    	<i class="fas fa-info-circle"></i>
+	    			</a>
+			   		<a href="{% url 'story:story-update' story.slug %}" class="btn btn-sm btn-dark"
+			   			data-toggle="tooltip" data-placement="top" title="Edit Story">
+			   			<i class="fas fa-pencil-alt"></i>
+			   		</a>
+			   		<a href="#" data-toggle="modal" data-target="#confirmationModal{{story.id}}"
+			   			data-backdrop="static" data-keyboard="false" class="btn btn-sm btn-danger"
+			   			data-toggle="tooltip" data-placement="top" title="Delete Story">
+			   			<i class="fas fa-trash"></i>
 			   		</a>
 
 			   		<!-- Modal -->

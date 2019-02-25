@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="container mt-5">
-	<h5><strong class="font-italic">GDG Zamboanga Events</strong></h5>
+	<h5><strong class="font-italic">GDG Zamboanga Events <small>(Drafts)</small></strong></h5>
 	<div class="btn-group mt-2" role="group">
 	  <a href="{% url 'event:event-upcoming' %}" class="btn btn-sm btn-dark">Upcoming</a>
 		<a href="{% url 'event:event-past' %}" class="btn btn-sm btn-dark">Past</a>
@@ -43,11 +43,18 @@
 			    		{{ event.description|truncatechars:350 }}
 			    	</p>
 			    	{% if request.user.is_authenticated and request.user.useraccount.is_event_creator or request.user.is_superuser %}
-				    	<a href="{% url 'event:event-view' event.slug %}" class="btn btn-sm btn-dark">Show More</a>
-				   		<a href="{% url 'event:event-update' event.slug %}" class="btn btn-sm btn-dark">Update</a>
+				    	<a href="{% url 'event:event-view' event.slug %}" class="btn btn-sm btn-info mt-2"
+				    		data-toggle="tooltip" data-placement="top" title="Event Details">
+				    		<i class="fas fa-info-circle"></i>
+				    	</a>
+				   		<a href="{% url 'event:event-update' event.slug %}" class="btn btn-sm btn-dark mt-2"
+				   			data-toggle="tooltip" data-placement="top" title="Edit Event">
+				   			<i class="fas fa-pencil-alt"></i>
+				   		</a>
 				   		<a href="#" data-toggle="modal" data-backdrop="static" data-keyboard="false" 
-					    	data-target="#subscriptionModal{{ event.id }}" class="btn btn-sm btn-info">
-							Publish
+				   			data-toggle="tooltip" data-placement="top" title="Publish Event"
+					    	data-target="#subscriptionModal{{ event.id }}" class="btn btn-sm btn-success mt-2">
+							<i class="fas fa-upload"></i>
 						</a>
 
 			        	<div class="modal fade" id="subscriptionModal{{ event.id }}" tabindex="-1" role="dialog" 
@@ -55,23 +62,23 @@
 						  	<div class="modal-dialog modal-dialog-centered" role="document">
 						    	<div class="modal-content">
 						      		<div class="modal-body text-center">
-						      			<div class="modal-header">
-							        		<h5 class="modal-title">Notify Site Subscribers?</h5>
+							      		<div class="modal-body text-center">
+							        		Do you want to notify site subscribers?
 							      		</div>
 						      		</div>
 						      		<div class="modal-footer">
-						      			<a href="{% url 'event:event-publish' event.slug 1 %}" class="btn btn-sm btn-success">Yes</a>
-						      			<a href="{% url 'event:event-publish' event.slug 0 %}" class="btn btn-sm btn-secondary">No</a>
 						      			<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
+						      			<a href="{% url 'event:event-publish' event.slug 0 %}" class="btn btn-sm btn-secondary">No</a>
+						      			<a href="{% url 'event:event-publish' event.slug 1 %}" class="btn btn-sm btn-success">Yes</a>
 						      		</div>
 						    	</div>
 						  	</div>
 						</div>
 
-				   		<a 
-				   			href="#" data-toggle="modal" data-target="#confirmationModal{{event.id}}"
-				   			class="btn btn-sm btn-danger">
-				   			Delete
+				   		<a href="#" data-toggle="modal" data-target="#confirmationModal{{event.id}}"
+				   			data-toggle="tooltip" data-placement="top" title="Delete Event"
+				   			class="btn btn-sm btn-danger mt-2">
+				   			<i class="fas fa-trash"></i>
 				   		</a>
 
 				   		<!-- Modal -->

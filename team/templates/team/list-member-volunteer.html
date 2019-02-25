@@ -165,11 +165,11 @@
 					      					<div class="row">
 					      						<div class="col-12 col-sm-4 mb-3">
 					      							<div class="row">
-					      								<div class="col-12">
+					      								<div class="col-sm-12">
 					      									<strong>Events (Speaker)</strong>
 					      								</div>
 					      								{% for event in member.event_set.all %}
-					      									<div class="col-12">
+					      									<div class="col-sm-12">
 						      									+ {{ event.title }}
 						      								</div>
 					      								{% endfor %}
@@ -177,11 +177,11 @@
 					      						</div>
 					      						<div class="col-12 col-sm-4 mb-3">
 					      							<div class="row">
-					      								<div class="col-12">
+					      								<div class="col-sm-12">
 					      									<strong>Sponsored Events</strong>
 					      								</div>
 					      								{% for event in member.sponsored_events.all %}
-					      									<div class="col-12">
+					      									<div class="col-sm-12">
 						      									+ {{ event.title }}
 						      								</div>
 					      								{% endfor %}
@@ -189,11 +189,11 @@
 					      						</div>
 					      						<div class="col-12 col-sm-4 mb-3">
 					      							<div class="row">
-					      								<div class="col-12">
+					      								<div class="col-sm-12">
 					      									<strong>Volunteered Events</strong>
 					      								</div>
 					      								{% for event in member.volunteered_events.all %}
-					      									<div class="col-12">
+					      									<div class="col-sm-12">
 						      									+ {{ event.title }}
 						      								</div>
 					      								{% endfor %}
@@ -214,7 +214,7 @@
 	
 	<div class="mt-5"></div>
 	<h5><strong class="font-italic">The GDG Zamboanga Volunteers</strong></h5>
-	{% if request.user.is_authenticated and request.user.is_superuser %}
+	{% if request.user.is_authenticated and request.user.is_superuser or request.user.useraccount.is_event_creator %}
 	    <a href="{% url 'team:create-volunteer' %}" class="btn btn-sm btn-info mt-2">Add Volunteers</a>
 	{% endif %}
 	<hr />
@@ -275,7 +275,7 @@
 									</a>
 								{% endif %}
 
-								{% if request.user.is_authenticated and request.user.is_superuser and request.user.useraccount.is_event_creator %}
+								{% if request.user.is_authenticated and request.user.is_superuser or request.user.useraccount.is_event_creator %}
 									| 
 									{% if request.user.is_superuser %}
 									    <a href="#" data-toggle="modal" data-target="#migrateModalVol{{volunteer.id}}"
@@ -388,13 +388,13 @@
 					      				</div>
 					      				<div class="col-sm-12">
 					      					<div class="row">
-					      						<div class="col-6">
+					      						<div class="col-sm-12">
 					      							<div class="row">
-					      								<div class="col-12">
+					      								<div class="col-sm-12">
 					      									<strong>Events Volunteered</strong>
 					      								</div>
 					      								{% for event in volunteer.event_set.all %}
-					      									<div class="col-4">
+					      									<div class="col-sm-6 mt-2">
 						      									{{ event.title }}
 						      								</div>
 					      								{% endfor %}

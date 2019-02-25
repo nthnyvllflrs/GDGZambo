@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="container mt-5">
-	<h5><strong class="font-italic">GDG Zamboanga Blogs</strong></h5>
+	<h5><strong class="font-italic">GDG Zamboanga Blogs <small>(Waiting)</small></strong></h5>
 	{% if request.user.is_authenticated and request.user.useraccount.is_blog_creator or request.user.is_superuser %}
 	  	<a href="{% url 'blog:blog-list' %}" class="btn btn-sm btn-info mt-2">List</a>
 	  	<a href="{% url 'blog:blog-published' %}" class="btn btn-sm btn-info mt-2">Published</a>
@@ -42,10 +42,14 @@
 				        	{{ blog.author }}
 					    </td>
 				        <td>
-				        	<a href="{% url 'blog:blog-view' blog.slug %}" class="btn btn-sm btn-dark">Details</a>
+				        	<a href="{% url 'blog:blog-view' blog.slug %}" class="btn btn-sm btn-info"
+				        		data-toggle="tooltip" data-placement="top" title="Blog Details">
+				        		<i class="fas fa-info-circle"></i>
+				        	</a>
 				        	<a href="#" data-toggle="modal" data-backdrop="static" data-keyboard="false" 
-						    	data-target="#confirmationModal" class="btn btn-sm btn-dark">
-								Publish
+						    	data-target="#confirmationModal" class="btn btn-sm btn-success"
+						    	data-toggle="tooltip" data-placement="top" title="Publish Blog">
+								<i class="fas fa-upload"></i>
 							</a>
 
 		        	<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" 

@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="container mt-5">
-	<h5><strong class="font-italic">GDG Zamboanga Events</strong></h5>
+	<h5><strong class="font-italic">GDG Zamboanga Events <small>(Past)</small></strong></h5>
 	<div class="btn-group mt-2" role="group">
 	  <a href="{% url 'event:event-upcoming' %}" class="btn btn-sm btn-dark">Upcoming</a>
 		<a href="{% url 'event:event-past' %}" class="btn btn-sm btn-dark">Past</a>
@@ -50,9 +50,6 @@
 			    	<a href="{% url 'event:event-view' event.slug %}" class="btn btn-sm btn-dark">Show More</a>
 			    	{% if event.meetup_ID %}
 			    		<a href="https://www.meetup.com/gdgzamboanga/events/{{ event.meetup_ID}}" target="_blank" class="btn btn-sm btn-primary">View On Meetup</a>
-			    	{% endif %}
-			    	{% if event.registration %}
-			    		<a href="{{ event.registration }}" target="_blank" class="btn btn-sm btn-info">Register</a>
 			    	{% endif %}
 			  	</div>
 			</div>

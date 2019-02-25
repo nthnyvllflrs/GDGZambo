@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="container mt-5">
-	<h5><strong class="font-italic">GDG Zamboanga Events</strong></h5>
+	<h5><strong class="font-italic">GDG Zamboanga Events <small>(Upcoming)</small></strong></h5>
 	<div class="btn-group mt-2" role="group">
 	  <a href="{% url 'event:event-upcoming' %}" class="btn btn-sm btn-dark">Upcoming</a>
 		<a href="{% url 'event:event-past' %}" class="btn btn-sm btn-dark">Past</a>
@@ -19,19 +19,13 @@
 
 	<hr />
 
-	{% if e_events %}
-		{% for event in e_events %}
+	{% if e_event %}
+	asdasds
+		{% for event in e_event %}
 			<div class="card mb-4">
 			  	<div class="card-body">
 			  		<h5 class="card-title mb-1">
-			  			<strong>{{ event.title }}</strong>
-			  			<small class="text-muted">
-		  					<a 
-		  						href="#" 
-		  						class="font-weight-bold">
-		  						<span class="badge badge-primary">{{ event.feedback_set.count }}</span>
-		  					</a>
-			  			</small>
+			  			<strong>{{ event.title }} <small class="font-italic">(Happening Now!)</small></strong>
 			  		</h5>
 			  		<small class="card-subtitle text-muted">{{ event.location }}</small>
 			  		, <small class="card-subtitle text-muted">{{ event.attendees }} Attendee(s)</small>
@@ -47,7 +41,7 @@
 	{% endif %}
 
 
-	{% if event_list.count == 0 %}
+	{% if event_list.count == 0 and e_event.count == 0 %}
 		<div class="card">
 		  	<div class="card-body">
 		    	<p class="card-text font-italic">
@@ -62,13 +56,6 @@
 			  	<div class="card-body">
 			  		<h5 class="card-title mb-1">
 			  			<strong>{{ event.title }}</strong>
-			  			<small class="text-muted">
-		  					<a 
-		  						href="#" 
-		  						class="font-weight-bold">
-		  						<span class="badge badge-primary">{{ event.feedback_set.count }}</span>
-		  					</a>
-			  			</small>
 			  		</h5>
 			  		<small class="card-subtitle text-muted">{{ event.location }}</small>
 			  		, <small class="card-subtitle text-muted">{{ event.attendees }} Attendee(s)</small>

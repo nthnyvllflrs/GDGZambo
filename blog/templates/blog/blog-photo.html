@@ -44,7 +44,7 @@
 		<div class="row mt-3">
 			{% for photo in photo_set %}
 				<div class="col-sm-3">
-					<img src="{{ photo.image.secure_url }}" width="100%" height="250px" class="img-thumbnail"/>
+					<img src="{{ photo.image.url }}" width="100%" height="250px" class="img-thumbnail"/>
 					<a href="#" class="btn btn-block btn-sm btn-danger mt-1"
 						data-toggle="modal" data-target="#confirmationModal{{photo.id}}">
 						Remove

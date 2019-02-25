@@ -38,19 +38,26 @@
 			  			{% endif %}
 			  			</small>
 			  		</h5>
-			  		<small class="text-muted">Published {{ story.updated|date:"d F Y" }} ago</small>
+			  		<small class="text-muted">Published {{ story.updated|date:"d F Y" }}</small>
 			    	<p class="card-text mt-3 text-justify">
 			    		{{ story.body|truncatechars:350 }}
 			    	</p>
 
 			   		{% if not story.status == 'Publish' %}
-			    		<a href="{% url 'story:story-view' story.slug %}" class="btn btn-sm btn-dark">Show More</a>
+			    		<a href="{% url 'story:story-view' story.slug %}" class="btn btn-sm btn-info
+			    			data-toggle="tooltip" data-placement="top" title="Story Details">
+					    	<i class="fas fa-info-circle"></i>
+			    		</a>
 			    		{% if request.user.is_authenticated and request.user.useraccount.is_blog_creator or request.user.is_superuser %}
-					   		<a href="{% url 'story:story-update' story.slug %}" class="btn btn-sm btn-dark">Update</a>
+					   		<a href="{% url 'story:story-update' story.slug %}" class="btn btn-sm btn-dark"
+					   			data-toggle="tooltip" data-placement="top" title="Edit Story">
+					   			<i class="fas fa-pencil-alt"></i>
+					   		</a>
 					   		{% if story.status == 'Draft' %}
 						   		<a href="#" data-toggle="modal" data-backdrop="static" data-keyboard="false" 
-							    	data-target="#publishModal{{ story.id }}" class="btn btn-sm btn-success">
-										Publish
+							    	data-target="#publishModal{{ story.id }}" class="btn btn-sm btn-success"
+							    	data-toggle="tooltip" data-placement="top" title="Publish Story">
+										<i class="fas fa-upload"></i>
 									</a>
 									{% if not request.user.is_superuser %}
 									    <!-- Modal -->
@@ -80,19 +87,19 @@
 									        		<h5 class="modal-title">Notify Site Subscribers?</h5>
 									      		</div>
 									      		<div class="modal-footer">
-															<a href="{% url 'story:story-publish' story.slug 1 %}" class="btn btn-sm btn-success">Yes</a>
-															<a href="{% url 'story:story-publish' story.slug 0 %}" class="btn btn-sm btn-dark">No</a>
-															<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
+													<a href="{% url 'story:story-publish' story.slug 1 %}" class="btn btn-sm btn-success">Yes</a>
+													<a href="{% url 'story:story-publish' story.slug 0 %}" class="btn btn-sm btn-dark">No</a>
+													<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
 									      		</div>
 									    	</div>
 									  	</div>
 										</div>
 									{% endif %}
 								{% endif %}
-					   		<a href="#" class="btn btn-sm btn-danger"
-					   			data-toggle="modal" data-target="#confirmationModal{{story.id}}"
-					   			data-backdrop="static" data-keyboard="false">
-					   			Delete
+					   		<a href="#" data-toggle="modal" data-target="#confirmationModal{{story.id}}"
+					   			class="btn btn-sm btn-danger" data-backdrop="static" data-keyboard="false" 
+					   			data-toggle="tooltip" data-placement="top" title="Delete Story">
+					   			<i class="fas fa-trash"></i>
 					   		</a>
 					   		<!-- Modal -->
 								<div class="modal fade" id="confirmationModal{{story.id}}" tabindex="-1" role="dialog">

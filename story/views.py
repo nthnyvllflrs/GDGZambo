@@ -15,6 +15,8 @@ from user.utils import send_story_notification, send_story_published_notificatio
 
 def view_story(request, slug):
 	story = get_object_or_404(Story, slug=slug)
+	if story.status != 'Publish' and not request.user.is_authenticated:
+		return redirect('landing-page')
 	context = {'story': story,}
 	return render(request, 'story/story-view.html', context)
 
@@ -34,10 +36,10 @@ def publish_story(request, slug, notif):
 	if request.user.is_superuser:
 		story.status = 'Publish'
 		description = "Story Publish"
-
-		member_notif_thread = threading.Thread(target=send_story_published_notification(user.useraccount.member, story))
-		member_notif_thread.setDaemon = True
-		member_notif_thread.start()
+		if not user.is_superuser:
+			member_notif_thread = threading.Thread(target=send_story_published_notification(user.useraccount.member, story))
+			member_notif_thread.setDaemon = True
+			member_notif_thread.start()
 		if notif == 1:
 			story_notif_thread = threading.Thread(target=send_story_notification(story))
 			story_notif_thread.setDaemon = True

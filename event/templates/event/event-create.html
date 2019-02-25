@@ -211,13 +211,13 @@
 			<div class="modal fade" id="notifyModal" tabindex="-1" role="dialog">
 		  	<div class="modal-dialog modal-dialog-centered" role="document">
 		    	<div class="modal-content">
-	      		<div class="modal-header">
-	        		<h5 class="modal-title">Notify Site Subscribers?</h5>
-	      		</div>
-	      		<div class="modal-footer">
-	      			<input type="submit" name="No" value="No" class="btn btn-sm btn-dark">
-	      			<input type="submit" name="Yes" value="Yes" class="btn btn-sm btn-success">
-	      		</div>
+		      		<div class="modal-body text-center">
+		        		Do you want to notify site subscribers?
+		      		</div>
+		      		<div class="modal-footer">
+		      			<input type="submit" name="No" value="No" class="btn btn-sm btn-dark">
+		      			<input type="submit" name="Yes" value="Yes" class="btn btn-sm btn-success">
+		      		</div>
 		    	</div>
 		  	</div>
 			</div>
@@ -421,7 +421,7 @@
 				success: function(json) {
 					console.log(json)
 					console.log(json.id + ", " + json.name)
-					$("#volunteer-checkgroup").append("<div class='col-sm-4 mt-3'><input type=checkbox name=unchecked_volunteers id=option" + json.id + " value=" + json.id + " /> <label for='volunteer" + json.id + "'>" + json.name + "</label><br /><small>(" + json.description + ")</small></div>");
+					$("#volunteer-checkgroup").append("<div class='col-sm-4 mt-3'><input type=checkbox name=volunteers id=option" + json.id + " value=" + json.id + " /> <label for='volunteer" + json.id + "'>" + json.name + "</label><br /><small>(" + json.description + ")</small></div>");
 					$('#volunteerModal').modal('toggle');
 				},
 				error: function(err) {

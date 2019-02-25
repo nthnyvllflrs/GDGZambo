@@ -14,6 +14,8 @@ from user.utils import send_blog_notification, send_blog_published_notification,
 
 def view_blog(request, slug):
 	blog = get_object_or_404(Blog, slug=slug)
+	if blog.status != 'Publish' and not request.user.is_authenticated:
+		return redirect('landing-page')
 	context = {'blog': blog,}
 	return render(request, 'blog/blog-view.html', context)
 
@@ -75,10 +77,10 @@ def publish_blog(request, slug, notif):
 	if request.user.is_superuser:
 		blog.status = 'Publish'
 		description = "Blog Publish"
-
-		member_notif_thread = threading.Thread(target=send_blog_published_notification(user.useraccount.member, blog))
-		member_notif_thread.setDaemon = True
-		member_notif_thread.start()
+		if not user.is_superuser:
+			member_notif_thread = threading.Thread(target=send_blog_published_notification(user.useraccount.member, blog))
+			member_notif_thread.setDaemon = True
+			member_notif_thread.start()
 		if notif == 1:
 			blog_notif_thread = threading.Thread(target=send_blog_notification(blog))
 			blog_notif_thread.setDaemon = True

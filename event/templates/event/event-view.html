@@ -65,7 +65,7 @@
 						{% if not speaker.photo %}
 							<img class="mr-3 img-fluid rounded-circle" src="https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg" width="60px" height="60px" />
 						{% else %}
-							<img class="mr-3 img-fluid rounded-circle" src="{{ speaker.photo.secure_url }}" width="60px" height="60px" />
+							<img class="mr-3 img-fluid rounded-circle" src="{{ speaker.photo.url }}" width="60px" height="60px" />
 						{% endif %}
 					  	<div class="media-body">
 						    <strong>{{ speaker.name }}</strong> <br>
@@ -82,7 +82,7 @@
 						{% if not member.photo %}
 							<img class="mr-3 img-fluid rounded-circle" src="https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg" width="60px" height="60px" />
 						{% else %}
-							<img class="mr-3 img-fluid rounded-circle" src="{{ member.photo.secure_url }}" width="60px" height="60px" />
+							<img class="mr-3 img-fluid rounded-circle" src="{{ member.photo.url }}" width="60px" height="60px" />
 						{% endif %}
 					  	<div class="media-body">
 						    <strong>{{ member.name }}</strong> <br>
@@ -111,7 +111,7 @@
 						{% if not sponsor.photo %}
 							<img class="mr-3 img-fluid rounded-circle" src="https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg" width="60px" height="60px" />
 						{% else %}
-							<img class="mr-3 img-fluid rounded-circle" src="{{ sponsor.photo.secure_url }}" width="60px" height="60px" />
+							<img class="mr-3 img-fluid rounded-circle" src="{{ sponsor.photo.url }}" width="60px" height="60px" />
 						{% endif %}
 					  	<div class="media-body">
 						    <strong>{{ sponsor.name }}</strong> <br>
@@ -128,7 +128,7 @@
 						{% if not member.photo %}
 							<img class="mr-3 img-fluid rounded-circle" src="https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg" width="60px" height="60px" />
 						{% else %}
-							<img class="mr-3 img-fluid rounded-circle" src="{{ member.photo.secure_url }}" width="60px" height="60px" />
+							<img class="mr-3 img-fluid rounded-circle" src="{{ member.photo.url }}" width="60px" height="60px" />
 						{% endif %}
 					  	<div class="media-body">
 						    <strong>{{ member.name }}</strong> <br>
@@ -157,7 +157,7 @@
 						{% if not volunteer.photo %}
 							<img class="mr-3 img-fluid rounded-circle" src="https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg" width="60px" height="60px" />
 						{% else %}
-							<img class="mr-3 img-fluid rounded-circle" src="{{ volunteer.photo.secure_url }}" width="60px" height="60px" />
+							<img class="mr-3 img-fluid rounded-circle" src="{{ volunteer.photo.url }}" width="60px" height="60px" />
 						{% endif %}
 					  	<div class="media-body">
 						    <strong>{{ volunteer.name }}</strong> <br>
@@ -174,7 +174,7 @@
 						{% if not volunteer.photo %}
 							<img class="mr-3 img-fluid rounded-circle" src="https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg" width="60px" height="60px" />
 						{% else %}
-							<img class="mr-3 img-fluid rounded-circle" src="{{ volunteer.photo.secure_url }}" width="60px" height="60px" />
+							<img class="mr-3 img-fluid rounded-circle" src="{{ volunteer.photo.url }}" width="60px" height="60px" />
 						{% endif %}
 					  	<div class="media-body">
 						    <strong>{{ volunteer.name }}</strong> <br>
@@ -191,7 +191,7 @@
 	{% endif %}
 
 	{% if event.is_past_event %}
-    <a href="{% url 'event:event-feedback' event.slug %}" class="font-weight-bold font-italic">Goto Feedback Page</a>
+    	<a href="{% url 'event:event-feedback' event.slug %}" class="font-weight-bold font-italic">Goto Feedback Page</a>
 	{% endif %}
 	
 	<hr />

@@ -126,16 +126,16 @@ def delete_sponsor(request, slug):
 
 def view_event(request, slug):
 	event = get_object_or_404(Event, slug=slug)
-	print(event.banner.__dict__.keys())
+	if event.status != 'Publish' and not request.user.is_authenticated:
+		return redirect('landing-page')
 	context = {'event': event,}
 	return render(request, 'event/event-view.html', context)
 
 
 def list_upcoming_events(request):
 	date_now = datetime.datetime.now().date()
-	e_event = Event.objects.filter(date=date_now)[:1]
-	date_now = datetime.datetime.now().date()
-	event_list = Event.objects.filter(date_to__gt=date_now, status='Publish').order_by('date')
+	e_event = Event.objects.filter(Q(date__lte=date_now) & Q(date_to__gte=date_now))
+	event_list = Event.objects.filter(date__gt=date_now, status='Publish').order_by('date')
 	context = {'e_event': e_event, 'event_list': event_list,}
 	return render(request, 'event/event-upcoming.html', context)
 
@@ -208,7 +208,7 @@ def create_event(request, meetup_id):
 					event.member_volunteer.add(Member.objects.get(pk=volunteer))
 
 			if not ('overwrite' in request.POST) and 'meetup_photo_url' in request.POST:
-				if request.POST['meetup_photo_url'] != None:
+				if request.POST['meetup_photo_url'] != 'None':
 					meetup_photo_url = request.POST['meetup_photo_url']
 					meetup_banner = cloudinary.uploader.upload(meetup_photo_url)
 					result = cloudinary.CloudinaryResource(public_id=meetup_banner['public_id'], type=meetup_banner['type'], 
@@ -218,7 +218,7 @@ def create_event(request, meetup_id):
 			event.save()
 
 			EventStatistics.objects.create(event=event)
-			UserLog.objects.create(description = "New Event Created. (%s)" % (event.title,),)
+			UserLog.objects.create(user = request.user, description = "New Event Created. (%s)" % (event.title,),)
 			if ('Yes' in request.POST) and event.status == 'Publish':
 				t = threading.Thread(target=send_event_notification(event))
 				t.setDaemon = True
@@ -360,7 +360,7 @@ def update_event(request, slug):
 			if 'Draft' in request.POST: event.status = 'Draft'
 			event.save()
 
-			UserLog.objects.create(description = "Event Updated. (%s)" % (event.title,),)
+			UserLog.objects.create(user = request.user, description = "Event Updated. (%s)" % (event.title,),)
 			return redirect('event:event-view', event.slug)
 	else:
 		# event_form = EventForm(instance=event)
@@ -659,7 +659,6 @@ def event_manual_count_update(request, id):
 		form = EventStatisticManualCountForm(request.POST, instance=event_statistic)
 		if form.is_valid():
 			statistic = form.save(commit=False)
-			print(int(event_statistic.yes_rsvp), int(statistic.manual_count))
 			if int(event_statistic.yes_rsvp) <= int(statistic.manual_count):
 				statistic.save()
 				return redirect('event:event-data-details', id=id)

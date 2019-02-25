@@ -89,7 +89,7 @@ class Event(models.Model):
 	member_sponsor	 	= models.ManyToManyField(Member, related_name='sponsored_events')
 	member_volunteer 	= models.ManyToManyField(Member, related_name='volunteered_events')
 
-	registration 			= models.CharField(max_length=1000, blank=True, null=True)
+	registration 			= models.URLField(max_length=1000, blank=True, null=True)
 	status 						= models.CharField(max_length=120, default='Draft')
 
 	slug 							= models.SlugField(null=True, blank=True)
@@ -101,7 +101,7 @@ class Event(models.Model):
 
 	@property
 	def is_past_event(self):
-		return date.today() > self.date
+		return date.today() > self.date_to
 
 	@property
 	def attendees(self):

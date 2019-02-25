@@ -111,7 +111,7 @@
 
 	<!-- CURRENT EVENT -->
 	{% if e_event %}
-	<h5 class="mt-5"><strong class="font-italic">Events (Happening Now)</strong></h5>
+	<h5 class="mt-5"><strong class="font-italic">Events Happening Now</strong></h5>
 	<hr />
 	<div class="row">
 		<div class="col">
@@ -125,7 +125,7 @@
 					    	<p class="card-text mt-3 text-justify">
 					    		{{ event.description|truncatechars:250 }}
 					    	</p>
-					    	<a href="#" class="btn btn-sm btn-dark">Show More</a>
+					    	<a href="{% url 'event:event-view' event.slug %}" class="btn btn-sm btn-dark">Show More</a>
 					    	{% if event.meetup_ID %}
 					    		<a href="https://www.meetup.com/gdgzamboanga/events/{{ event.meetup_ID}}" class="btn btn-sm btn-primary" target="_blank" >View On Meetup</a>
 					    	{% endif %}
@@ -152,12 +152,12 @@
 						    	<p class="card-text mt-3 text-justify">
 						    		{{ event.description|truncatechars:250 }}
 						    	</p>
-						    	<a href="#" class="btn btn-sm btn-dark">Show More</a>
+						    	<a href="{% url 'event:event-view' event.slug %}" class="btn btn-sm btn-dark mt-2">Show More</a>
 						    	{% if event.meetup_ID %}
-						    		<a href="https://www.meetup.com/gdgzamboanga/events/{{ event.meetup_ID}}" class="btn btn-sm btn-primary" target="_blank" >View On Meetup</a>
+						    		<a href="https://www.meetup.com/gdgzamboanga/events/{{ event.meetup_ID}}" class="btn btn-sm btn-primary mt-2" target="_blank" >View On Meetup</a>
 						    	{% endif %}
 						    	{% if event.registration %}
-						    		<a href="{{ event.registration }}" class="btn btn-sm btn-danger" target="_blank" >Register</a>
+						    		<a href="{{ event.registration }}" class="btn btn-sm btn-info mt-2" target="_blank" >Register</a>
 						    	{% endif %}
 						  	</div>
 						</div>

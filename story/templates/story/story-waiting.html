@@ -42,10 +42,14 @@
 				        	{{ story.author }}
 					    </td>
 				        <td>
-				        	<a href="{% url 'story:story-view' story.slug %}" class="btn btn-sm btn-dark">Details</a>
+				        	<a href="{% url 'story:story-view' story.slug %}" class="btn btn-sm btn-info"
+				        		data-toggle="tooltip" data-placement="top" title="Story Details">
+				        		<i class="fas fa-info-circle"></i>
+				        	</a>
 				        	<a href="#" data-toggle="modal" data-backdrop="static" data-keyboard="false" 
-						    	data-target="#confirmationModal" class="btn btn-sm btn-dark">
-								Publish
+						    	data-target="#confirmationModal" class="btn btn-sm btn-success"
+						    	data-toggle="tooltip" data-placement="top" title="Publish Story">
+								<i class="fas fa-upload"></i>
 							</a>
 
 				        	<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" 

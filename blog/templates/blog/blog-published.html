@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="container mt-5">
-	<h5><strong class="font-italic">GDG Zamboanga Blogs</strong></h5>
+	<h5><strong class="font-italic">GDG Zamboanga Blogs <small>(Published)</small></strong></h5>
 	{% if request.user.is_authenticated and request.user.useraccount.is_blog_creator or request.user.is_superuser %}
 		<a href="{% url 'blog:blog-list' %}" class="btn btn-sm btn-info mt-2">List</a>
 	  	<a href="{% url 'blog:blog-published' %}" class="btn btn-sm btn-info mt-2">Published</a>
@@ -36,18 +36,22 @@
 		  					</a>
 			  			</small>
 			  		</h5>
-			  		<small class="text-muted">Published {{ blog.updated|date:"d F Y" }} ago</small>
+			  		<small class="text-muted">Published {{ blog.updated|date:"d F Y" }}</small>
 			    	<p class="card-text mt-3 text-justify">
 			    		{{ blog.body|truncatechars:350 }}
 			    	</p>
-	    			<a href="{% url 'blog:blog-view' blog.slug %}" class="btn btn-sm btn-dark">Show More</a>
-			   		<a href="{% url 'blog:blog-update' blog.slug %}" class="btn btn-sm btn-dark">Update</a>
-			   		<a 
-			   			href="#" data-toggle="modal" data-target="#confirmationModal{{blog.id}}"
-			   			data-backdrop="static" data-keyboard="false" 
-			   			class="btn btn-sm btn-danger"
-			   		>
-			   			Delete
+	    			<a href="{% url 'blog:blog-view' blog.slug %}" class="btn btn-sm btn-info"
+	    				data-toggle="tooltip" data-placement="top" title="Blog Details">
+		        		<i class="fas fa-info-circle"></i>
+	    			</a>
+			   		<a href="{% url 'blog:blog-update' blog.slug %}" class="btn btn-sm btn-dark"
+			   			data-toggle="tooltip" data-placement="top" title="Edit Blog">
+			   			<i class="fas fa-pencil-alt"></i>
+			   		</a>
+			   		<a href="#" data-toggle="modal" data-target="#confirmationModal{{blog.id}}"
+			   			data-backdrop="static" data-keyboard="false" class="btn btn-sm btn-danger"
+			   			data-toggle="tooltip" data-placement="top" title="Delete Blog">
+			   			<i class="fas fa-trash"></i>
 			   		</a>
 
 			   		<!-- Modal -->
