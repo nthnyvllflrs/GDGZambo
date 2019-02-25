@@ -11,12 +11,13 @@ from .views import(
 )
 
 from .api import (
-	create_speaker_api, create_sponsor_api,
+	create_speaker_api, create_sponsor_api, sync_event_api,
 )
 
 urlpatterns = [
 	path('api/speaker/create/', create_speaker_api, name='speaker-create-api'),
 	path('api/sponsor/create/', create_sponsor_api, name='sponsor-create-api'),
+	path('api/event/<int:id>/sync/', sync_event_api, name='sync-event-api'),
 
 	path('speaker/', list_speaker, name='speaker-list'),
 	path('speaker/create/', create_speaker, name='speaker-create'),

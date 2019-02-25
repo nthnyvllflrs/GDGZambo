@@ -617,9 +617,12 @@ def event_data_details(request, id):
 	event = Event.objects.get(id=id)
 	event_statistic = get_object_or_404(EventStatistics, event=event)
 	event_attendance = EventAttendance.objects.filter(event_statistic=event_statistic)
-	gender_percentage = {
-		'male': round((int(event_statistic.male)/int(event_statistic.manual_count))*100, 2),
-		'female': round((int(event_statistic.female)/int(event_statistic.manual_count))*100, 2),}
+	if int(event_statistic.manual_count) == 0:
+		gender_percentage = {'male': 0, 'female': 0, 'manual_count': 0}
+	else:
+		gender_percentage = {
+			'male': round((int(event_statistic.male)/int(event_statistic.manual_count))*100, 2),
+			'female': round((int(event_statistic.female)/int(event_statistic.manual_count))*100, 2),}
 	context = { 'event': event, 'event_statistic': event_statistic, 'event_attendance': event_attendance, 'gender_percentage': gender_percentage,}
 	return render(request, 'event/event-data-details.html', context)
 

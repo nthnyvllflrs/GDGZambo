@@ -19,7 +19,7 @@
 						</div>
 					{% endfor %}
 				{% else %}
-					<div class="col-12 mb-3">
+					<div class="col-sm-12 mb-3">
 						<div class="card">
 						  	<div class="card-body">
 						    	<p class="card-text font-italic">
@@ -31,15 +31,15 @@
 				{% endif %}
 			</div>
 		</div>
-		<div class="col">
+		<div class="col-sm-6">
 			<div class="row">
-				<div class="col-12">
+				<div class="col-sm-12">
 					<h5 class="font-italic">
 						<strong>Gender Total</strong>
 					</h5>
 					<hr />
 				</div>
-				<div class="col-12">
+				<div class="col-sm-12">
 					<canvas id="genderChart" width="200" height="75"></canvas>	
 				</div>
 			</div>
@@ -104,12 +104,13 @@
 						<td class="text-center">{{ event.date|date:'m/d/Y' }}</td>
 						<td class="text-center">{{ event.meetup_ID }}</td>
 						<td>{{ event.title }}</td>
-						<td class="text-center">{{ event.eventstatistic.yes_rsvp }}</td>
-						<td class="text-center">{{ event.eventstatistic.manual_count }}</td>
+
+						<td class="text-center">{{ event.eventstatistics.yes_rsvp }}</td>
+						<td class="text-center">{{ event.eventstatistics.manual_count }}</td>
 						<td class="text-center">
-							<a href="{% url 'event:event-data-sync' event.id %}">Sync</a>
+							<a href="#" class="syncBtn" data-url="{% url 'event:sync-event-api' event.id %}">Sync</a>
 				      		&nbsp | &nbsp
-				      		<a href="{% url 'event:event-data-details' event.id %}">Details</a>
+				      		<a id="eventDetails" href="{% url 'event:event-data-details' event.id %}">Details</a>
 						</td>
 					</tr>
 					{% endfor %}
@@ -118,15 +119,44 @@
 		{% endif %}
 	</div>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="syncModal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-body text-center">
+				<p>Please wait... Syncing Data.</p>
+			</div>
+		</div>
+	</div>
+</div>
 
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
 <script type="text/javascript">
+	$(".syncBtn").click(function(e) {
+		e.preventDefault()
+		$('#syncModal').modal('toggle');
+	  	$.ajax({
+			url: $(this).attr('data-url'),
+			data: {},
+			success: function(json) {
+				console.log(json)
+				$('#syncModal').modal('toggle');
+				document.getElementById('eventDetails').click();
+			},
+			error: function(err) {
+				console.log(err)
+				$('#syncModal').modal('toggle');
+				document.getElementById('eventDetails').click();
+			}
+		})
+	});
+
 	var ctx = document.getElementById("genderChart").getContext('2d');
 	var myChart = new Chart(ctx, {
 	    type: 'doughnut',
 	    data: {
-	        labels: ["Girls ({{ gender_count.female__sum }})", "Boys ({{ gender_count.male__sum }})"],
+	        labels: ["Girls ({{ gender_percentage.female }}%)", "Boys ({{ gender_percentage.male }}%)"],
 	        datasets: [{
 	            data: [parseInt("{{ gender_count.female__sum }}"), parseInt("{{ gender_count.male__sum }}")],
 	            backgroundColor: [
@@ -145,32 +175,14 @@
 	            display: true,
 	            position: 'bottom',
 	            labels: {
-	                fontColor: 'rgb(255, 99, 132)'
+	                fontColor: 'rgb(0, 0, 0)'
 	            }
+	        },
+	        title: {
+	        	display: true,
+	        	text: 'Out of {{ gender_count.manual_count__sum }} Attendees'
 	        }
 		}
-	});
-
-	var ctx = document.getElementById("attendanceChart").getContext('2d');
-	var myChart = new Chart(ctx, {
-	    type: 'line',
-	    data: {
-	        datasets: [{
-	        	fill: false,
-	        	showLine: true,
-	            data: [10,20,50,100,2,200],
-	            backgroundColor: [
-	                'rgba(255, 99, 132, 0.2)',
-	                'rgba(54, 162, 235, 0.2)'
-	            ],
-	            borderColor: [
-	                'rgba(255,99,132,1)',
-	                'rgba(54, 162, 235, 1)'
-	            ],
-	            borderWidth: 1
-	        }]
-	    },
-	    options: {}
 	});
 </script>
 {% endblock content %}
