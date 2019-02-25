@@ -1,0 +1,89 @@
+<!DOCTYPE Html>
+<html>
+    <head>
+        <title>Event Data</title>
+        <style>
+            * {
+                font-size: 12px;
+                font-family: 'Tahoma', 'Verdana';
+            }
+            h3 {
+                margin-bottom: 0;
+            }
+            hr {
+                margin-top: 0;
+            }
+
+            .full-width-img {
+                width: 100%;
+            }
+        </style>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    </head>
+    <body>
+        <img src="{{ event_statistic.event.banner.url }}" class="full-width-img" />
+        <h1>{{ event_statistic.event }}</h1>
+
+        <h3>Author</h3> 
+        <hr />
+        {{ event_statistic.event.author }} <br />
+
+        <h3>Location</h3> 
+        <hr />
+        {{ event_statistic.event.location }} ({{ event_statistic.event.latitude }}, {{ event_statistic.event.longitude }})<br />
+
+        <h3>Date and Time</h3>
+        <hr />
+        {% if event_statistic.event.date == event_statistic.event.date_to %}
+            {{ event_statistic.event.date|date:'l, F d, Y'}} {{ event_statistic.event.time|time:'f A' }} - {{ event_statistic.event.time_to|time:'f A' }}
+        {% else %}
+            {{ event_statistic.event.date|date:'l, F d, Y'}}, {{ event_statistic.event.time|time:'f A' }} - 
+            {{ event_statistic.event.date_to|date:'l, F d, Y'}}, {{ event_statistic.event.time_to|time:'f A' }}
+        {% endif %}
+
+        <h3>Description</h3>
+        <hr />
+        {{ event_statistic.event.description }}
+
+        <h3>Speakers</h3>
+        <hr />
+        {% for speaker in event_statistic.event.speakers.all %}
+            {{ speaker }}, 
+        {% endfor %}
+        {% for speaker in event_statistic.event.member_speaker.all %}
+            {{ speaker }}, 
+        {% endfor %}
+
+        <h3>Sponsors</h3>
+        <hr />
+        {% for sponsor in event_statistic.event.sponsors.all %}
+            {{ sponsor }}, 
+        {% endfor %}
+        {% for speaker in event_statistic.event.member_sponsor.all %}
+            {{ speaker }}, 
+        {% endfor %}
+
+        <h3>Volunteers</h3>
+        <hr />
+        {% for volunteer in event_statistic.event.volunteers.all %}
+            {{ volunteer }}, 
+        {% endfor %}
+        {% for speaker in event_statistic.event.member_volunteer.all %}
+            {{ speaker }}, 
+        {% endfor %}
+
+        <h3>Event Data</h3>
+        <hr />        
+        <p>
+            Yes RSVP Count: {{event_statistic.yes_rsvp}}
+            &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+            No RSVP Count: {{event_statistic.no_rsvp}}
+        </p>
+        <p></p>
+        <p>Manual Attendee Count: {{event_statistic.manual_count}}
+        &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+        Male Count: {{event_statistic.male}}
+        &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+        Female Count: {{event_statistic.female}}</p>
+    </body>
+</html>

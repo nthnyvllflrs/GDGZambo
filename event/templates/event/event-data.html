@@ -111,6 +111,8 @@
 							<a href="#" class="syncBtn" data-url="{% url 'event:sync-event-api' event.id %}">Sync</a>
 				      		&nbsp | &nbsp
 				      		<a id="eventDetails" href="{% url 'event:event-data-details' event.id %}">Details</a>
+				      		&nbsp | &nbsp
+				      		<a href="{% url 'event:event-data-pdf' event.id %}" target="_blank">PDF</a>
 						</td>
 					</tr>
 					{% endfor %}

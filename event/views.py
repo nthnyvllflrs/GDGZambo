@@ -13,6 +13,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from .models import (Sponsor, Speaker, Event, Feedback, EventStatistics, EventAttendance, Info,)
 from .forms import (SponsorForm, SpeakerForm, EventForm, FeedbackForm, EventStatisticForm, EventStatisticManualCountForm)
+from .utils import render_to_pdf
 
 from user.models import UserLog
 from user.utils import send_event_notification, send_feedback_notification
@@ -671,3 +672,15 @@ def event_manual_count_update(request, id):
 		form = EventStatisticManualCountForm(instance=event_statistic)
 	context = {'error_message': error_message, 'event_statistic': event_statistic, 'form': form,}
 	return render(request, 'event/event-data-manual-count.html', context)
+
+
+def event_statistic_pdf(request, pk):
+	event = Event.objects.get(pk=pk)
+	event_statistic = EventStatistics.objects.get(event=event)
+	event_attendance = EventAttendance.objects.filter(event_statistic=event_statistic)
+	context = {
+		'event_statistic': event_statistic,
+		'event_attendance': event_attendance,
+	}
+	pdf = render_to_pdf('event/event-pdf.html', context)
+	return HttpResponse(pdf, content_type='application/pdf')

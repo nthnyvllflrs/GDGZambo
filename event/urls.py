@@ -4,6 +4,7 @@ from .views import(
 	list_speaker, create_speaker, update_speaker, delete_speaker,
 	list_sponsor, create_sponsor, update_sponsor, delete_sponsor,
 	event_data, event_data_sync, event_data_details, attendees_list, event_gender_count_update, event_manual_count_update,
+	event_statistic_pdf,
 	list_upcoming_events, list_past_events, list_published, list_draft,
 	view_event, create_pre_event, create_event, update_event, delete_event,
 	publish_event, 
@@ -31,6 +32,7 @@ urlpatterns = [
 
 	path('data/', event_data, name='event-data'),
 	path('data/<int:id>/sync/', event_data_sync, name='event-data-sync'),
+	path('data/<int:pk>/pdf/', event_statistic_pdf, name='event-data-pdf'),
 	path('data/<int:id>/', event_data_details, name='event-data-details'),
 	path('data/attendee-list/', attendees_list, name='event-data-attendees'),
 	path('data/<int:id>/gender/', event_gender_count_update, name='event-data-gender-count'),
