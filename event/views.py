@@ -575,8 +575,8 @@ def event_data(request):
 
 
 @user_passes_test(lambda u: u.is_superuser)
-def event_data_sync(request, id):
-	event = Event.objects.get(id=id)
+def event_data_sync(request, slug):
+	event = Event.objects.get(slug=slug)
 	meetup_event_attendance = settings.MEETUP_CLIENT.GetGroupEventsAttendance({'id': event.meetup_ID, 'urlname': 'gdgzamboanga'})
 	meetup_event_rsvps = settings.MEETUP_CLIENT.GetRsvps({'event_id': event.meetup_ID})
 
@@ -610,12 +610,12 @@ def event_data_sync(request, id):
 				member_id = member['member']['id'],
 				member_name = member['member']['name'],
 			)
-	return redirect('event:event-data-details', id=id) 
+	return redirect('event:event-data-details', slug=slug) 
 
 
 @user_passes_test(lambda u: u.is_superuser)
-def event_data_details(request, id):
-	event = Event.objects.get(id=id)
+def event_data_details(request, slug):
+	event = Event.objects.get(slug=slug)
 	event_statistic = get_object_or_404(EventStatistics, event=event)
 	event_attendance = EventAttendance.objects.filter(event_statistic=event_statistic)
 	if int(event_statistic.manual_count) == 0:
@@ -636,8 +636,8 @@ def attendees_list(request):
 
 
 @user_passes_test(lambda u: u.is_superuser)
-def event_gender_count_update(request, id):
-	event = Event.objects.get(id=id)
+def event_gender_count_update(request, slug):
+	event = Event.objects.get(slug=slug)
 	event_statistic = get_object_or_404(EventStatistics, event=event)
 	error_message = None
 	if request.method == 'POST':
@@ -646,7 +646,7 @@ def event_gender_count_update(request, id):
 			statistic = form.save(commit=False)
 			if int(event_statistic.manual_count) == (int(statistic.male) + int(statistic.female)):
 				statistic.save()
-				return redirect('event:event-data-details', id=id)
+				return redirect('event:event-data-details', slug=slug)
 			else:
 				error_message = "Ooops! Total number of Males and Females does'nt match with the total RSVP/Manual Count."
 	else:
@@ -655,8 +655,8 @@ def event_gender_count_update(request, id):
 	return render(request, 'event/event-data-gender-count.html', context)
 
 
-def event_manual_count_update(request, id):
-	event = Event.objects.get(id=id)
+def event_manual_count_update(request, slug):
+	event = Event.objects.get(slug=slug)
 	event_statistic = get_object_or_404(EventStatistics, event=event)
 	error_message = None
 	if request.method == 'POST':
@@ -665,7 +665,7 @@ def event_manual_count_update(request, id):
 			statistic = form.save(commit=False)
 			if int(event_statistic.yes_rsvp) <= int(statistic.manual_count):
 				statistic.save()
-				return redirect('event:event-data-details', id=id)
+				return redirect('event:event-data-details', slug=slug)
 			else:
 				error_message = "Ooops! Manual count is less than RSVP."
 	else:
@@ -674,8 +674,8 @@ def event_manual_count_update(request, id):
 	return render(request, 'event/event-data-manual-count.html', context)
 
 
-def event_statistic_pdf(request, pk):
-	event = Event.objects.get(pk=pk)
+def event_statistic_pdf(request, slug):
+	event = Event.objects.get(slug=slug)
 	event_statistic = EventStatistics.objects.get(event=event)
 	event_attendance = EventAttendance.objects.filter(event_statistic=event_statistic)
 	context = {

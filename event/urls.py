@@ -18,7 +18,7 @@ from .api import (
 urlpatterns = [
 	path('api/speaker/create/', create_speaker_api, name='speaker-create-api'),
 	path('api/sponsor/create/', create_sponsor_api, name='sponsor-create-api'),
-	path('api/event/<int:id>/sync/', sync_event_api, name='sync-event-api'),
+	path('api/event/<slug:slug>/sync/', sync_event_api, name='sync-event-api'),
 
 	path('speaker/', list_speaker, name='speaker-list'),
 	path('speaker/create/', create_speaker, name='speaker-create'),
@@ -31,12 +31,12 @@ urlpatterns = [
 	path('sponsor/<slug:slug>/delete/', delete_sponsor, name='sponsor-delete'),
 
 	path('data/', event_data, name='event-data'),
-	path('data/<int:id>/sync/', event_data_sync, name='event-data-sync'),
-	path('data/<int:pk>/pdf/', event_statistic_pdf, name='event-data-pdf'),
-	path('data/<int:id>/', event_data_details, name='event-data-details'),
 	path('data/attendee-list/', attendees_list, name='event-data-attendees'),
-	path('data/<int:id>/gender/', event_gender_count_update, name='event-data-gender-count'),
-	path('data/<int:id>/manual-count/', event_manual_count_update, name='event-data-manual-count'),
+	path('data/<slug:slug>/sync/', event_data_sync, name='event-data-sync'),
+	path('data/<slug:slug>/pdf/', event_statistic_pdf, name='event-data-pdf'),
+	path('data/<slug:slug>/', event_data_details, name='event-data-details'),
+	path('data/<slug:slug>/gender/', event_gender_count_update, name='event-data-gender-count'),
+	path('data/<slug:slug>/manual-count/', event_manual_count_update, name='event-data-manual-count'),
 
 	path('upcoming/', list_upcoming_events, name='event-upcoming'),
 	path('past/', list_past_events, name='event-past'),

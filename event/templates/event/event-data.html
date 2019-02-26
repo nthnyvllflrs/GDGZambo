@@ -114,14 +114,16 @@
 						<td class="text-center">{{ event.eventstatistics.yes_rsvp }}</td>
 						<td class="text-center">{{ event.eventstatistics.manual_count }}</td>
 						<td class="text-center">
-							<a data-url="{% url 'event:sync-event-api' event.id %}" 
-								data-id="{{event.id}}" href="#" class="syncBtn">
-								Sync
-							</a>
-				      		&nbsp | &nbsp
-				      		<a id="eventDetails{{event.id}}" href="{% url 'event:event-data-details' event.id %}">Details</a>
-				      		&nbsp | &nbsp
-				      		<a href="{% url 'event:event-data-pdf' event.id %}" target="_blank">PDF</a>
+							<small>
+								<a data-url="{% url 'event:sync-event-api' event.slug %}" 
+									data-slug="{{event.slug}}" href="#" class="syncBtn">
+									Sync
+								</a>
+					      		&nbsp | &nbsp
+					      		<a id="eventDetails{{event.slug}}" href="{% url 'event:event-data-details' event.slug %}">Details</a>
+					      		&nbsp | &nbsp
+					      		<a href="{% url 'event:event-data-pdf' event.slug %}" target="_blank">PDF</a>
+				      		</small>
 						</td>
 					</tr>
 					{% endfor %}
@@ -146,7 +148,7 @@
 <script type="text/javascript">
 	$(".syncBtn").click(function(e) {
 		e.preventDefault()
-		var detailLink = 'eventDetails' + $(this).attr('data-id')
+		var detailLink = 'eventDetails' + $(this).attr('data-slug')
 		console.log(detailLink)
 		$('#syncModal').modal('toggle');
 	  	$.ajax({
