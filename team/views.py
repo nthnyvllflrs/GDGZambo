@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import user_passes_test, login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -61,8 +61,10 @@ def delete_member(request, slug):
 	return redirect('team:list-member-volunteer')
 
 
-@user_passes_test(lambda u: u.is_superuser)
+@login_required
 def create_volunteer(request):
+	if not request.user.is_superuser and not request.user.useraccount.is_event_creator:
+		return redirect('landing-page')
 	volunteer, success = None, False
 	if request.method == 'POST':
 		volunteer_form = VolunteerForm(request.POST, request.FILES)
@@ -78,8 +80,10 @@ def create_volunteer(request):
 	return render(request, 'team/create-volunteer.html', context)
 
 
-@user_passes_test(lambda u: u.is_superuser)
+@login_required
 def update_volunteer(request, slug):
+	if not request.user.is_superuser and not request.user.useraccount.is_event_creator:
+		return redirect('landing-page')
 	volunteer = get_object_or_404(Volunteer, slug=slug)
 	if request.method == 'POST':
 		volunteer_form = VolunteerForm(request.POST, request.FILES, instance=volunteer)
@@ -95,8 +99,10 @@ def update_volunteer(request, slug):
 	return render(request, 'team/update-volunteer.html', context)
 
 
-@user_passes_test(lambda u: u.is_superuser)
+@login_required
 def delete_volunteer(request, slug):
+	if not request.user.is_superuser and not request.user.useraccount.is_event_creator:
+		return redirect('landing-page')
 	volunteer = get_object_or_404(Volunteer, slug=slug)
 	UserLog.objects.create(user = request.user, description = "Volunteer Removed. (%s)" % (volunteer.name,),)
 	volunteer.delete()

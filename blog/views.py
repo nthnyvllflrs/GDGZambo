@@ -104,6 +104,8 @@ def list_draft_blog(request):
 
 @login_required
 def list_published_blog(request):
+	if not request.user.is_superuser and not request.user.useraccount.is_blog_creator:
+		return redirect('landing-page')
 	blog_list = Blog.objects.filter(author=request.user, status='Publish')
 	context = {'blog_list': blog_list,}
 	return render(request, 'blog/blog-published.html', context)

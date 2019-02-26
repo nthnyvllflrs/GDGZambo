@@ -70,7 +70,11 @@
 					  	<div class="media-body">
 						    <strong>{{ speaker.name }}</strong> <br>
 							<small>
-								{{ speaker.expertise }}
+								{% if speaker.expertise != '' %}
+								    {{ speaker.expertise }}
+							   	{% else %}
+							   	    {{ speaker.description }}
+								{% endif %}
 				  			</small>
 					  	</div>
 					</div>
@@ -87,7 +91,11 @@
 					  	<div class="media-body">
 						    <strong>{{ member.name }}</strong> <br>
 							<small>
-								{{ member.expertise }}
+								{% if member.expertise != '' %}
+								    {{ member.expertise }}
+							   	{% else %}
+							   	    {{ member.description }}
+								{% endif %}
 				  			</small>
 					  	</div>
 					</div>

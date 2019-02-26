@@ -63,6 +63,8 @@ def list_draft_story(request):
 
 @login_required
 def list_published_story(request):
+	if not request.user.is_superuser and not request.user.useraccount.is_blog_creator:
+		return redirect('landing-page')
 	story_list = Story.objects.filter(author=request.user, status='Publish')
 	context = {'story_list': story_list,}
 	return render(request, 'story/story-published.html', context)

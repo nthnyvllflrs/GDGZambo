@@ -82,7 +82,7 @@ def list_sponsor(request):
 
 @login_required
 def create_sponsor(request):
-	if not request.user.is_superuser:
+	if not request.user.is_superuser and not request.user.useraccount.is_event_creator:
 		return redirect('landing-page')
 	if request.method == 'POST':
 		sponsor_form = SponsorForm(request.POST, request.FILES)
@@ -99,7 +99,7 @@ def create_sponsor(request):
 
 @login_required
 def update_sponsor(request, slug):
-	if not request.user.is_superuser:
+	if not request.user.is_superuser and not request.user.useraccount.is_event_creator:
 		return redirect('landing-page')
 	sponsor = get_object_or_404(Sponsor, slug=slug)
 	if request.method == 'POST':
@@ -117,7 +117,7 @@ def update_sponsor(request, slug):
 
 @login_required
 def delete_sponsor(request, slug):
-	if not request.user.is_superuser:
+	if not request.user.is_superuser and not request.user.useraccount.is_event_creator:
 		return redirect('landing-page')
 	sponsor = get_object_or_404(Sponsor, slug=slug)
 	UserLog.objects.create(user = request.user, description = "Sponsor Removed. (%s)" % (sponsor.name,),)
@@ -167,6 +167,8 @@ def create_pre_event(request):
 
 @login_required
 def create_event(request, meetup_id):
+	if not request.user.is_superuser and not request.user.useraccount.is_event_creator:
+		return redirect('landing-page')
 	photo_url = None
 	if request.method == 'POST':
 		event_status = 'Draft' if('Draft' in request.POST) else 'Publish'
@@ -497,6 +499,8 @@ def publish_event(request, slug, notif):
 def list_draft(request):
 	if not request.user.is_superuser and not request.user.useraccount.is_event_creator:
 		return redirect('landing-page')
+	if not request.user.is_superuser and not request.user.useraccount.is_event_creator:
+		return redirect('landing-page')
 	event_list = Event.objects.exclude(status='Publish')
 	context = {'event_list': event_list,}
 	return render(request, 'event/event-draft.html', context)
@@ -504,6 +508,8 @@ def list_draft(request):
 
 @login_required
 def list_published(request):
+	if not request.user.is_superuser and not request.user.useraccount.is_event_creator:
+		return redirect('landing-page')
 	event_list = Event.objects.filter(author=request.user, status='Publish').order_by('-date_to')
 	context = {'event_list': event_list}
 	return render(request, 'event/event-published.html', context)
@@ -655,6 +661,7 @@ def event_gender_count_update(request, slug):
 	return render(request, 'event/event-data-gender-count.html', context)
 
 
+@user_passes_test(lambda u: u.is_superuser)
 def event_manual_count_update(request, slug):
 	event = Event.objects.get(slug=slug)
 	event_statistic = get_object_or_404(EventStatistics, event=event)
@@ -674,6 +681,7 @@ def event_manual_count_update(request, slug):
 	return render(request, 'event/event-data-manual-count.html', context)
 
 
+@user_passes_test(lambda u: u.is_superuser)
 def event_statistic_pdf(request, slug):
 	event = Event.objects.get(slug=slug)
 	event_statistic = EventStatistics.objects.get(event=event)
