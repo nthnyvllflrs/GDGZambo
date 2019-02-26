@@ -332,7 +332,89 @@
 	  	</div>
 	</div>
 
+	<!-- GOOGLE MAP Modal -->
+	<div class="modal fade" id="locationMap" tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content text-center">
+				<div class="modal-body">
+					<div id="map" style="width: 100%; height: 400px"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<script type="text/javascript">
+		var firstrun = true
+		var $label = $("label[for='id_location']")
+        $label.append("<a href='#' data-toggle='modal' data-target='#locationMap'><i class='fas fa-globe-asia'></i></a>&nbsp&nbsp<small class='font-italic'>( <input type='checkbox' name='mapOverwrite' id='mapOverwrite' checked/> Enable Map Sync )</small>")  
+
+		function initAutocomplete() {
+			autocomplete = new google.maps.places.Autocomplete(
+				(document.getElementById('id_location')),
+				{types: []}
+			);
+			autocomplete.addListener('place_changed', fillInAddress);
+			function fillInAddress() {
+			    if ($('#mapOverwrite').is(":checked")){
+					var place = autocomplete.getPlace();
+					document.getElementById("id_latitude").value = place.geometry.location.lat(); 
+					document.getElementById("id_longitude").value = place.geometry.location.lng();
+
+					var newLatLng = new google.maps.LatLng(
+						document.getElementById("id_latitude").value, 
+						document.getElementById("id_longitude").value);
+				    marker.setPosition(newLatLng);
+				    map.setCenter(newLatLng);
+				}
+			}
+			displayMap()
+		}
+
+		var map, marker
+		function displayMap() {
+			var eventLatitude = $("#id_latitude").val()
+			var eventLongitude = $("#id_longitude").val()
+			var myLatlng = new google.maps.LatLng(eventLatitude, eventLongitude);
+
+			map = new google.maps.Map(document.getElementById('map'), {
+				center: myLatlng,
+				zoom: 18,
+				mapTypeId: 'roadmap',
+				disableDefaultUI: true,
+			});
+			marker = new google.maps.Marker({
+				position: myLatlng,
+				map: map,
+			});
+
+			google.maps.event.addListener(map, 'click', function(event) {
+				marker.setMap(null)
+				marker = new google.maps.Marker({
+					position: event.latLng, 
+					map: map,
+				});
+
+				document.getElementById("id_latitude").value = marker.getPosition().lat()
+				document.getElementById("id_longitude").value = marker.getPosition().lng()
+
+				if ($('#mapOverwrite').is(":checked")){
+					url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='
+					geocoder_url = url + marker.getPosition().lat() + ',' + marker.getPosition().lng() + '&key=AIzaSyBLvHFeixDacvhmdX-L_0EoG4of6n0pM1A'
+					$.ajax({
+						url: geocoder_url,
+						success: function(data){
+							newAddress = data.results[0].formatted_address
+							$('#id_location').val(newAddress);
+						},
+						error: function(e){
+							console.log(e.message)
+						}
+					})
+				}
+			});
+		}
+
+
 		function getCookie(name) {
 		    var cookieValue = null;
 		    if (document.cookie && document.cookie !== '') {
@@ -432,4 +514,6 @@
 			})
 		});
 	</script>
+	<script 
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBLvHFeixDacvhmdX-L_0EoG4of6n0pM1A&libraries=places&callback=initAutocomplete" async defer></script>
 {% endblock content %}
