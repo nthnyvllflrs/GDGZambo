@@ -16,7 +16,7 @@ class Story(models.Model):
 	author 		= models.ForeignKey(User, on_delete=models.CASCADE)
 	body 			= models.TextField()
 	video_url = models.URLField(max_length=500, blank=True, null=True)
-	slug 			= models.SlugField(null=True, blank=True)
+	slug 			= models.SlugField(max_length=255, null=True, blank=True)
 	status 		= models.CharField(max_length=120, default='Draft')
 	updated 	= models.DateTimeField(auto_now=True)
 	timestamp = models.DateTimeField(auto_now_add=True)

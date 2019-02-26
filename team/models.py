@@ -20,7 +20,7 @@ class Member(models.Model):
 	twitter 		= models.URLField(max_length=500, null=True, blank=True)
 	instagram 	= models.URLField(max_length=500, null=True, blank=True)
 	website 		= models.URLField(max_length=500, null=True, blank=True)
-	slug 				= models.SlugField(null=True, blank=True)
+	slug 				= models.SlugField(max_length=255, null=True, blank=True)
 	timestamp 	= models.DateTimeField(auto_now_add=True)
 
 	def __str__(self):
@@ -44,7 +44,7 @@ class Volunteer(models.Model):
 	twitter 		= models.URLField(max_length=500, null=True, blank=True)
 	instagram 	= models.URLField(max_length=500, null=True, blank=True)
 	website 		= models.URLField(max_length=500, null=True, blank=True)
-	slug 				= models.SlugField(null=True, blank=True)
+	slug 				= models.SlugField(max_length=255, null=True, blank=True)
 	timestamp 	= models.DateTimeField(auto_now_add=True)
 
 	def __str__(self):

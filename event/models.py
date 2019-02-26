@@ -30,7 +30,7 @@ class Sponsor(models.Model):
 	twitter 		= models.URLField(max_length=500, null=True, blank=True)
 	instagram 	= models.URLField(max_length=500, null=True, blank=True)
 	website 		= models.URLField(max_length=500, null=True, blank=True)
-	slug 				= models.SlugField(null=True, blank=True)
+	slug 				= models.SlugField(max_length=255, null=True, blank=True)
 	timestamp 	= models.DateTimeField(auto_now_add=True)
 
 	def __str__(self):
@@ -54,7 +54,7 @@ class Speaker(models.Model):
 	twitter 		= models.URLField(max_length=500, null=True, blank=True)
 	instagram 	= models.URLField(max_length=500, null=True, blank=True)
 	website 		= models.URLField(max_length=500, null=True, blank=True)
-	slug 				= models.SlugField(null=True, blank=True)
+	slug 				= models.SlugField(max_length=255, null=True, blank=True)
 	timestamp 	= models.DateTimeField(auto_now_add=True)
 
 	def __str__(self):
@@ -92,7 +92,7 @@ class Event(models.Model):
 	registration 			= models.URLField(max_length=1000, blank=True, null=True)
 	status 						= models.CharField(max_length=120, default='Draft')
 
-	slug 							= models.SlugField(null=True, blank=True)
+	slug 							= models.SlugField(max_length=255, null=True, blank=True)
 	timestamp 				= models.DateTimeField(auto_now_add=True)
 	updated 					= models.DateTimeField(auto_now=True)
 
@@ -150,7 +150,7 @@ class Info(models.Model):
 	banner 			= CloudinaryField('banner', blank=True, null=True)
 	title 			= models.CharField(max_length=120)
 	description = models.TextField()
-	slug 				= models.SlugField(null=True, blank=True)
+	slug 				= models.SlugField(max_length=255, null=True, blank=True)
 	timestamp 	= models.DateTimeField(auto_now_add=True)
 
 	def __str__(self):

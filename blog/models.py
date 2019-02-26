@@ -16,7 +16,7 @@ class Blog(models.Model):
 	body 			= models.TextField()
 	video_url = models.URLField(max_length=500, blank=True, null=True)
 	status 		= models.CharField(max_length=120, default='Draft')
-	slug 			= models.SlugField(null=True, blank=True)
+	slug 			= models.SlugField(max_length=255, null=True, blank=True)
 	updated 	= models.DateTimeField(auto_now=True)
 	timestamp = models.DateTimeField(auto_now_add=True)
 
