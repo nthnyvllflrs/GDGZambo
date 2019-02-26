@@ -364,44 +364,43 @@ def update_event(request, slug):
 			UserLog.objects.create(user = request.user, description = "Event Updated. (%s)" % (event.title,),)
 			return redirect('event:event-view', event.slug)
 	else:
-		# event_form = EventForm(instance=event)
-		meetup_event = settings.MEETUP_CLIENT.GetEvent({'id': meetup_id})
-		if 'venue' in meetup_event.__dict__:
-			try:
-				event_location = meetup_event.venue['name'] + ', ' + meetup_event.venue['address_1'] + ', ' + meetup_event.venue['address_2'] + ', ' + meetup_event.venue['city']
-			except Exception as e:
-				event_location = meetup_event.venue['name'] + ', ' + meetup_event.venue['address_1'] + ', ' + meetup_event.venue['city']
-			event_lat = meetup_event.venue['lat']
-			event_lng = meetup_event.venue['lon']
-		else:
-			event_location = 'No event venue was set'
-			event_lat = 6.9214
-			event_lng = 122.0790
+		event_form = EventForm(instance=event)
+		# meetup_event = settings.MEETUP_CLIENT.GetEvent({'id': meetup_id})
+		# if 'venue' in meetup_event.__dict__:
+		# 	try:
+		# 		event_location = meetup_event.venue['name'] + ', ' + meetup_event.venue['address_1'] + ', ' + meetup_event.venue['address_2'] + ', ' + meetup_event.venue['city']
+		# 	except Exception as e:
+		# 		event_location = meetup_event.venue['name'] + ', ' + meetup_event.venue['address_1'] + ', ' + meetup_event.venue['city']
+		# 	event_lat = meetup_event.venue['lat']
+		# 	event_lng = meetup_event.venue['lon']
+		# else:
+		# 	event_location = 'No event venue was set'
+		# 	event_lat = 6.9214
+		# 	event_lng = 122.0790
 
-		if 'duration' in  meetup_event.__dict__:
-			event_duration = meetup_event.duration
-		else:
-			event_duration = 0
+		# if 'duration' in  meetup_event.__dict__:
+		# 	event_duration = meetup_event.duration
+		# else:
+		# 	event_duration = 0
 
-		if 'description' in  meetup_event.__dict__:
-			event_description = meetup_event.description
-		else:
-			event_description = 'No Description'
+		# if 'description' in  meetup_event.__dict__:
+		# 	event_description = meetup_event.description
+		# else:
+		# 	event_description = 'No Description'
 			
-		event_start = datetime.datetime.fromtimestamp(meetup_event.time/1000.0)
-		event_start_date = event_start.strftime("%Y-%m-%d")
-		event_start_time = event_start.strftime("%H:%M:%S")
-		event_end = datetime.datetime.fromtimestamp(meetup_event.time/1000.0) + datetime.timedelta(hours=event_duration/3600000)
-		event_end_date = event_end.strftime("%Y-%m-%d")
-		event_end_time = event_end.strftime("%H:%M:%S")
+		# event_start = datetime.datetime.fromtimestamp(meetup_event.time/1000.0)
+		# event_start_date = event_start.strftime("%Y-%m-%d")
+		# event_start_time = event_start.strftime("%H:%M:%S")
+		# event_end = datetime.datetime.fromtimestamp(meetup_event.time/1000.0) + datetime.timedelta(hours=event_duration/3600000)
+		# event_end_date = event_end.strftime("%Y-%m-%d")
+		# event_end_time = event_end.strftime("%H:%M:%S")
 
-		event_description = BeautifulSoup(event_description, features='html.parser').get_text(separator='\n')
+		# event_description = BeautifulSoup(event_description, features='html.parser').get_text(separator='\n')
 
-		event_form = EventForm(initial={
-			'author': request.user, 'title': meetup_event.name, 'location': event_location, 'latitude': event_lat,
-			'longitude': event_lng, 'date': event_start_date, 'time': event_start_time, 'date_to': event_end_date,
-			'time_to': event_end_time, 'description': event_description, 'meetup_ID': meetup_id, })
-
+		# event_form = EventForm(initial={
+		# 	'author': request.user, 'title': meetup_event.name, 'location': event_location, 'latitude': event_lat,
+		# 	'longitude': event_lng, 'date': event_start_date, 'time': event_start_time, 'date_to': event_end_date,
+		# 	'time_to': event_end_time, 'description': event_description, 'meetup_ID': meetup_id, })
 		error_message = None
 
 	if event.speakers.all():
@@ -505,7 +504,7 @@ def list_draft(request):
 
 @login_required
 def list_published(request):
-	event_list = Event.objects.filter(author=request.user, status='Publish')
+	event_list = Event.objects.filter(author=request.user, status='Publish').order_by('-date_to')
 	context = {'event_list': event_list}
 	return render(request, 'event/event-published.html', context)
 

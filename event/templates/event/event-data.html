@@ -2,15 +2,18 @@
 {% block content %}
 
 <div class="container mt-5">
+	<h5 class="font-italic">
+		<strong>GDG Zamboanga Event Data</strong>
+	</h5>
+	<hr />
 	<div class="row mb-3">
 		<div class="col-sm-6">
 			<div class="row">
-				<div class="col-sm-12">
+				<div class="col-sm-12 mb-3">
 					<h5 class="font-italic">
-						<strong>Top Attendees</strong>
-						<small><a href="{% url 'event:event-data-attendees' %}">View All</a></small>
+						Top Attendees
+						<small> | <a href="{% url 'event:event-data-attendees' %}">View All</a></small>
 					</h5>
-					<hr />
 				</div>
 				{% if top_attendee %}
 					{% for attendee in top_attendee %}
@@ -33,13 +36,12 @@
 		</div>
 		<div class="col-sm-6">
 			<div class="row">
-				<div class="col-sm-12">
+				<div class="col-sm-12 mb-3">
 					<h5 class="font-italic">
-						<strong>Gender Total</strong>
+						Gender Percentage
 					</h5>
-					<hr />
 				</div>
-				<div class="col-sm-12">
+				<div class="col-sm-12 mb-3">
 					<canvas id="genderChart" width="200" height="75"></canvas>	
 				</div>
 			</div>
@@ -54,7 +56,6 @@
 				<div class="col-sm-12 mb-3 text-center">
 					<h3>List Of GDG Zamboanga Events</h3>
 				</div>
-				
 					<div class="col-6 col-sm-3">
 			  			<div class="form-group row text-center">
 			  				<label class="col-sm-2 col-form-label">From</label>
@@ -113,9 +114,12 @@
 						<td class="text-center">{{ event.eventstatistics.yes_rsvp }}</td>
 						<td class="text-center">{{ event.eventstatistics.manual_count }}</td>
 						<td class="text-center">
-							<a href="#" class="syncBtn" data-url="{% url 'event:sync-event-api' event.id %}">Sync</a>
+							<a data-url="{% url 'event:sync-event-api' event.id %}" 
+								data-id="{{event.id}}" href="#" class="syncBtn">
+								Sync
+							</a>
 				      		&nbsp | &nbsp
-				      		<a id="eventDetails" href="{% url 'event:event-data-details' event.id %}">Details</a>
+				      		<a id="eventDetails{{event.id}}" href="{% url 'event:event-data-details' event.id %}">Details</a>
 				      		&nbsp | &nbsp
 				      		<a href="{% url 'event:event-data-pdf' event.id %}" target="_blank">PDF</a>
 						</td>
@@ -142,6 +146,8 @@
 <script type="text/javascript">
 	$(".syncBtn").click(function(e) {
 		e.preventDefault()
+		var detailLink = 'eventDetails' + $(this).attr('data-id')
+		console.log(detailLink)
 		$('#syncModal').modal('toggle');
 	  	$.ajax({
 			url: $(this).attr('data-url'),
@@ -149,12 +155,12 @@
 			success: function(json) {
 				console.log(json)
 				$('#syncModal').modal('toggle');
-				document.getElementById('eventDetails').click();
+				document.getElementById(detailLink).click();
 			},
 			error: function(err) {
 				console.log(err)
 				$('#syncModal').modal('toggle');
-				document.getElementById('eventDetails').click();
+				document.getElementById(detailLink).click();
 			}
 		})
 	});

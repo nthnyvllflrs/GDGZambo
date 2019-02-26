@@ -58,16 +58,16 @@ class EventForm(forms.ModelForm):
 			'registration', 'banner',)
 		labels = {'date': '', 'time': '', 'date_to': '', 'time_to': '',}
 		widgets = {
-			'title': forms.TextInput(attrs={'readonly': 'readonly'},),
-			'location': forms.TextInput(attrs={'readonly': 'readonly'},),
-			'description': forms.Textarea(attrs={'readonly': 'readonly'},),
-			'meetup_ID': forms.TextInput(attrs={'readonly': 'readonly'},),
+			'title': forms.TextInput(attrs={},),
+			'location': forms.TextInput(attrs={},),
+			'description': forms.Textarea(attrs={},),
+			'meetup_ID': forms.TextInput(attrs={'readonly': 'readonly',},),
 			'date': forms.DateInput(attrs={'type': 'date',},),
 			'time': forms.TimeInput(attrs={'type': 'time',},),
 			'date_to': forms.DateInput(attrs={'type': 'date',},),
 			'time_to': forms.TimeInput(attrs={'type': 'time',},),
-			'latitude': forms.TextInput(attrs={'readonly': 'readonly', 'hidden': 'hidden'}),
-			'longitude': forms.TextInput(attrs={'readonly': 'readonly', 'hidden': 'hidden'}),}
+			'latitude': forms.TextInput(attrs={'hidden': 'hidden',}),
+			'longitude': forms.TextInput(attrs={'hidden': 'hidden',}),}
 		help_texts ={'registration': '*Complete event registration URL',}
 
 	def clean_banner(self):

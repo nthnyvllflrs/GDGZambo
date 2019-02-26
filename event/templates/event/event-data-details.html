@@ -1,29 +1,39 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container mt-5">
-	
+	<h5 class="font-italic">
+		<strong>{{ event.title }} Event Data</strong>
+	</h5>
+	<hr />
 	<div class="row mb-5">
-		<div class="col-6">
+		<div class="col-sm-6">
 			<div class="row">
-				<div class="col-12">
+				<div class="col-sm-12 mb-3">
 					<h5 class="font-italic">
-						<strong>Event Attendee Count</strong>
+						Event Attendee Count
 						<small>| <a href="{% url 'event:event-data-manual-count' event.id %}">Update</a></small>
 					</h5>
-					<hr />
 				</div>
-				<div class="col-6">
+				<div class="col-6 col-sm-4 mb-3">
 					<div class="card text-center">
 						<div class="card-body">
-							<h5 class="card-title font-italic">RSVP</h5>
+							<strong class="card-title font-italic">RSVP (Yes)</strong> <br>
 							<strong style="font-size: 2em;">{{ event_statistic.yes_rsvp }}</strong>
 						</div>
 					</div>
 				</div>
-				<div class="col-6">
+				<div class="col-6 col-sm-4 mb-3">
 					<div class="card text-center">
 						<div class="card-body">
-							<h5 class="card-title font-italic">Manual Count</h5>
+							<strong class="card-title font-italic">RSVP (No)</strong> <br>
+							<strong style="font-size: 2em;">{{ event_statistic.no_rsvp }}</strong>
+						</div>
+					</div>
+				</div>
+				<div class="col-12 col-sm-4 mb-3">
+					<div class="card text-center">
+						<div class="card-body">
+							<strong class="card-title font-italic">Manual Count</strong> <br>
 							<strong style="font-size: 2em;">{{ event_statistic.manual_count }}</strong>
 						</div>
 					</div>
@@ -31,28 +41,27 @@
 			</div>
 		</div>
 
-		<div class="col-6">
+		<div class="col-sm-6">
 			<div class="row">
-				<div class="col-12">
+				<div class="col-sm-12 mb-3">
 					<h5 class="font-italic">
-						<strong>Event Gender Count</strong>
+						Event Gender Percentage
 						<small>| <a href="{% url 'event:event-data-gender-count' event.id %}">Update</a></small>
 					</h5>
-					<hr />
 				</div>
-				<div class="col-6">
+				<div class="col-6 col-sm-6 mb-3">
 					<div class="card text-center">
 						<div class="card-body pb-2">
-							<h5 class="card-title font-italic">Male</h5>
+							<strong class="card-title font-italic">Male</strong> <br>
 							<strong style="font-size: 1.5em;">{{ gender_percentage.male }} %</strong> <br>
 							<small class="font-italic">{{ event_statistic.male }} attendees</small>
 						</div>
 					</div>
 				</div>
-				<div class="col-6">
+				<div class="col-6 col-sm-6 mb-3">
 					<div class="card text-center">
 						<div class="card-body pb-2">
-							<h5 class="card-title font-italic">Female</h5>
+							<strong class="card-title font-italic">Female</strong> <br>
 							<strong style="font-size: 1.5em;">{{ gender_percentage.female }} %</strong> <br>
 							<small class="font-italic">{{ event_statistic.female }} attendees</small>
 						</div>
@@ -63,15 +72,14 @@
 	</div>
 
 	<h5 class="font-italic">
-		<strong>Event Attendance</strong>
+		Event Attendance
 	</h5>
-	<hr />
-	<div class="card">
+	<div class="card mt-4">
 		<div class="card-body">
 			{% if event_attendance %}
 			    <div class="row">
 		   		{% for member in event_attendance %}
-					<div class="col-3">
+					<div class="col-sm-3">
 						<div class="media">
 						  	<div class="media-body">
 							    <p>{{ member.member_name|title }}</p>
