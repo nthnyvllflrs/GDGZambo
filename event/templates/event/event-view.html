@@ -141,7 +141,11 @@
 					  	<div class="media-body">
 						    <strong>{{ member.name }}</strong> <br>
 							<small>
-								{{ member.expertise }}
+								{% if member.expertise != '' %}
+								    {{ member.expertise }}
+							   	{% else %}
+							   	    {{ member.description }}
+								{% endif %}
 				  			</small>
 					  	</div>
 					</div>
@@ -187,7 +191,11 @@
 					  	<div class="media-body">
 						    <strong>{{ volunteer.name }}</strong> <br>
 							<small>
-								{{ volunteer.expertise }}
+								{% if volunteer.expertise != '' %}
+								    {{ volunteer.expertise }}
+							   	{% else %}
+							   	    {{ volunteer.description }}
+								{% endif %}
 				  			</small>
 					  	</div>
 					</div>
