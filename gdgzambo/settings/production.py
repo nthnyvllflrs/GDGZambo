@@ -150,6 +150,7 @@ cloudinary.config(
   cloud_name = os.environ.get('CLOUDINARY_NAME'), 
   api_key = os.environ.get('CLOUDINARY_KEY'), 
   api_secret = os.environ.get('CLOUDINARY_SECRET'), 
+  secure = True,
 )
 
 # MEETUP API SETTINGS

@@ -144,6 +144,7 @@ cloudinary.config(
   cloud_name = "**********", 
   api_key = "**********", 
   api_secret = "**********" 
+  secure = True,
 )
 
 # MEETUP API SETTINGS
