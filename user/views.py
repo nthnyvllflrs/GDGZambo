@@ -76,7 +76,7 @@ def change_password_user(request):
 			user = form.save()
 			update_session_auth_hash(request, user)
 			UserLog.objects.create(user = request.user, description = "Password Changed. (%s)" % (request.user.username,),)
-			return redirect("landing_page")
+			return redirect("landing-page")
 	else:
 		form = PasswordChangeForm(request.user)
 	context = {'form': form,}
