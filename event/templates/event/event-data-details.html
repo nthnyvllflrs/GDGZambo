@@ -11,7 +11,7 @@
 				<div class="col-sm-12 mb-3">
 					<h5 class="font-italic">
 						Event Attendee Count
-						<small>| <a href="{% url 'event:event-data-manual-count' event.id %}">Update</a></small>
+						<small>| <a href="{% url 'event:event-data-manual-count' event.slug %}">Update</a></small>
 					</h5>
 				</div>
 				<div class="col-6 col-sm-4 mb-3">
@@ -46,10 +46,13 @@
 				<div class="col-sm-12 mb-3">
 					<h5 class="font-italic">
 						Event Gender Percentage
-						<small>| <a href="{% url 'event:event-data-gender-count' event.id %}">Update</a></small>
+						<small>| <a href="{% url 'event:event-data-gender-count' event.slug %}">Update</a></small>
 					</h5>
 				</div>
-				<div class="col-6 col-sm-6 mb-3">
+				<div class="col-sm-12 mb-3">
+					<canvas id="genderChart" width="200" height="75"></canvas>	
+				</div>
+				<!-- <div class="col-6 col-sm-6 mb-3">
 					<div class="card text-center">
 						<div class="card-body pb-2">
 							<strong class="card-title font-italic">Male</strong> <br>
@@ -66,7 +69,7 @@
 							<small class="font-italic">{{ event_statistic.female }} attendees</small>
 						</div>
 					</div>
-				</div>
+				</div> -->
 			</div>
 		</div>
 	</div>
@@ -94,4 +97,40 @@
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+<script type="text/javascript">
+	var ctx = document.getElementById("genderChart").getContext('2d');
+	var myChart = new Chart(ctx, {
+	    type: 'doughnut',
+	    data: {
+	        labels: ["Girls ({{ gender_percentage.female }}%)", "Boys ({{ gender_percentage.male }}%)"],
+	        datasets: [{
+	            data: [parseInt("{{ event_statistic.female }}"), parseInt("{{ event_statistic.male }}")],
+	            backgroundColor: [
+	                'rgba(255, 99, 132, 0.2)',
+	                'rgba(54, 162, 235, 0.2)'
+	            ],
+	            borderColor: [
+	                'rgba(255,99,132,1)',
+	                'rgba(54, 162, 235, 1)'
+	            ],
+	            borderWidth: 2
+	        }]
+	    },
+	    options: {
+	        legend: {
+	            display: true,
+	            position: 'bottom',
+	            labels: {
+	                fontColor: 'rgb(0, 0, 0)'
+	            }
+	        },
+	        title: {
+	        	display: true,
+	        	text: 'Out of {{ event_statistic.manual_count }} Attendees'
+	        }
+		}
+	});
+</script>
 {% endblock content %}

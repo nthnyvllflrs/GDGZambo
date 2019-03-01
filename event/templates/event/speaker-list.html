@@ -178,4 +178,17 @@
 	</div>
 	{% endif %}
 </div>
+<script type="text/javascript">
+	$.ajax({
+		url : "https://www.facebook.com/TS201402078",
+		statusCode: {
+			200: function() {
+				alert("user exist");
+			},
+			404: function() {
+				alert( "user not exist" );
+			}
+		}
+	});
+</script>
 {% endblock content %}

@@ -14,7 +14,10 @@
 		{% csrf_token %}
 		<div class="card">
 			<div class="card-body">
-				<h5 class="card-title font-italic">Event Details</h5>
+				<h5 class="card-title font-italic">
+					Event Details
+					<small><a href="#" id="resync-link" class="btn btn-sm">Resync Event Details</a></small>
+				</h5>
 				<div class="row">
 					<div class="col-sm-9">{{ event_form.title|as_crispy_field }}</div>
 					<div class="col-sm-3">{{ event_form.meetup_ID|as_crispy_field }}</div>
@@ -74,16 +77,51 @@
 					<div class="row" id="speaker-checkgroup">
 						{% for speaker in speaker_list_2 %}
 							<div class="col-sm-4 mt-3">
-								<input type="checkbox" name="checked_speakers" id="option{{speaker.id}}" value={{speaker.id}} checked/>
-								<label for="speaker{{speaker.id}}">{{speaker.name}} </label><br />
-								<label for="speaker{{speaker.id}}">({{ speaker.description|truncatechars:30 }})</label>
+								<div class="row">
+									<div class="col-1">
+										<input type="checkbox" name="checked_speakers" id="option{{speaker.id}}" value={{speaker.id}} checked/>
+									</div>
+									<div class="col">
+										<div class="media">
+											{% if not speaker.photo %}
+												<img class="mr-3 img-fluid rounded-circle" src="https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg" width="60px" height="60px" />
+											{% else %}
+												<img class="mr-3 img-fluid rounded-circle" src="{{ speaker.photo.url }}" width="60px" height="60px" />
+											{% endif %}
+										  	<div class="media-body">
+											    <strong>{{ speaker.name }}</strong> <br>
+												<small>{% if speaker.expertise != '' %}{{ speaker.expertise }}{% else %}{{ speaker.description }}{% endif %}
+									  			</small>
+										  	</div>
+										</div>
+									</div>
+								</div>
 							</div>
 						{% endfor %}
 						{% for speaker in speaker_list %}
 							<div class="col-sm-4 mt-3">
-								<input type="checkbox" name="unchecked_speakers" id="option{{speaker.id}}" value={{speaker.id}} />
+								<div class="row">
+									<div class="col-1">
+										<input type="checkbox" name="unchecked_speakers" id="option{{speaker.id}}" value={{speaker.id}} />
+									</div>
+									<div class="col">
+										<div class="media">
+											{% if not speaker.photo %}
+												<img class="mr-3 img-fluid rounded-circle" src="https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg" width="60px" height="60px" />
+											{% else %}
+												<img class="mr-3 img-fluid rounded-circle" src="{{ speaker.photo.url }}" width="60px" height="60px" />
+											{% endif %}
+										  	<div class="media-body">
+											    <strong>{{ speaker.name }}</strong> <br>
+												<small>{% if speaker.expertise != '' %}{{ speaker.expertise }}{% else %}{{ speaker.description }}{% endif %}
+									  			</small>
+										  	</div>
+										</div>
+									</div>
+								</div>
+								<!-- <input type="checkbox" name="unchecked_speakers" id="option{{speaker.id}}" value={{speaker.id}} />
 								<label for="speaker{{speaker.id}}">{{speaker.name}}</label><br />
-								<label for="speaker{{speaker.id}}">({{ speaker.description|truncatechars:30 }})</label>
+								<label for="speaker{{speaker.id}}">({{ speaker.description|truncatechars:30 }})</label> -->
 							</div>
 						{% endfor %}
 					</div>
@@ -93,16 +131,54 @@
 					<div class="row" id="member-speaker-checkgroup">
 						{% for member in member_speaker_list_2 %}
 							<div class="col-sm-4 mt-3">
-								<input type="checkbox" name="checked_member_speakers" id="option{{member.id}}" value={{member.id}} checked/>
+								<div class="row">
+									<div class="col-1">
+										<input type="checkbox" name="checked_member_speakers" id="option{{member.id}}" value={{member.id}} checked/>
+									</div>
+									<div class="col">
+										<div class="media">
+											{% if not member.photo %}
+												<img class="mr-3 img-fluid rounded-circle" src="https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg" width="60px" height="60px" />
+											{% else %}
+												<img class="mr-3 img-fluid rounded-circle" src="{{ member.photo.url }}" width="60px" height="60px" />
+											{% endif %}
+										  	<div class="media-body">
+											    <strong>{{ member.name }}</strong> <br>
+												<small>{% if member.expertise != '' %}{{ member.expertise }}{% else %}{{ member.description }}{% endif %}
+									  			</small>
+										  	</div>
+										</div>
+									</div>
+								</div>
+								<!-- <input type="checkbox" name="checked_member_speakers" id="option{{member.id}}" value={{member.id}} checked/>
 								<label for="member{{member.id}}">{{member.name}}</label><br />
-								<label for="member{{member.id}}">({{ member.description|truncatechars:30 }})</label>
+								<label for="member{{member.id}}">({{ member.description|truncatechars:30 }})</label> -->
 							</div>
 						{% endfor %}
 						{% for member in member_speaker_list %}
 							<div class="col-sm-4 mt-3">
-								<input type="checkbox" name="unchecked_member_speakers" id="option{{member.id}}" value={{member.id}} />
+								<div class="row">
+									<div class="col-1">
+										<input type="checkbox" name="unchecked_member_speakers" id="option{{member.id}}" value={{member.id}} />
+									</div>
+									<div class="col">
+										<div class="media">
+											{% if not member.photo %}
+												<img class="mr-3 img-fluid rounded-circle" src="https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg" width="60px" height="60px" />
+											{% else %}
+												<img class="mr-3 img-fluid rounded-circle" src="{{ member.photo.url }}" width="60px" height="60px" />
+											{% endif %}
+										  	<div class="media-body">
+											    <strong>{{ member.name }}</strong> <br>
+												<small>{% if member.expertise != '' %}{{ member.expertise }}{% else %}{{ member.description }}{% endif %}
+									  			</small>
+										  	</div>
+										</div>
+									</div>
+								</div>
+								<!-- <input type="checkbox" name="unchecked_member_speakers" id="option{{member.id}}" value={{member.id}} />
 								<label for="member{{member.id}}">{{member.name}}</label><br />
-								<label for="member{{member.id}}">({{ member.description|truncatechars:30 }})</label>
+								<label for="member{{member.id}}">({{ member.description|truncatechars:30 }})</label> -->
 							</div>
 						{% endfor %}
 					</div>
@@ -121,16 +197,52 @@
 					<div class="row" id="sponsor-checkgroup">
 						{% for sponsor in sponsor_list_2 %}
 							<div class="col-sm-4 mt-3">
-								<input type="checkbox" name="checked_sponsors" id="option{{sponsor.id}}" value={{sponsor.id}} checked/>
+								<div class="row">
+									<div class="col-1">
+										<input type="checkbox" name="checked_sponsors" id="option{{sponsor.id}}" value={{sponsor.id}} checked/>
+									</div>
+									<div class="col">
+										<div class="media">
+											{% if not sponsor.photo %}
+												<img class="mr-3 img-fluid rounded-circle" src="https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg" width="60px" height="60px" />
+											{% else %}
+												<img class="mr-3 img-fluid rounded-circle" src="{{ sponsor.photo.url }}" width="60px" height="60px" />
+											{% endif %}
+										  	<div class="media-body">
+											    <strong>{{ sponsor.name }}</strong> <br>
+												<small>{{ sponsor.description }}</small>
+										  	</div>
+										</div>
+									</div>
+								</div>
+								<!-- <input type="checkbox" name="checked_sponsors" id="option{{sponsor.id}}" value={{sponsor.id}} checked/>
 								<label for="sponsor{{sponsor.id}}">{{sponsor.name}}</label><br />
-								<label for="sponsor{{sponsor.id}}">({{ sponsor.description|truncatechars:30 }})</label>
+								<label for="sponsor{{sponsor.id}}">({{ sponsor.description|truncatechars:30 }})</label> -->
 							</div>
 						{% endfor %}
 						{% for sponsor in sponsor_list %}
 							<div class="col-sm-4 mt-3">
-								<input type="checkbox" name="unchecked_sponsors" id="option{{sponsor.id}}" value={{sponsor.id}} />
+								<div class="row">
+									<div class="col-1">
+										<input type="checkbox" name="unchecked_sponsors" id="option{{sponsor.id}}" value={{sponsor.id}} />
+									</div>
+									<div class="col">
+										<div class="media">
+											{% if not sponsor.photo %}
+												<img class="mr-3 img-fluid rounded-circle" src="https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg" width="60px" height="60px" />
+											{% else %}
+												<img class="mr-3 img-fluid rounded-circle" src="{{ sponsor.photo.url }}" width="60px" height="60px" />
+											{% endif %}
+										  	<div class="media-body">
+											    <strong>{{ sponsor.name }}</strong> <br>
+												<small>{{ sponsor.description }}</small>
+										  	</div>
+										</div>
+									</div>
+								</div>
+								<!-- <input type="checkbox" name="unchecked_sponsors" id="option{{sponsor.id}}" value={{sponsor.id}} />
 								<label for="sponsor{{sponsor.id}}">{{sponsor.name}}</label><br />
-								<label for="sponsor{{sponsor.id}}">({{ sponsor.description|truncatechars:30 }})</label>
+								<label for="sponsor{{sponsor.id}}">({{ sponsor.description|truncatechars:30 }})</label> -->
 							</div>
 						{% endfor %}
 					</div>
@@ -140,16 +252,54 @@
 					<div class="row" id="member-sponsor-checkgroup">
 						{% for member in member_sponsor_list_2 %}
 							<div class="col-sm-4 mt-3">
-								<input type="checkbox" name="checked_member_sponsors" id="option{{member.id}}" value={{member.id}} checked/>
+								<div class="row">
+									<div class="col-1">
+										<input type="checkbox" name="checked_member_sponsors" id="option{{member.id}}" value={{member.id}} checked/>
+									</div>
+									<div class="col">
+										<div class="media">
+											{% if not member.photo %}
+												<img class="mr-3 img-fluid rounded-circle" src="https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg" width="60px" height="60px" />
+											{% else %}
+												<img class="mr-3 img-fluid rounded-circle" src="{{ member.photo.url }}" width="60px" height="60px" />
+											{% endif %}
+										  	<div class="media-body">
+											    <strong>{{ member.name }}</strong> <br>
+												<small>{% if member.expertise != '' %}{{ member.expertise }}{% else %}{{ member.description }}{% endif %}
+									  			</small>
+										  	</div>
+										</div>
+									</div>
+								</div>
+								<!-- <input type="checkbox" name="checked_member_sponsors" id="option{{member.id}}" value={{member.id}} checked/>
 								<label for="member{{member.id}}">{{member.name}}</label><br />
-								<label for="member{{member.id}}">({{ member.description|truncatechars:30 }})</label>
+								<label for="member{{member.id}}">({{ member.description|truncatechars:30 }})</label> -->
 							</div>
 						{% endfor %}
 						{% for member in member_sponsor_list %}
 							<div class="col-sm-4 mt-3">
-								<input type="checkbox" name="unchecked_member_sponsors" id="option{{member.id}}" value={{member.id}} />
+								<div class="row">
+									<div class="col-1">
+										<input type="checkbox" name="unchecked_member_sponsors" id="option{{member.id}}" value={{member.id}} />
+									</div>
+									<div class="col">
+										<div class="media">
+											{% if not member.photo %}
+												<img class="mr-3 img-fluid rounded-circle" src="https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg" width="60px" height="60px" />
+											{% else %}
+												<img class="mr-3 img-fluid rounded-circle" src="{{ member.photo.url }}" width="60px" height="60px" />
+											{% endif %}
+										  	<div class="media-body">
+											    <strong>{{ member.name }}</strong> <br>
+												<small>{% if member.expertise != '' %}{{ member.expertise }}{% else %}{{ member.description }}{% endif %}
+									  			</small>
+										  	</div>
+										</div>
+									</div>
+								</div>
+								<!-- <input type="checkbox" name="unchecked_member_sponsors" id="option{{member.id}}" value={{member.id}} />
 								<label for="member{{member.id}}">{{member.name}}</label><br />
-								<label for="member{{member.id}}">({{ member.description|truncatechars:30 }})</label>
+								<label for="member{{member.id}}">({{ member.description|truncatechars:30 }})</label> -->
 							</div>
 						{% endfor %}
 					</div>
@@ -168,16 +318,54 @@
 					<div class="row" id="volunteer-checkgroup">
 						{% for volunteer in volunteer_list_2 %}
 							<div class="col-sm-4 mt-3">
-								<input type="checkbox" name="checked_volunteers" id="option{{volunteer.id}}" value={{volunteer.id}} checked/>
+								<div class="row">
+									<div class="col-1">
+										<input type="checkbox" name="checked_volunteers" id="option{{volunteer.id}}" value={{volunteer.id}} checked/>
+									</div>
+									<div class="col">
+										<div class="media">
+											{% if not volunteer.photo %}
+												<img class="mr-3 img-fluid rounded-circle" src="https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg" width="60px" height="60px" />
+											{% else %}
+												<img class="mr-3 img-fluid rounded-circle" src="{{ volunteer.photo.url }}" width="60px" height="60px" />
+											{% endif %}
+										  	<div class="media-body">
+											    <strong>{{ volunteer.name }}</strong> <br>
+												<small>{% if volunteer.expertise != '' %}{{ volunteer.expertise }}{% else %}{{ volunteer.description }}{% endif %}
+									  			</small>
+										  	</div>
+										</div>
+									</div>
+								</div>
+								<!-- <input type="checkbox" name="checked_volunteers" id="option{{volunteer.id}}" value={{volunteer.id}} checked/>
 								<label for="volunteer{{volunteer.id}}">{{volunteer.name}}</label><br />
-								<label for="volunteer{{volunteer.id}}">({{ volunteer.description|truncatechars:30 }})</label>
+								<label for="volunteer{{volunteer.id}}">({{ volunteer.description|truncatechars:30 }})</label> -->
 							</div>
 						{% endfor %}
 						{% for volunteer in volunteer_list %}
 							<div class="col-sm-4 mt-3">
-								<input type="checkbox" name="unchecked_volunteers" id="option{{volunteer.id}}" value={{volunteer.id}} />
+								<div class="row">
+									<div class="col-1">
+										<input type="checkbox" name="unchecked_volunteers" id="option{{volunteer.id}}" value={{volunteer.id}} />
+									</div>
+									<div class="col">
+										<div class="media">
+											{% if not volunteer.photo %}
+												<img class="mr-3 img-fluid rounded-circle" src="https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg" width="60px" height="60px" />
+											{% else %}
+												<img class="mr-3 img-fluid rounded-circle" src="{{ volunteer.photo.url }}" width="60px" height="60px" />
+											{% endif %}
+										  	<div class="media-body">
+											    <strong>{{ volunteer.name }}</strong> <br>
+												<small>{% if volunteer.expertise != '' %}{{ volunteer.expertise }}{% else %}{{ volunteer.description }}{% endif %}
+									  			</small>
+										  	</div>
+										</div>
+									</div>
+								</div>
+								<!-- <input type="checkbox" name="unchecked_volunteers" id="option{{volunteer.id}}" value={{volunteer.id}} />
 								<label for="volunteer{{volunteer.id}}">{{volunteer.name}}</label><br />
-								<label for="volunteer{{volunteer.id}}">({{ volunteer.description|truncatechars:30 }})</label>
+								<label for="volunteer{{volunteer.id}}">({{ volunteer.description|truncatechars:30 }})</label> -->
 							</div>
 						{% endfor %}
 					</div>
@@ -187,16 +375,54 @@
 					<div class="row" id="member-volunteer-checkgroup">
 						{% for member in member_volunteer_list_2 %}
 							<div class="col-sm-4 mt-3">
-								<input type="checkbox" name="checked_member_volunteers" id="option{{member.id}}" value={{member.id}} checked/>
+								<div class="row">
+									<div class="col-1">
+										<input type="checkbox" name="checked_member_volunteers" id="option{{member.id}}" value={{member.id}} checked/>
+									</div>
+									<div class="col">
+										<div class="media">
+											{% if not member.photo %}
+												<img class="mr-3 img-fluid rounded-circle" src="https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg" width="60px" height="60px" />
+											{% else %}
+												<img class="mr-3 img-fluid rounded-circle" src="{{ member.photo.url }}" width="60px" height="60px" />
+											{% endif %}
+										  	<div class="media-body">
+											    <strong>{{ member.name }}</strong> <br>
+												<small>{% if member.expertise != '' %}{{ member.expertise }}{% else %}{{ member.description }}{% endif %}
+									  			</small>
+										  	</div>
+										</div>
+									</div>
+								</div>
+								<!-- <input type="checkbox" name="checked_member_volunteers" id="option{{member.id}}" value={{member.id}} checked/>
 								<label for="member{{member.id}}">{{member.name}}</label><br />
-								<label for="member{{member.id}}">({{ member.description|truncatechars:30 }})</label>
+								<label for="member{{member.id}}">({{ member.description|truncatechars:30 }})</label> -->
 							</div>
 						{% endfor %}
 						{% for member in member_volunteer_list %}
 							<div class="col-sm-4 mt-3">
-								<input type="checkbox" name="unchecked_member_volunteers" id="option{{member.id}}" value={{member.id}} />
+								<div class="row">
+									<div class="col-1">
+										<input type="checkbox" name="unchecked_member_volunteers" id="option{{member.id}}" value={{member.id}} />
+									</div>
+									<div class="col">
+										<div class="media">
+											{% if not member.photo %}
+												<img class="mr-3 img-fluid rounded-circle" src="https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg" width="60px" height="60px" />
+											{% else %}
+												<img class="mr-3 img-fluid rounded-circle" src="{{ member.photo.url }}" width="60px" height="60px" />
+											{% endif %}
+										  	<div class="media-body">
+											    <strong>{{ member.name }}</strong> <br>
+												<small>{% if member.expertise != '' %}{{ member.expertise }}{% else %}{{ member.description }}{% endif %}
+									  			</small>
+										  	</div>
+										</div>
+									</div>
+								</div>
+								<!-- <input type="checkbox" name="unchecked_member_volunteers" id="option{{member.id}}" value={{member.id}} />
 								<label for="member{{member.id}}">{{member.name}}</label><br />
-								<label for="member{{member.id}}">({{ member.description|truncatechars:30 }})</label>
+								<label for="member{{member.id}}">({{ member.description|truncatechars:30 }})</label> -->
 							</div>
 						{% endfor %}
 					</div>
@@ -210,14 +436,29 @@
 					<input type="submit" name="Draft" value="Draft" class="btn btn-block btn-dark">
 				</div>
 				<div class="col-sm-6 mt-3">
-					<input type="submit" name="Update" value="Update" class="btn btn-block btn-success">
+					<a href="#" data-toggle="modal" data-target="#notifyModal" class="btn btn-block btn-success">
+						Publish
+					</a>
+					<!-- <input type="submit" name="Update" value="Update" class="btn btn-block btn-success"> -->
 				</div>
 			</div>
 		{% else %}
 			<button type="submit" class="btn btn-block btn-dark mt-3" style="letter-spacing: 3px;">Update Event</button>
 		{% endif %}
 
-		
+		<div class="modal fade" id="notifyModal" tabindex="-1" role="dialog">
+		  	<div class="modal-dialog modal-dialog-centered" role="document">
+		    	<div class="modal-content">
+		      		<div class="modal-body text-center">
+		        		Do you want to notify site subscribers?
+		      		</div>
+		      		<div class="modal-footer">
+		      			<input type="submit" name="No" value="No" class="btn btn-sm btn-dark">
+		      			<input type="submit" name="Yes" value="Yes" class="btn btn-sm btn-success">
+		      		</div>
+		    	</div>
+		  	</div>
+		</div>
 	</form>
 </div>
 
@@ -332,88 +573,52 @@
 	  	</div>
 	</div>
 
-	<!-- GOOGLE MAP Modal -->
-	<div class="modal fade" id="locationMap" tabindex="-1" role="dialog">
-		<div class="modal-dialog modal-dialog-centered">
-			<div class="modal-content text-center">
-				<div class="modal-body">
-					<div id="map" style="width: 100%; height: 400px"></div>
+	<!-- Modal -->
+	<div class="modal fade" id="syncModal" tabindex="-1">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+				    <h5 class="modal-title">{{ event.title }}</h5>
+				    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          		<span aria-hidden="true">&times;</span>
+			        </button>
+				  </div>
+				<div class="modal-body text-center">
+					<p id="modalMessage">Please wait... Resyncing Data...</p>
 				</div>
+					<button id="modalClose" type="button" class="btn btn-secondary" data-dismiss="modal" hidden>Close</button>
 			</div>
 		</div>
 	</div>
-
+	
 	<script type="text/javascript">
-		var firstrun = true
-		var $label = $("label[for='id_location']")
-        $label.append("<a href='#' data-toggle='modal' data-target='#locationMap'><i class='fas fa-globe-asia'></i></a>&nbsp&nbsp<small class='font-italic'>( <input type='checkbox' name='mapOverwrite' id='mapOverwrite' checked/> Enable Map Sync )</small>")  
+		$('#resync-link').on('click', function(event){
+		    event.preventDefault();
+		    $("#modalMessage").text("Please wait... Resyncing Data...");
+		    $("#syncModal").modal('toggle')
+		    $.ajax({
+				url: "{% url 'event:resync-event-api' event.slug %}",
+				type: "GET",
+				data: {},
+				success: function(data) {
+					$("#id_title").val(data.name);
+					$("#id_location").val(data.location);
+					$("#id_latitude").val(data.latitude);
+					$("#id_longitude").val(data.longitude);
+					$("#id_date").val(data.start_date);
+					$("#id_time").val(data.start_time);
+					$("#id_date_to").val(data.end_date);
+					$("#id_time_to").val(data.end_time);
+					$("#id_description").val(data.description);
+					$("#meetup_banner").val(data.banner);
 
-		function initAutocomplete() {
-			autocomplete = new google.maps.places.Autocomplete(
-				(document.getElementById('id_location')),
-				{types: []}
-			);
-			autocomplete.addListener('place_changed', fillInAddress);
-			function fillInAddress() {
-			    if ($('#mapOverwrite').is(":checked")){
-					var place = autocomplete.getPlace();
-					document.getElementById("id_latitude").value = place.geometry.location.lat(); 
-					document.getElementById("id_longitude").value = place.geometry.location.lng();
-
-					var newLatLng = new google.maps.LatLng(
-						document.getElementById("id_latitude").value, 
-						document.getElementById("id_longitude").value);
-				    marker.setPosition(newLatLng);
-				    map.setCenter(newLatLng);
+					$("#modalMessage").text("Syncing Done...");
+				},
+				error: function(err) {
+					console.log(err)
 				}
-			}
-			displayMap()
-		}
-
-		var map, marker
-		function displayMap() {
-			var eventLatitude = $("#id_latitude").val()
-			var eventLongitude = $("#id_longitude").val()
-			var myLatlng = new google.maps.LatLng(eventLatitude, eventLongitude);
-
-			map = new google.maps.Map(document.getElementById('map'), {
-				center: myLatlng,
-				zoom: 18,
-				mapTypeId: 'roadmap',
-				disableDefaultUI: true,
-			});
-			marker = new google.maps.Marker({
-				position: myLatlng,
-				map: map,
-			});
-
-			google.maps.event.addListener(map, 'click', function(event) {
-				marker.setMap(null)
-				marker = new google.maps.Marker({
-					position: event.latLng, 
-					map: map,
-				});
-
-				document.getElementById("id_latitude").value = marker.getPosition().lat()
-				document.getElementById("id_longitude").value = marker.getPosition().lng()
-
-				if ($('#mapOverwrite').is(":checked")){
-					url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='
-					geocoder_url = url + marker.getPosition().lat() + ',' + marker.getPosition().lng() + '&key=AIzaSyBLvHFeixDacvhmdX-L_0EoG4of6n0pM1A'
-					$.ajax({
-						url: geocoder_url,
-						success: function(data){
-							newAddress = data.results[0].formatted_address
-							$('#id_location').val(newAddress);
-						},
-						error: function(e){
-							console.log(e.message)
-						}
-					})
-				}
-			});
-		}
-
+			})
+		});
 
 		function getCookie(name) {
 		    var cookieValue = null;
@@ -448,9 +653,7 @@
 					'website': $('#speaker-website').val(),
 				},
 				success: function(json) {
-					console.log(json)
-					console.log(json.id + ", " + json.name)
-					$("#speaker-checkgroup").append("<div class='col-sm-4 mt-3'><input type=checkbox name=unchecked_speakers id=option" + json.id + " value=" + json.id + " /> <label for='speaker" + json.id + "'>" + json.name + "</label><br /><small>(" + json.description + ")</small></div>");
+					$("#speaker-checkgroup").append("<div class='col-sm-4 mt-3'><div class='row'><div class='col-1'><input type='checkbox' name='unchecked_speakers' id='option" + json.id + "' value=" + json.id + " checked/></div><div class='col'><div class='media'><img class='mr-3 img-fluid rounded-circle' src='https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg' width='60px' height='60px' /><div class='media-body'><strong>" + json.name + "</strong> <br><small>" + json.description + "</small></div></div></div></div></div>");
 					$('#speakerModal').modal('toggle');
 				},
 				error: function(err) {
@@ -474,9 +677,7 @@
 					'website': $('#sponsor-website').val(),
 				},
 				success: function(json) {
-					console.log(json)
-					console.log(json.id + ", " + json.name)
-					$("#sponsor-checkgroup").append("<div class='col-sm-4 mt-3'><input type=checkbox name=unchecked_sponsors id=option" + json.id + " value=" + json.id + " /> <label for='sponsor" + json.id + "'>" + json.name + "</label><br /><small>(" + json.description + ")</small></div>");
+					$("#sponsor-checkgroup").append("<div class='col-sm-4 mt-3'><div class='row'><div class='col-1'><input type='checkbox' name='unchecked_sponsors' id='option" + json.id + "' value=" + json.id + " checked/></div><div class='col'><div class='media'><img class='mr-3 img-fluid rounded-circle' src='https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg' width='60px' height='60px' /><div class='media-body'><strong>" + json.name + "</strong> <br><small>" + json.description + "</small></div></div></div></div></div>");
 					$('#sponsorModal').modal('toggle');
 				},
 				error: function(err) {
@@ -503,9 +704,7 @@
 					'website': $('#volunteer-website').val(),
 				},
 				success: function(json) {
-					console.log(json)
-					console.log(json.id + ", " + json.name)
-					$("#volunteer-checkgroup").append("<div class='col-sm-4 mt-3'><input type=checkbox name=unchecked_volunteers id=option" + json.id + " value=" + json.id + " /> <label for='volunteer" + json.id + "'>" + json.name + "</label><br /><small>(" + json.description + ")</small></div>");
+					$("#volunteer-checkgroup").append("<div class='col-sm-4 mt-3'><div class='row'><div class='col-1'><input type='checkbox' name='unchecked_volunteers' id='option" + json.id + "' value=" + json.id + " checked/></div><div class='col'><div class='media'><img class='mr-3 img-fluid rounded-circle' src='https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg' width='60px' height='60px' /><div class='media-body'><strong>" + json.name + "</strong> <br><small>" + json.description + "</small></div></div></div></div></div>");
 					$('#volunteerModal').modal('toggle');
 				},
 				error: function(err) {
@@ -514,6 +713,4 @@
 			})
 		});
 	</script>
-	<script 
-		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBLvHFeixDacvhmdX-L_0EoG4of6n0pM1A&libraries=places&callback=initAutocomplete" async defer></script>
 {% endblock content %}

@@ -214,40 +214,42 @@
 	<div class="mb-3">
 		<small class="text-muted">{{ event.author|capfirst }}, Posted {{ event.timestamp|date:"d F Y" }}</small> 
 		{% if request.user.is_authenticated and request.user.useraccount.is_event_creator or request.user.is_superuser %}
-		    | 
-			<small>
-				<a 
-					href="{% url 'event:event-update' event.slug %}" 
-					style="font-size: 1em;color: #00F;"
-				>
-					<i class="fas fa-pencil-alt"></i>
-					Edit Event
-				</a>
-				| 
-				<a 
-					href="#" data-toggle="modal" data-target="#confirmationModal"
-					style="font-size: 1em;color: #00F;"
-				>
-					<i class="fas fa-trash"></i>
-					Delete Event
-				</a>
-			</small>
-			<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog">
-			  	<div class="modal-dialog modal-dialog-centered" role="document">
-			    	<div class="modal-content">
-			      		<div class="modal-header">
-			        		<h5 class="modal-title">Confirm Event Deletion</h5>
-			      		</div>
-			      		<div class="modal-body text-center">
-			        		Are you sure you want to delete <strong>{{ event.title }}</strong>?
-			      		</div>
-			      		<div class="modal-footer">
-			        		<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
-			        		<a href="{% url 'event:event-delete' event.slug %}" class="btn btn-sm btn-danger">Confirm</a>
-			      		</div>
-			    	</div>
-			  	</div>
-			</div>
+		    {% if event.event_status != 'Ongoing' %}
+		        | 
+				<small>
+					<a 
+						href="{% url 'event:event-update' event.slug %}" 
+						style="font-size: 1em;color: #00F;"
+					>
+						<i class="fas fa-pencil-alt"></i>
+						Edit Event
+					</a>
+					| 
+					<a 
+						href="#" data-toggle="modal" data-target="#confirmationModal"
+						style="font-size: 1em;color: #00F;"
+					>
+						<i class="fas fa-trash"></i>
+						Delete Event
+					</a>
+				</small>
+				<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog">
+				  	<div class="modal-dialog modal-dialog-centered" role="document">
+				    	<div class="modal-content">
+				      		<div class="modal-header">
+				        		<h5 class="modal-title">Confirm Event Deletion</h5>
+				      		</div>
+				      		<div class="modal-body text-center">
+				        		Are you sure you want to delete <strong>{{ event.title }}</strong>?
+				      		</div>
+				      		<div class="modal-footer">
+				        		<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
+				        		<a href="{% url 'event:event-delete' event.slug %}" class="btn btn-sm btn-danger">Confirm</a>
+				      		</div>
+				    	</div>
+				  	</div>
+				</div>
+		    {% endif %}
 		{% endif %}
 	</div>
 </div>

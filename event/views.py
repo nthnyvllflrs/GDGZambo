@@ -229,31 +229,33 @@ def create_event(request, meetup_id):
 			return redirect('event:event-upcoming')
 	else:
 		meetup_event = settings.MEETUP_CLIENT.GetEvent({'id': meetup_id})
-		if 'photo_url' in meetup_event.__dict__:
-			photo_url = meetup_event.photo_url
+
+		# Get Event Banner
+		photo_url = meetup_event.photo_url if 'photo_url' in meetup_event.__dict__ else None
 
 		if 'venue' in meetup_event.__dict__:
-			try:
-				event_location = meetup_event.venue['name'] + ', ' + meetup_event.venue['address_1'] + ', ' + meetup_event.venue['address_2'] + ', ' + meetup_event.venue['city']
-			except Exception as e:
-				event_location = meetup_event.venue['name'] + ', ' + meetup_event.venue['address_1'] + ', ' + meetup_event.venue['city']
-			event_lat = meetup_event.venue['lat']
-			event_lng = meetup_event.venue['lon']
+			venue_name = meetup_event.venue['name'] if 'name' in meetup_event.venue else ''
+			address_1 = meetup_event.venue['address_1'] if 'address_1' in meetup_event.venue else ''
+			address_2 = meetup_event.venue['address_2'] if 'address_2' in meetup_event.venue else ''
+			city = meetup_event.venue['city'] if 'city' in meetup_event.venue else ''
+			event_lat = meetup_event.venue['lat'] if 'lat' in meetup_event.venue else 6.9214
+			event_lng = meetup_event.venue['lon'] if 'lon' in meetup_event.venue else 122.0790
+			event_location = venue_name + ', ' + address_1 + ', ' + address_2 + ', ' +  city
+			# try:
+			# 	event_location = meetup_event.venue['name'] + ', ' + meetup_event.venue['address_1'] + ', ' + meetup_event.venue['address_2'] + ', ' + meetup_event.venue['city']
+			# except Exception as e:
+			# 	event_location = meetup_event.venue['name'] + ', ' + meetup_event.venue['address_1'] + ', ' + meetup_event.venue['city']
+			# event_lat = meetup_event.venue['lat']
+			# event_lng = meetup_event.venue['lon']
 		else:
 			event_location = 'No event venue was set'
 			event_lat = 6.9214
 			event_lng = 122.0790
+		# Get Event Duration
+		event_duration = meetup_event.duration if 'duration' in  meetup_event.__dict__ else 0
+		# Get Event Description
+		event_description = meetup_event.description if 'description' in  meetup_event.__dict__ else 'No Description'
 
-		if 'duration' in  meetup_event.__dict__:
-			event_duration = meetup_event.duration
-		else:
-			event_duration = 0
-
-		if 'description' in  meetup_event.__dict__:
-			event_description = meetup_event.description
-		else:
-			event_description = 'No Description'
-			
 		event_start = datetime.datetime.fromtimestamp(meetup_event.time/1000.0)
 		event_start_date = event_start.strftime("%Y-%m-%d")
 		event_start_time = event_start.strftime("%H:%M:%S")
@@ -279,7 +281,8 @@ def create_event(request, meetup_id):
 
 	context = {
 		'form': form, 'speaker_form': speaker_form, 'sponsor_form': sponsor_form, 'volunteer_form': volunteer_form, 'speaker_list': speaker_list, 
-		'sponsor_list': sponsor_list, 'member_list': member_list, 'volunteer_list': volunteer_list, 'photo_url': photo_url}
+		'sponsor_list': sponsor_list, 'member_list': member_list, 'volunteer_list': volunteer_list, 'photo_url': photo_url, 
+		'start_date': event_start_date, 'end_date': event_end_date}
 	return render(request, 'event/event-create.html', context)
 
 
@@ -364,6 +367,12 @@ def update_event(request, slug):
 			event.save()
 
 			UserLog.objects.create(user = request.user, description = "Event Updated. (%s)" % (event.title,),)
+
+			if 'Yes' in request.POST:
+				t = threading.Thread(target=send_event_notification(event))
+				t.setDaemon = True
+				t.start()
+
 			return redirect('event:event-view', event.slug)
 	else:
 		event_form = EventForm(instance=event)
@@ -562,9 +571,41 @@ def event_data(request):
 	date_now = datetime.datetime.now().date()
 	date_from = request.GET.get('from')
 	date_to = request.GET.get('to')
+	title = request.GET.get('title') if request.GET.get('title') else ''
+	status = request.GET.getlist('status')
+
+
+	if 'past' in status and 'upcoming' in status:
+		event_list = Event.objects.filter((Q(date__range=(date_from, date_to)) & Q(title__contains=title))).order_by('-date')
+	elif 'past' in status:
+		event_list = Event.objects.filter((Q(date_to__range=(date_from, date_to)) & Q(title__contains=title)) & Q(date_to__lte=date_now)).order_by('-date_to')
+	elif 'upcoming' in status:
+		event_list = Event.objects.filter((Q(date__range=(date_from, date_to)) & Q(title__contains=title)) & Q(date__gte=date_now)).order_by('-date')
+	else:
+		event_list = Event.objects.filter((Q(date__range=(date_from, date_to)) & Q(title__contains=title))).order_by('-date')
+
+	# PAST
+	# event_list = Event.objects.filter((Q(date_to__range=(date_from, date_to)) & Q(title__contains=title)) & Q(date_to__lte=date_now))
+	# UPCOMING
+	# event_list = Event.objects.filter((Q(date__range=(date_from, date_to)) & Q(title__contains=title)) & Q(date__gte=date_now))
+	# ALL
+	# event_list = Event.objects.filter((Q(date__range=(date_from, date_to)) & Q(title__contains=title)))
+
+	# if ('upcoming' in status and 'past' in status):
+	# 	print("BOTH!")
+	# 	event_list = Event.objects.filter(Q(date__range=(date_from, date_to)) & Q(title__contains=title)).order_by('-date_to')
+	# elif 'upcoming' in status:
+	# 	print("UPCOMING!")
+	# 	event_list = Event.objects.filter(
+	# 		Q(date__gte=(date_now) & Q(date__range=(date_from, date_to))) & Q(title__contains=title)).order_by('-date_to')
+	# elif 'past' in status:
+	# 	print("PAST!")
+	# 	event_list = Event.objects.filter(
+	# 		Q(date_to__lte=(date_now) & Q(date__range=(date_from, date_to))) & Q(title__contains=title)).order_by('-date_to')
+	# else:
+	# 	event_list = Event.objects.filter(Q(date__range=(date_from, date_to)) & Q(date_to__lt=date_now))
 
 	# event_list = Event.objects.filter(Q(date__range=(date_from, date_to)) & Q(date_to__lt=date_now))
-	event_list = Event.objects.filter(Q(date__range=(date_from, date_to)))
 	top_attendee = EventAttendance.objects.values('member_name').annotate(num_events=Count('member_id')).order_by('-num_events', 'member_name')[:8]
 	gender_count = EventStatistics.objects.aggregate(Sum('manual_count'), Sum('male'), Sum('female'))
 

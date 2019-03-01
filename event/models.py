@@ -41,6 +41,11 @@ def sponsor_pre_save_receiver(sender, instance, *args, **kwargs):
 		instance.slug = unique_slug_generator(instance)
 pre_save.connect(sponsor_pre_save_receiver, sender=Sponsor)
 
+class SpeakerManager(models.Manager):
+	def is_event_conflict(self, start_date, end_date):
+		event_set = self.event_set.all()
+		result = event_set.filter(date__range(start_date, end_date))
+		return True if result.count != 0 else False
 
 class Speaker(models.Model):
 	name 				= models.CharField(max_length=200)
@@ -56,6 +61,7 @@ class Speaker(models.Model):
 	website 		= models.URLField(max_length=500, null=True, blank=True)
 	slug 				= models.SlugField(max_length=255, null=True, blank=True)
 	timestamp 	= models.DateTimeField(auto_now_add=True)
+	objects = SpeakerManager()
 
 	def __str__(self):
 		return self.name
@@ -102,6 +108,15 @@ class Event(models.Model):
 	@property
 	def is_past_event(self):
 		return date.today() > self.date_to
+
+	@property
+	def event_status(self):
+		if self.date <= date.today() <= self.date_to:
+			return 'Ongoing'
+		elif date.today() > self.date_to:
+			return 'Past'
+		else:
+			return 'Upcoming'
 
 	@property
 	def attendees(self):
