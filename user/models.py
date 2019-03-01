@@ -20,9 +20,9 @@ class Subscriber(models.Model):
 
 
 class UserAccount(models.Model):
-	user 			= models.OneToOneField(User, on_delete=models.CASCADE)
-	member 		= models.OneToOneField(Member, on_delete=models.CASCADE)
-	role 			= models.CharField(max_length=120, default='Blog Creator')
+	user = models.OneToOneField(User, on_delete=models.CASCADE)
+	member = models.OneToOneField(Member, on_delete=models.CASCADE)
+	role = models.CharField(max_length=120, default='Blog Creator')
 	activated = models.BooleanField(default=True)
 	timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
 
@@ -39,9 +39,9 @@ class UserAccount(models.Model):
 
 
 class UserLog(models.Model):
-	user 				= models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
+	user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
 	description = models.TextField()
-	timestamp 	= models.DateTimeField(auto_now_add=True, auto_now=False)
+	timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
 
 
 class SiteCarousel(models.Model):

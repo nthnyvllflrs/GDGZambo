@@ -241,12 +241,6 @@ def create_event(request, meetup_id):
 			event_lat = meetup_event.venue['lat'] if 'lat' in meetup_event.venue else 6.9214
 			event_lng = meetup_event.venue['lon'] if 'lon' in meetup_event.venue else 122.0790
 			event_location = venue_name + ', ' + address_1 + ', ' + address_2 + ', ' +  city
-			# try:
-			# 	event_location = meetup_event.venue['name'] + ', ' + meetup_event.venue['address_1'] + ', ' + meetup_event.venue['address_2'] + ', ' + meetup_event.venue['city']
-			# except Exception as e:
-			# 	event_location = meetup_event.venue['name'] + ', ' + meetup_event.venue['address_1'] + ', ' + meetup_event.venue['city']
-			# event_lat = meetup_event.venue['lat']
-			# event_lng = meetup_event.venue['lon']
 		else:
 			event_location = 'No event venue was set'
 			event_lat = 6.9214
@@ -376,42 +370,6 @@ def update_event(request, slug):
 			return redirect('event:event-view', event.slug)
 	else:
 		event_form = EventForm(instance=event)
-		# meetup_event = settings.MEETUP_CLIENT.GetEvent({'id': meetup_id})
-		# if 'venue' in meetup_event.__dict__:
-		# 	try:
-		# 		event_location = meetup_event.venue['name'] + ', ' + meetup_event.venue['address_1'] + ', ' + meetup_event.venue['address_2'] + ', ' + meetup_event.venue['city']
-		# 	except Exception as e:
-		# 		event_location = meetup_event.venue['name'] + ', ' + meetup_event.venue['address_1'] + ', ' + meetup_event.venue['city']
-		# 	event_lat = meetup_event.venue['lat']
-		# 	event_lng = meetup_event.venue['lon']
-		# else:
-		# 	event_location = 'No event venue was set'
-		# 	event_lat = 6.9214
-		# 	event_lng = 122.0790
-
-		# if 'duration' in  meetup_event.__dict__:
-		# 	event_duration = meetup_event.duration
-		# else:
-		# 	event_duration = 0
-
-		# if 'description' in  meetup_event.__dict__:
-		# 	event_description = meetup_event.description
-		# else:
-		# 	event_description = 'No Description'
-			
-		# event_start = datetime.datetime.fromtimestamp(meetup_event.time/1000.0)
-		# event_start_date = event_start.strftime("%Y-%m-%d")
-		# event_start_time = event_start.strftime("%H:%M:%S")
-		# event_end = datetime.datetime.fromtimestamp(meetup_event.time/1000.0) + datetime.timedelta(hours=event_duration/3600000)
-		# event_end_date = event_end.strftime("%Y-%m-%d")
-		# event_end_time = event_end.strftime("%H:%M:%S")
-
-		# event_description = BeautifulSoup(event_description, features='html.parser').get_text(separator='\n')
-
-		# event_form = EventForm(initial={
-		# 	'author': request.user, 'title': meetup_event.name, 'location': event_location, 'latitude': event_lat,
-		# 	'longitude': event_lng, 'date': event_start_date, 'time': event_start_time, 'date_to': event_end_date,
-		# 	'time_to': event_end_time, 'description': event_description, 'meetup_ID': meetup_id, })
 		error_message = None
 
 	if event.speakers.all():
@@ -584,28 +542,6 @@ def event_data(request):
 	else:
 		event_list = Event.objects.filter((Q(date__range=(date_from, date_to)) & Q(title__contains=title))).order_by('-date')
 
-	# PAST
-	# event_list = Event.objects.filter((Q(date_to__range=(date_from, date_to)) & Q(title__contains=title)) & Q(date_to__lte=date_now))
-	# UPCOMING
-	# event_list = Event.objects.filter((Q(date__range=(date_from, date_to)) & Q(title__contains=title)) & Q(date__gte=date_now))
-	# ALL
-	# event_list = Event.objects.filter((Q(date__range=(date_from, date_to)) & Q(title__contains=title)))
-
-	# if ('upcoming' in status and 'past' in status):
-	# 	print("BOTH!")
-	# 	event_list = Event.objects.filter(Q(date__range=(date_from, date_to)) & Q(title__contains=title)).order_by('-date_to')
-	# elif 'upcoming' in status:
-	# 	print("UPCOMING!")
-	# 	event_list = Event.objects.filter(
-	# 		Q(date__gte=(date_now) & Q(date__range=(date_from, date_to))) & Q(title__contains=title)).order_by('-date_to')
-	# elif 'past' in status:
-	# 	print("PAST!")
-	# 	event_list = Event.objects.filter(
-	# 		Q(date_to__lte=(date_now) & Q(date__range=(date_from, date_to))) & Q(title__contains=title)).order_by('-date_to')
-	# else:
-	# 	event_list = Event.objects.filter(Q(date__range=(date_from, date_to)) & Q(date_to__lt=date_now))
-
-	# event_list = Event.objects.filter(Q(date__range=(date_from, date_to)) & Q(date_to__lt=date_now))
 	top_attendee = EventAttendance.objects.values('member_name').annotate(num_events=Count('member_id')).order_by('-num_events', 'member_name')[:8]
 	gender_count = EventStatistics.objects.aggregate(Sum('manual_count'), Sum('male'), Sum('female'))
 

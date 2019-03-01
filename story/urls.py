@@ -1,19 +1,9 @@
 from django.urls import path
 
 from .views import (
-	list_story,
-	list_draft_story,
-	list_published_story,
-	list_waiting_story,
-
-	view_story,
-	create_story,
-	update_story,
-	delete_story,
-	publish_story,
-
-	add_view_images,
-	delete_image,
+	list_story, list_draft_story, list_published_story, list_waiting_story,
+	view_story, create_story, update_story, delete_story, publish_story,
+	add_view_images, delete_image,
 )
 
 urlpatterns = [
