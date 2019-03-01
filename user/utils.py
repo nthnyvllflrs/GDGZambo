@@ -17,6 +17,16 @@ def send_event_notification(instance):
 	send_mail(email_subject, email_body, email_from, recipient_list, html_message=html_message)
 
 
+def send_event_updated_notification(instance):
+	email_subject = 'Updated GDG Zamboanga Event <%s>' % (instance.title,)
+	email_body = '' 
+	email_from = settings.EMAIL_HOST_USER
+	subscriber_list = [ (subscriber.email) for subscriber in Subscriber.objects.all()]
+	recipient_list = tuple(subscriber_list)
+	html_message = loader.render_to_string('email/subscriber-event-updated-notification.html',{'event': instance})
+	send_mail(email_subject, email_body, email_from, recipient_list, html_message=html_message)
+
+
 def send_blog_notification(instance):
 	email_subject = 'New GDG Zamboanga Blog <%s>' % (instance.title,)
 	email_body = '' 

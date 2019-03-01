@@ -16,7 +16,7 @@ from .forms import (SponsorForm, SpeakerForm, EventForm, FeedbackForm, EventStat
 from .utils import render_to_pdf
 
 from user.models import UserLog
-from user.utils import send_event_notification, send_feedback_notification
+from user.utils import send_event_notification, send_feedback_notification, send_event_updated_notification
 from team.models import Member, Volunteer
 from team.forms import VolunteerForm
 
@@ -369,7 +369,7 @@ def update_event(request, slug):
 			UserLog.objects.create(user = request.user, description = "Event Updated. (%s)" % (event.title,),)
 
 			if 'Yes' in request.POST:
-				t = threading.Thread(target=send_event_notification(event))
+				t = threading.Thread(target=send_event_updated_notification(event))
 				t.setDaemon = True
 				t.start()
 
