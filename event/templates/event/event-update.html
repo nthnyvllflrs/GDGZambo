@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
-
+{% load event_tags %}
 {% block content %}
 <div class="container mt-5 mt-3">
 	<h5 class="font-italic">
@@ -70,7 +70,8 @@
 			<div class="card-body">
 				<h5 class="card-title font-italic">
 					Event Speakers 
-					<a href="#" class="btn btn-sm" data-toggle="modal" data-target="#speakerModal">Add New Speaker</a>
+					<a href="#" class="btn btn-sm" data-toggle="modal" data-target="#speakerModal">Add New Speaker</a> <br />
+					<small class="text-muted" style="font-size: .75em;">Note: Speakers that are red colored have date conflicts with existing events...</small>
 				</h5>
 
 				<div class="form-check">
@@ -89,7 +90,11 @@
 												<img class="mr-3 img-fluid rounded-circle" src="{{ speaker.photo.url }}" width="60px" height="60px" />
 											{% endif %}
 										  	<div class="media-body">
-											    <strong>{{ speaker.name }}</strong> <br>
+											    <!-- <strong>{{ speaker.name }}</strong> <br>
+												<small>{% if speaker.expertise != '' %}{{ speaker.expertise }}{% else %}{{ speaker.description }}{% endif %}
+									  			</small> -->
+									  			{% check_conflict_speaker speaker event.date|date:'Y-m-d' event.date_to|date:'Y-m-d' event as conflict %}
+											    <strong {% if conflict %}class="text-danger"{% endif %}>{{ speaker.name }}</strong> <br>
 												<small>{% if speaker.expertise != '' %}{{ speaker.expertise }}{% else %}{{ speaker.description }}{% endif %}
 									  			</small>
 										  	</div>
@@ -112,7 +117,11 @@
 												<img class="mr-3 img-fluid rounded-circle" src="{{ speaker.photo.url }}" width="60px" height="60px" />
 											{% endif %}
 										  	<div class="media-body">
-											    <strong>{{ speaker.name }}</strong> <br>
+											    <!-- <strong>{{ speaker.name }}</strong> <br>
+												<small>{% if speaker.expertise != '' %}{{ speaker.expertise }}{% else %}{{ speaker.description }}{% endif %}
+									  			</small> -->
+									  			{% check_conflict_speaker speaker event.date|date:'Y-m-d' event.date_to|date:'Y-m-d' event as conflict %}
+											    <strong {% if conflict %}class="text-danger"{% endif %}>{{ speaker.name }}</strong> <br>
 												<small>{% if speaker.expertise != '' %}{{ speaker.expertise }}{% else %}{{ speaker.description }}{% endif %}
 									  			</small>
 										  	</div>
@@ -140,7 +149,11 @@
 												<img class="mr-3 img-fluid rounded-circle" src="{{ member.photo.url }}" width="60px" height="60px" />
 											{% endif %}
 										  	<div class="media-body">
-											    <strong>{{ member.name }}</strong> <br>
+											    <!-- <strong>{{ member.name }}</strong> <br>
+												<small>{% if member.expertise != '' %}{{ member.expertise }}{% else %}{{ member.description }}{% endif %}
+									  			</small> -->
+									  			{% check_conflict_member member event.date|date:'Y-m-d' event.date_to|date:'Y-m-d' event as conflict %}
+											    <strong {% if conflict %}class="text-danger"{% endif %}>{{ member.name }}</strong> <br>
 												<small>{% if member.expertise != '' %}{{ member.expertise }}{% else %}{{ member.description }}{% endif %}
 									  			</small>
 										  	</div>
@@ -163,7 +176,11 @@
 												<img class="mr-3 img-fluid rounded-circle" src="{{ member.photo.url }}" width="60px" height="60px" />
 											{% endif %}
 										  	<div class="media-body">
-											    <strong>{{ member.name }}</strong> <br>
+											    <!-- <strong>{{ member.name }}</strong> <br>
+												<small>{% if member.expertise != '' %}{{ member.expertise }}{% else %}{{ member.description }}{% endif %}
+									  			</small> -->
+									  			{% check_conflict_member member event.date|date:'Y-m-d' event.date_to|date:'Y-m-d' event as conflict %}
+											    <strong {% if conflict %}class="text-danger"{% endif %}>{{ member.name }}</strong> <br>
 												<small>{% if member.expertise != '' %}{{ member.expertise }}{% else %}{{ member.description }}{% endif %}
 									  			</small>
 										  	</div>
@@ -404,7 +421,7 @@
 				</div>
 				<div class="col-sm-6 mt-3">
 					<a href="#" data-toggle="modal" data-target="#notifyModal" class="btn btn-block btn-success">
-						Publish
+						Update
 					</a>
 					<!-- <input type="submit" name="Update" value="Update" class="btn btn-block btn-success"> -->
 				</div>
