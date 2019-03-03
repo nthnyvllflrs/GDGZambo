@@ -3,11 +3,10 @@
 {% block content %}
 <div class="container mt-5">
 	<h5><strong class="font-italic">GDG Zamboanga Events <small>(Drafts)</small></strong></h5>
-	<div class="btn-group mt-2" role="group">
-	  <a href="{% url 'event:event-upcoming' %}" class="btn btn-sm btn-dark">Upcoming</a>
+	<!-- <div class="btn-group mt-2" role="group"> -->
+	  	<a href="{% url 'event:event-upcoming' %}" class="btn btn-sm btn-dark">Upcoming</a>
 		<a href="{% url 'event:event-past' %}" class="btn btn-sm btn-dark">Past</a>
-	</div>
-
+	<!-- </div> -->
 	{% if request.user.is_authenticated and request.user.useraccount.is_event_creator or request.user.is_superuser %}
 		<a href="{% url 'event:event-published' %}" class="btn btn-sm btn-info mt-2">Published</a>
 	    <a href="{% url 'event:event-draft' %}" class="btn btn-sm btn-info mt-2">Drafts</a>
