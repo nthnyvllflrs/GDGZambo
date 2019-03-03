@@ -47,20 +47,15 @@ def create_sponsor_api(request):
 @api_view(['GET'])
 def sync_event_api(request, slug):
 	event = Event.objects.get(slug=slug)
+	meetup_event = settings.MEETUP_CLIENT.GetEvent({'id': event.meetup_ID})
 	meetup_event_attendance = settings.MEETUP_CLIENT.GetGroupEventsAttendance({'id': event.meetup_ID, 'urlname': 'gdgzamboanga'})
 	meetup_event_rsvps = settings.MEETUP_CLIENT.GetRsvps({'event_id': event.meetup_ID})
 
-	if EventStatistics.objects.filter(event=event).exists():
-		event_statistic = get_object_or_404(EventStatistics, event=event)
-		event_statistic.yes_rsvp = meetup_event_rsvps.results[0]['tallies']['yes']
-		event_statistic.no_rsvp = meetup_event_rsvps.results[0]['tallies']['no']
-		event_statistic.manual_count = meetup_event_rsvps.results[0]['tallies']['yes']
-		event_statistic.save()
-	else:
-		event_statistic = get_object_or_404(EventStatistics, event=event)
-		event_statistic.yes_rsvp = meetup_event_rsvps.results[0]['tallies']['yes']
-		event_statistic.no_rsvp = meetup_event_rsvps.results[0]['tallies']['no']
-		event_statistic.save()
+	event_statistic = get_object_or_404(EventStatistics, event=event)
+	event_statistic.yes_rsvp = meetup_event_rsvps.results[0]['tallies']['yes']
+	event_statistic.no_rsvp = meetup_event_rsvps.results[0]['tallies']['no']
+	event_statistic.manual_count = meetup_event.headcount
+	event_statistic.save()
 	
 	if EventAttendance.objects.filter(event_statistic=event_statistic).exists():
 		existing_attendace = EventAttendance.objects.filter(event_statistic=event_statistic)
@@ -122,7 +117,7 @@ def event_resync(request, slug):
 		event_lng = 122.0790
 
 	data = {
-		'name': event_title, 'description': event_description, 'banner': event_banner, 'description': event_description,
+		'name': event_title, 'description': event_description, 'banner': event_banner,
 		'start_date': event_start_date, 'start_time': event_start_time, 'end_date': event_end_date, 'end_time': event_end_time,
 		'location': event_location, 'latitude': event_lat, 'longitude': event_lng,}
 	return Response(data)

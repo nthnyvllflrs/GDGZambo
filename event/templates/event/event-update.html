@@ -15,8 +15,10 @@
 		<div class="card">
 			<div class="card-body">
 				<h5 class="card-title font-italic">
-					Event Details
-					<small><a href="#" id="resync-link" class="btn btn-sm">Resync Event Details</a></small>
+					Event Details <br />
+					<small class="text-muted" style="font-size: .75em;">
+						Note: Event details was automatically synchronized with Meetup event and saved.
+					</small>
 				</h5>
 				<div class="row">
 					<div class="col-sm-9">{{ event_form.title|as_crispy_field }}</div>
@@ -70,7 +72,7 @@
 			<div class="card-body">
 				<h5 class="card-title font-italic">
 					Event Speakers 
-					<a href="#" class="btn btn-sm" data-toggle="modal" data-target="#speakerModal">Add New Speaker</a> <br />
+					<a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#speakerModal">Add New Speaker</a> <br />
 					<small class="text-muted" style="font-size: .75em;">Note: Speakers that are red colored have date conflicts with existing events...</small>
 				</h5>
 
@@ -198,7 +200,7 @@
 			<div class="card-body">
 				<h5 class="card-title font-italic">
 					Event Sponsors 
-					<a href="#" class="btn btn-sm" data-toggle="modal" data-target="#sponsorModal">Add New Sponsor</a>
+					<a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#sponsorModal">Add New Sponsor</a>
 				</h5>
 
 				<div class="form-check">
@@ -307,7 +309,7 @@
 			<div class="card-body">
 				<h5 class="card-title font-italic">
 					Event Volunteers 
-					<a href="#" class="btn btn-sm" data-toggle="modal" data-target="#volunteerModal">Add New Volunteer</a>
+					<a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#volunteerModal">Add New Volunteer</a>
 				</h5>
 
 				<div class="form-check">
@@ -576,34 +578,6 @@
 	</div>
 	
 	<script type="text/javascript">
-		$('#resync-link').on('click', function(event){
-		    event.preventDefault();
-		    $("#modalMessage").text("Please wait... Resyncing Data...");
-		    $("#syncModal").modal('toggle')
-		    $.ajax({
-				url: "{% url 'event:resync-event-api' event.slug %}",
-				type: "GET",
-				data: {},
-				success: function(data) {
-					$("#id_title").val(data.name);
-					$("#id_location").val(data.location);
-					$("#id_latitude").val(data.latitude);
-					$("#id_longitude").val(data.longitude);
-					$("#id_date").val(data.start_date);
-					$("#id_time").val(data.start_time);
-					$("#id_date_to").val(data.end_date);
-					$("#id_time_to").val(data.end_time);
-					$("#id_description").val(data.description);
-					$("#meetup_banner").val(data.banner);
-
-					$("#modalMessage").text("Syncing Done...");
-				},
-				error: function(err) {
-					console.log(err)
-				}
-			})
-		});
-
 		function getCookie(name) {
 		    var cookieValue = null;
 		    if (document.cookie && document.cookie !== '') {

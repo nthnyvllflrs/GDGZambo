@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Q, Count, Sum
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.dateparse import parse_date, parse_time
 
 from .models import (Sponsor, Speaker, Event, Feedback, EventStatistics, EventAttendance, Info,)
 from .forms import (SponsorForm, SpeakerForm, EventForm, FeedbackForm, EventStatisticForm, EventStatisticManualCountForm)
@@ -229,7 +230,6 @@ def create_event(request, meetup_id):
 			return redirect('event:event-upcoming')
 	else:
 		meetup_event = settings.MEETUP_CLIENT.GetEvent({'id': meetup_id})
-
 		# Get Event Banner
 		photo_url = meetup_event.photo_url if 'photo_url' in meetup_event.__dict__ else None
 
@@ -369,6 +369,44 @@ def update_event(request, slug):
 
 			return redirect('event:event-view', event.slug)
 	else:
+		# RESYNC
+		meetup_event = settings.MEETUP_CLIENT.GetEvent({'id': event.meetup_ID}) # Use Meetup API
+		event_title = meetup_event.name # Get Event Title/Name
+		event_description = meetup_event.description if 'description' in  meetup_event.__dict__ else 'No Description' # Get Event Description
+		event_description = BeautifulSoup(event_description, features='html.parser').get_text(separator='\n') # Clean Event Description
+		event_duration = meetup_event.duration if 'duration' in  meetup_event.__dict__ else 0 # Get Event Duration
+		# Get Event Start and End Date and Time
+		event_start = datetime.datetime.fromtimestamp(meetup_event.time/1000.0)
+		event_start_date = event_start.strftime("%Y-%m-%d")
+		event_start_time = event_start.strftime("%H:%M:%S")
+		event_end = datetime.datetime.fromtimestamp(meetup_event.time/1000.0) + datetime.timedelta(hours=event_duration/3600000)
+		event_end_date = event_end.strftime("%Y-%m-%d")
+		event_end_time = event_end.strftime("%H:%M:%S")
+		# Get Event Location
+		if 'venue' in meetup_event.__dict__:
+			venue_name = meetup_event.venue['name'] if 'name' in meetup_event.venue else ''
+			address_1 = meetup_event.venue['address_1'] if 'address_1' in meetup_event.venue else ''
+			address_2 = meetup_event.venue['address_2'] if 'address_2' in meetup_event.venue else ''
+			city = meetup_event.venue['city'] if 'city' in meetup_event.venue else ''
+			event_lat = meetup_event.venue['lat'] if 'lat' in meetup_event.venue else 6.9214
+			event_lng = meetup_event.venue['lon'] if 'lon' in meetup_event.venue else 122.0790
+			event_location = venue_name + ', ' + address_1 + ', ' + address_2 + ', ' +  city
+		else:
+			event_location = 'No event venue was set'
+			event_lat = 6.9214
+			event_lng = 122.0790
+
+		event.title = event_title
+		event.description = event_description
+		event.date =  parse_date(event_start_date)
+		event.time = parse_time(event_start_time)
+		event.date_to =  parse_date(event_end_date)
+		event.titme_to = parse_time(event_end_time)
+		event.location = event_location
+		event.latitude = event_lat
+		event.longitude = event_lng
+		event.save()
+
 		event_form = EventForm(instance=event)
 		error_message = None
 
@@ -548,7 +586,7 @@ def event_data(request):
 	if not (gender_count['manual_count__sum'] == None or gender_count['manual_count__sum'] == 0):
 		gender_percentage = {
 			'male': round((int(gender_count['male__sum'])/int(gender_count['manual_count__sum']))*100, 2),
-			'female': round((int(gender_count['female__sum'])/int(gender_count['manual_count__sum']))*100, 2),}
+			'female': round((int(gender_count['female__sum'])/int(gender_count['manual_count__sum']))	*100, 2),}
 	else:
 		gender_percentage = {'male': 0, 'female': 0,}
 		gender_count['male__sum'], gender_count['female__sum'], gender_count['manual_count__sum'] = 0, 0, 0
@@ -560,20 +598,15 @@ def event_data(request):
 @user_passes_test(lambda u: u.is_superuser)
 def event_data_sync(request, slug):
 	event = Event.objects.get(slug=slug)
+	meetup_event = settings.MEETUP_CLIENT.GetEvent({'id': event.meetup_id})
 	meetup_event_attendance = settings.MEETUP_CLIENT.GetGroupEventsAttendance({'id': event.meetup_ID, 'urlname': 'gdgzamboanga'})
 	meetup_event_rsvps = settings.MEETUP_CLIENT.GetRsvps({'event_id': event.meetup_ID})
 
-	if EventStatistics.objects.filter(event=event).exists():
-		event_statistic = get_object_or_404(EventStatistics, event=event)
-		event_statistic.yes_rsvp = meetup_event_rsvps.results[0]['tallies']['yes']
-		event_statistic.no_rsvp = meetup_event_rsvps.results[0]['tallies']['no']
-		event_statistic.manual_count = meetup_event_rsvps.results[0]['tallies']['yes']
-		event_statistic.save()
-	else:
-		event_statistic = get_object_or_404(EventStatistics, event=event)
-		event_statistic.yes_rsvp = meetup_event_rsvps.results[0]['tallies']['yes']
-		event_statistic.no_rsvp = meetup_event_rsvps.results[0]['tallies']['no']
-		event_statistic.save()
+	event_statistic = get_object_or_404(EventStatistics, event=event)
+	event_statistic.yes_rsvp = meetup_event_rsvps.results[0]['tallies']['yes']
+	event_statistic.no_rsvp = meetup_event_rsvps.results[0]['tallies']['no']
+	event_statistic.manual_count = meetup_event.headcount
+	event_statistic.save()
 	
 	if EventAttendance.objects.filter(event_statistic=event_statistic).exists():
 		existing_attendace = EventAttendance.objects.filter(event_statistic=event_statistic)

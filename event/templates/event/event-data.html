@@ -48,115 +48,115 @@
 		</div>
 	</div>
 </div>
-	<hr />
-	<div class="container mt-5">
-		<form method="GET">
-			<div class="row text-center mb-3">
-				<div class="col-sm-12 mb-3 text-center">
-					<h3>List Of GDG Zamboanga Events</h3>
-				</div>
+<hr />
+<div class="container mt-5">
+	<form method="GET">
+		<div class="row text-center mb-3">
+			<div class="col-sm-12 mb-3 text-center">
+				<h3>List Of GDG Zamboanga Events</h3>
+			</div>
 
-				<div class="col">
-					<div class="row">
-						<div class="col-sm-6 mt-3">
-							<input type="text" class="form-control form-control-sm" id="search" name="title" placeholder="Event Title">
+			<div class="col">
+				<div class="row">
+					<div class="col-sm-6 mt-3">
+						<input type="text" class="form-control form-control-sm" id="search" name="title" placeholder="Event Title">
+					</div>
+					<div class="col-sm-3 mt-3">
+						<div class="form-check form-check-inline form-control-sm">
+							<input class="form-check-input" type="checkbox" name="status" value='past' {% if 'past' in request.GET.status %}checked{% endif %}>
+							<label class="form-check-label">Past</label>
 						</div>
-						<div class="col-sm-3 mt-3">
-							<div class="form-check form-check-inline form-control-sm">
-								<input class="form-check-input" type="checkbox" name="status" value='past' {% if 'past' in request.GET.status %}checked{% endif %}>
-								<label class="form-check-label">Past</label>
-							</div>
-							<div class="form-check form-check-inline form-control-sm">
-								<input class="form-check-input" type="checkbox" name="status" value='upcoming' {% if 'upcoming' in request.GET.status %}checked{% endif %}>
-								<label class="form-check-label">Upcoming</label>
-							</div>
+						<div class="form-check form-check-inline form-control-sm">
+							<input class="form-check-input" type="checkbox" name="status" value='upcoming' {% if 'upcoming' in request.GET.status %}checked{% endif %}>
+							<label class="form-check-label">Upcoming</label>
 						</div>
-						<div class="col-sm-3 mt-3">
-							<label>{{ event_list.count }} Event(s) was retrieved.</label>
-						</div>
-						<div class="col-sm-3 mt-3">
-							<div class="form-group row">
-								<label class="col-sm-2 col-form-label">From</label>
-								<div class="col-sm-10">
-									<input type="date" name="from" class="form-control form-control-sm" value="{% if request.GET.from %}{{ request.GET.from }}{% else %}{% now 'Y-m-d' %}{% endif %}">
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-3 mt-3">
-							<div class="form-group row">
-								<label class="col-sm-2 col-form-label">To</label>
-								<div class="col-sm-10">
-									<input type="date" name="to" class="form-control form-control-sm" value="{% if request.GET.to %}{{ request.GET.to }}{% else %}{% now 'Y-m-d' %}{% endif %}">
-								</div>
+					</div>
+					<div class="col-sm-3 mt-3">
+						<label>{{ event_list.count }} Event(s) was retrieved.</label>
+					</div>
+					<div class="col-sm-3 mt-3">
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label">From</label>
+							<div class="col-sm-10">
+								<input type="date" name="from" class="form-control form-control-sm" value="{% if request.GET.from %}{{ request.GET.from }}{% else %}{% now 'Y-m-d' %}{% endif %}">
 							</div>
 						</div>
-						<div class="col-sm-6 mt-2">
-							<input type="submit" value="Search" class="btn btn-sm btn-block btn-dark">
+					</div>
+					<div class="col-sm-3 mt-3">
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label">To</label>
+							<div class="col-sm-10">
+								<input type="date" name="to" class="form-control form-control-sm" value="{% if request.GET.to %}{{ request.GET.to }}{% else %}{% now 'Y-m-d' %}{% endif %}">
+							</div>
 						</div>
+					</div>
+					<div class="col-sm-6 mt-2">
+						<input type="submit" value="Search" class="btn btn-sm btn-block btn-dark">
 					</div>
 				</div>
 			</div>
-		</form>
-	</div>
-	{% if event_list %}
-	<div class="table-responsive" style="padding: 10px;">
-		<table class="table mytable">
-			<thead>
-				<tr>
-					<th scope="col" class="text-center">Date</th>
-					<th scope="col" class="text-center">Meetup ID</th>
-					<th scope="col" class="text-center">Event Name</th>
-					<th scope="col" class="text-center">RSVP</th>
-					<th scope="col" class="text-center">Manual Count</th>
-					<th scope="col" class="text-center">---</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for event in event_list %}
-				<tr class="
-						{% if event.event_status == 'Ongoing' %}
-							table-success
-						{% elif event.event_status == 'Upcoming' %}
-							table-warning
-					    {% else %}
-					    	table-secondary
-						{% endif %}
-					 ">
-					<td class="text-center">
-						<small>
-							S: {{ event.date|date:'m/d/Y' }}<br>E: {{ event.date_to|date:'m/d/Y' }}
-						</small>
-					</td>
-					<td class="text-center">{{ event.meetup_ID }}</td>
-					<td>
-						{{ event.title }}
-						<small>
-							({{ event.event_status }})
-						</small>
-					</td>
+		</div>
+	</form>
+</div>
+{% if event_list %}
+<div class="table-responsive" style="padding: 10px;">
+	<table class="table mytable">
+		<thead class="black white-text">
+			<tr>
+				<th scope="col" class="text-center">Date</th>
+				<th scope="col" class="text-center">Meetup ID</th>
+				<th scope="col" class="text-center">Event Name</th>
+				<th scope="col" class="text-center">RSVP</th>
+				<th scope="col" class="text-center">Manual Count</th>
+				<th scope="col" class="text-center">---</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for event in event_list %}
+			<tr class="
+					{% if event.event_status == 'Ongoing' %}
+						table-success
+					{% elif event.event_status == 'Upcoming' %}
+						table-warning
+				    {% else %}
+				    	table-secondary
+					{% endif %}
+				 ">
+				<td class="text-center">
+					<small>
+						S: {{ event.date|date:'m/d/Y' }}<br>E: {{ event.date_to|date:'m/d/Y' }}
+					</small>
+				</td>
+				<td class="text-center">{{ event.meetup_ID }}</td>
+				<td>
+					{{ event.title }}
+					<small>
+						({{ event.event_status }})
+					</small>
+				</td>
 
-					<td class="text-center">{{ event.eventstatistics.yes_rsvp }}</td>
-					<td class="text-center">{{ event.eventstatistics.manual_count }}</td>
-					<td class="text-center">
-						<small>
-							{% if event.event_status == 'Past' %}
-							    <a data-url="{% url 'event:sync-event-api' event.slug %}" data-title="{{ event.title }}"
-								data-slug="{{event.slug}}" href="#" class="syncBtn">
-									Sync
-								</a>
-					      		&nbsp | &nbsp
-							{% endif %}
-				      		<a id="eventDetails{{event.slug}}" href="{% url 'event:event-data-details' event.slug %}">Details</a>
+				<td class="text-center">{{ event.eventstatistics.yes_rsvp }}</td>
+				<td class="text-center">{{ event.eventstatistics.manual_count }}</td>
+				<td class="text-center">
+					<small>
+						{% if event.event_status == 'Past' %}
+						    <a data-url="{% url 'event:sync-event-api' event.slug %}" data-title="{{ event.title }}"
+							data-slug="{{event.slug}}" href="#" class="syncBtn">
+								Sync
+							</a>
 				      		&nbsp | &nbsp
-				      		<a href="{% url 'event:event-data-pdf' event.slug %}" target="_blank">PDF</a>
-			      		</small>
-					</td>
-				</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-	{% endif %}
-	</div>
+						{% endif %}
+			      		<a id="eventDetails{{event.slug}}" href="{% url 'event:event-data-details' event.slug %}">Details</a>
+			      		&nbsp | &nbsp
+			      		<a href="{% url 'event:event-data-pdf' event.slug %}" target="_blank">PDF</a>
+		      		</small>
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endif %}
+</div>
 	
 
 <!-- Modal -->
