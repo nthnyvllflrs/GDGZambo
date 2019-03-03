@@ -570,15 +570,30 @@ def event_data(request):
 	title = request.GET.get('title') if request.GET.get('title') else ''
 	status = request.GET.getlist('status')
 
-
-	if 'past' in status and 'upcoming' in status:
-		event_list = Event.objects.filter((Q(date__range=(date_from, date_to)) & Q(title__contains=title))).order_by('-date')
-	elif 'past' in status:
-		event_list = Event.objects.filter((Q(date_to__range=(date_from, date_to)) & Q(title__contains=title)) & Q(date_to__lte=date_now)).order_by('-date_to')
+	if 'past' in status:
+		event_list = Event.objects.filter(
+			(Q(date_to__range=(date_from, date_to)) & Q(title__contains=title)) & 
+			Q(date_to__lte=date_now)).order_by('-date_to', '-time_to')
 	elif 'upcoming' in status:
-		event_list = Event.objects.filter((Q(date__range=(date_from, date_to)) & Q(title__contains=title)) & Q(date__gte=date_now)).order_by('-date')
+		event_list = Event.objects.filter(
+			(Q(date__range=(date_from, date_to)) & Q(title__contains=title)) & 
+			Q(date__gte=date_now)).order_by('-date', '-time')
 	else:
-		event_list = Event.objects.filter((Q(date__range=(date_from, date_to)) & Q(title__contains=title))).order_by('-date')
+		event_list = []
+
+	# if 'past' in status and 'upcoming' in status:
+	# 	event_list = Event.objects.filter(
+	# 		(Q(date__range=(date_from, date_to)) & Q(title__contains=title))).order_by('-date')
+	# elif 'past' in status:
+	# 	event_list = Event.objects.filter(
+	# 		(Q(date_to__range=(date_from, date_to)) & Q(title__contains=title)) & 
+	# 		Q(date_to__lte=date_now)).order_by('-date_to')
+	# elif 'upcoming' in status:
+	# 	event_list = Event.objects.filter(
+	# 		(Q(date__range=(date_from, date_to)) & Q(title__contains=title)) & 
+	# 		Q(date__gte=date_now)).order_by('-date')
+	# else:
+	# 	event_list = Event.objects.filter((Q(date__range=(date_from, date_to)) & Q(title__contains=title))).order_by('-date')
 
 	top_attendee = EventAttendance.objects.values('member_name').annotate(num_events=Count('member_id')).order_by('-num_events', 'member_name')[:8]
 	gender_count = EventStatistics.objects.aggregate(Sum('manual_count'), Sum('male'), Sum('female'))
