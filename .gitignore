@@ -1,5 +1,6 @@
 gdgzambo/old_settings.py
 gdgzambo/settings/local.py
+static/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
