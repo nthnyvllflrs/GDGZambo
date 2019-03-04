@@ -29,9 +29,12 @@ class Member(models.Model):
 def member_pre_save_receiver(sender, instance, *args, **kwargs):
 	if not instance.slug:
 		instance.slug = unique_slug_generator(instance)
-	instance.facebook = 'https://www.facebook.com/' + instance.facebook
-	instance.twitter = 'https://www.twitter.com/' + instance.twitter
-	instance.instagram = 'https://www.instagram.com/' + instance.instagram
+	if instance.facebook:
+		instance.facebook = 'https://www.facebook.com/' + instance.facebook
+	if instance.twitter:
+		instance.twitter = 'https://www.twitter.com/' + instance.twitter
+	if instance.instagram:
+		instance.instagram = 'https://www.instagram.com/' + instance.instagram
 pre_save.connect(member_pre_save_receiver, sender=Member)
 
 
@@ -56,7 +59,10 @@ class Volunteer(models.Model):
 def volunteer_pre_save_receiver(sender, instance, *args, **kwargs):
 	if not instance.slug:
 		instance.slug = unique_slug_generator(instance)
-	instance.facebook = 'https://www.facebook.com/' + instance.facebook
-	instance.twitter = 'https://www.twitter.com/' + instance.twitter
-	instance.instagram = 'https://www.instagram.com/' + instance.instagram
+	if instance.facebook:
+		instance.facebook = 'https://www.facebook.com/' + instance.facebook
+	if instance.twitter:
+		instance.twitter = 'https://www.twitter.com/' + instance.twitter
+	if instance.instagram:
+		instance.instagram = 'https://www.instagram.com/' + instance.instagram
 pre_save.connect(volunteer_pre_save_receiver, sender=Volunteer)
