@@ -469,6 +469,11 @@
 		      				<div class="col-sm-12">{{ speaker_form.expertise|as_crispy_field }}</div>
 		      			</div>
 		      			<div class="row">
+		      				<div class="col-sm-12">
+		      					<small class="text-danger font-italic" id="EventSpeakerError"></small>
+		      				</div>
+		      			</div>
+		      			<div class="row">
 		      				<div class="col-sm-6">{{ speaker_form.facebook|as_crispy_field }}</div>
 		      				<div class="col-sm-6">{{ speaker_form.twitter|as_crispy_field }}</div>
 		      			</div>
@@ -500,6 +505,11 @@
 		      				<div class="col-sm-12">{{ sponsor_form.name|as_crispy_field }}</div>
 		      				<div class="col-sm-12">{{ sponsor_form.email|as_crispy_field }}</div>
 		      				<div class="col-sm-12">{{ sponsor_form.description|as_crispy_field }}</div>
+		      			</div>
+		      			<div class="row">
+		      				<div class="col-sm-12">
+		      					<small class="text-danger font-italic" id="EventSponsorError"></small>
+		      				</div>
 		      			</div>
 		      			<div class="row">
 		      				<div class="col-sm-6">{{ sponsor_form.facebook|as_crispy_field }}</div>
@@ -539,6 +549,11 @@
 		      			<div class="row">
 		      				<div class="col-sm-12">{{ volunteer_form.description|as_crispy_field }}</div>
 		      				<div class="col-sm-12">{{ volunteer_form.expertise|as_crispy_field }}</div>
+		      			</div>
+		      			<div class="row">
+		      				<div class="col-sm-12">
+		      					<small class="text-danger font-italic" id="EventVolunteerError"></small>
+		      				</div>
 		      			</div>
 		      			<div class="row">
 		      				<div class="col-sm-6">{{ volunteer_form.facebook|as_crispy_field }}</div>
@@ -611,8 +626,14 @@
 					'website': $('#speaker-website').val(),
 				},
 				success: function(json) {
-					$("#speaker-checkgroup").append("<div class='col-sm-4 mt-3'><div class='row'><div class='col-1'><input type='checkbox' name='unchecked_speakers' id='option" + json.id + "' value=" + json.id + " checked/></div><div class='col'><div class='media'><img class='mr-3 img-fluid rounded-circle' src='https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg' width='60px' height='60px' /><div class='media-body'><strong>" + json.name + "</strong> <br><small>" + json.description + "</small></div></div></div></div></div>");
-					$('#speakerModal').modal('toggle');
+					if ( json && json['error']){
+						console.log(json.error)
+						$("#EventSpeakerError").text(json.error)
+					} else {
+						$("#speaker-checkgroup").append("<div class='col-sm-4 mt-3'><div class='row'><div class='col-1'><input type='checkbox' name='unchecked_speakers' id='option" + json.id + "' value=" + json.id + " checked/></div><div class='col'><div class='media'><img class='mr-3 img-fluid rounded-circle' src='https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg' width='60px' height='60px' /><div class='media-body'><strong>" + json.name + "</strong> <br><small>" + json.description + "</small></div></div></div></div></div>");
+						$("#EventSpeakerError").text('')
+						$('#speakerModal').modal('toggle');
+					}
 				},
 				error: function(err) {
 					console.log(err)
@@ -635,8 +656,14 @@
 					'website': $('#sponsor-website').val(),
 				},
 				success: function(json) {
-					$("#sponsor-checkgroup").append("<div class='col-sm-4 mt-3'><div class='row'><div class='col-1'><input type='checkbox' name='unchecked_sponsors' id='option" + json.id + "' value=" + json.id + " checked/></div><div class='col'><div class='media'><img class='mr-3 img-fluid rounded-circle' src='https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg' width='60px' height='60px' /><div class='media-body'><strong>" + json.name + "</strong> <br><small>" + json.description + "</small></div></div></div></div></div>");
-					$('#sponsorModal').modal('toggle');
+					if ( json && json['error']){
+						console.log(json.error)
+						$("#EventSponsorError").text(json.error)
+					} else {
+						$("#sponsor-checkgroup").append("<div class='col-sm-4 mt-3'><div class='row'><div class='col-1'><input type='checkbox' name='unchecked_sponsors' id='option" + json.id + "' value=" + json.id + " checked/></div><div class='col'><div class='media'><img class='mr-3 img-fluid rounded-circle' src='https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg' width='60px' height='60px' /><div class='media-body'><strong>" + json.name + "</strong> <br><small>" + json.description + "</small></div></div></div></div></div>");
+						$("#EventSponsorError").text('')
+						$('#sponsorModal').modal('toggle');
+					}
 				},
 				error: function(err) {
 					console.log(err)
@@ -662,8 +689,14 @@
 					'website': $('#volunteer-website').val(),
 				},
 				success: function(json) {
-					$("#volunteer-checkgroup").append("<div class='col-sm-4 mt-3'><div class='row'><div class='col-1'><input type='checkbox' name='unchecked_volunteers' id='option" + json.id + "' value=" + json.id + " checked/></div><div class='col'><div class='media'><img class='mr-3 img-fluid rounded-circle' src='https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg' width='60px' height='60px' /><div class='media-body'><strong>" + json.name + "</strong> <br><small>" + json.description + "</small></div></div></div></div></div>");
-					$('#volunteerModal').modal('toggle');
+					if ( json && json['error']){
+						console.log(json.error)
+						$("#EventVolunteerError").text(json.error)
+					} else {
+						$("#volunteer-checkgroup").append("<div class='col-sm-4 mt-3'><div class='row'><div class='col-1'><input type='checkbox' name='unchecked_volunteers' id='option" + json.id + "' value=" + json.id + " checked/></div><div class='col'><div class='media'><img class='mr-3 img-fluid rounded-circle' src='https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg' width='60px' height='60px' /><div class='media-body'><strong>" + json.name + "</strong> <br><small>" + json.description + "</small></div></div></div></div></div>");
+						$("#EventVolunteerError").text('')
+						$('#volunteerModal').modal('toggle');
+					}
 				},
 				error: function(err) {
 					console.log(err)

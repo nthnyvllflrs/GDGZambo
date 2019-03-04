@@ -1,3 +1,5 @@
+import requests
+
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
@@ -15,8 +17,27 @@ def create_volunteer_api(request):
 	instagram = request.POST.get('instagram', None)
 	website = request.POST.get('website', None)
 
-	volunteer = Volunteer.objects.create(
-		name = firstname + ' ' + lastname, firstname = firstname, lastname = lastname, email = email, description = description, 
-		expertise = expertise, facebook = facebook, twitter = twitter, instagram = instagram, website = website,)
-	data = {'id': volunteer.id, 'name': volunteer.name, 'description': volunteer.description[:30], 'created': True,}
+	facebook_valid = True
+	if facebook != '':
+		request = requests.get('https://www.facebook.com/' + facebook)
+		facebook_valid = True if request.status_code == 200 else False
+
+	twitter_valid = True
+	if twitter != '':
+		request = requests.get('https://www.twitter.com/' + twitter)
+		twitter_valid = True if request.status_code == 200 else False
+
+	instagram_valid = True
+	if instagram != '':
+		request = requests.get('https://www.instagram.com/' + instagram)
+		instagram_valid = True if request.status_code == 200 else False
+
+	if facebook_valid and twitter_valid and instagram_valid:
+		volunteer = Volunteer.objects.create(
+			name = firstname + ' ' + lastname, firstname = firstname, lastname = lastname, email = email, description = description, 
+			expertise = expertise, facebook = facebook, twitter = twitter, instagram = instagram, website = website,)
+		data = {'id': volunteer.id, 'name': volunteer.name, 'description': volunteer.description[:30], 'created': True,}
+	else:
+		data = {'error': 'One of the Social Media URL is invalid. Please supply a valid URL or leave it blank.'}
+
 	return Response(data)

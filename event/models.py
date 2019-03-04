@@ -26,9 +26,9 @@ class Sponsor(models.Model):
 	photo = CloudinaryField('photo', blank=True, null=True)
 	description = models.CharField(max_length=300)
 	email = models.EmailField(null=True, blank=True)
-	facebook = models.URLField(max_length=500, null=True, blank=True)
-	twitter = models.URLField(max_length=500, null=True, blank=True)
-	instagram = models.URLField(max_length=500, null=True, blank=True)
+	facebook = models.CharField(max_length=500, null=True, blank=True)
+	twitter = models.CharField(max_length=500, null=True, blank=True)
+	instagram = models.CharField(max_length=500, null=True, blank=True)
 	website = models.URLField(max_length=500, null=True, blank=True)
 	slug = models.SlugField(max_length=255, null=True, blank=True)
 	timestamp = models.DateTimeField(auto_now_add=True)
@@ -39,13 +39,10 @@ class Sponsor(models.Model):
 def sponsor_pre_save_receiver(sender, instance, *args, **kwargs):
 	if not instance.slug:
 		instance.slug = unique_slug_generator(instance)
+	instance.facebook = 'https://www.facebook.com/' + instance.facebook
+	instance.twitter = 'https://www.twitter.com/' + instance.twitter
+	instance.instagram = 'https://www.instagram.com/' + instance.instagram
 pre_save.connect(sponsor_pre_save_receiver, sender=Sponsor)
-
-class SpeakerManager(models.Manager):
-	def is_event_conflict(self, start_date, end_date):
-		event_set = self.event_set.all()
-		result = event_set.filter(date__range(start_date, end_date))
-		return True if result.count != 0 else False
 
 class Speaker(models.Model):
 	name = models.CharField(max_length=200)
@@ -55,13 +52,12 @@ class Speaker(models.Model):
 	description = models.TextField(max_length=300)
 	expertise = models.TextField(null=True, blank=True)
 	email = models.EmailField(null=True, blank=True)
-	facebook = models.URLField(max_length=500, null=True, blank=True)
-	twitter = models.URLField(max_length=500, null=True, blank=True)
-	instagram = models.URLField(max_length=500, null=True, blank=True)
+	facebook = models.CharField(max_length=500, null=True, blank=True)
+	twitter = models.CharField(max_length=500, null=True, blank=True)
+	instagram = models.CharField(max_length=500, null=True, blank=True)
 	website = models.URLField(max_length=500, null=True, blank=True)
 	slug = models.SlugField(max_length=255, null=True, blank=True)
 	timestamp = models.DateTimeField(auto_now_add=True)
-	objects = SpeakerManager()
 
 	def __str__(self):
 		return self.name
@@ -69,6 +65,9 @@ class Speaker(models.Model):
 def speaker_pre_save_receiver(sender, instance, *args, **kwargs):
 	if not instance.slug:
 		instance.slug = unique_slug_generator(instance)
+	instance.facebook = 'https://www.facebook.com/' + instance.facebook
+	instance.twitter = 'https://www.twitter.com/' + instance.twitter
+	instance.instagram = 'https://www.instagram.com/' + instance.instagram
 pre_save.connect(speaker_pre_save_receiver, sender=Speaker)
 
 

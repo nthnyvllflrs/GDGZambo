@@ -1,3 +1,4 @@
+import requests
 # Django imports
 from django import forms
 
@@ -16,14 +17,37 @@ class SponsorForm(forms.ModelForm):
 		widgets = {
 			'name': forms.TextInput(attrs={'id': 'sponsor-name',}),
 			'description': forms.Textarea(attrs={'rows': 3, 'cols': 20, 'id': 'sponsor-description',}),
-			'facebook': forms.URLInput(attrs={'id': 'sponsor-facebook',}),
-			'twitter': forms.URLInput(attrs={'id': 'sponsor-twitter',}),
-			'instagram': forms.URLInput(attrs={'id': 'sponsor-instagram',}),
+			'facebook': forms.TextInput(attrs={'id': 'sponsor-facebook',}),
+			'twitter': forms.TextInput(attrs={'id': 'sponsor-twitter',}),
+			'instagram': forms.TextInput(attrs={'id': 'sponsor-instagram',}),
 			'website': forms.URLInput(attrs={'id': 'sponsor-website',}),}
 
 	def clean_photo(self):
 		return self.cleaned_data['photo'] or None
 
+	def clean_facebook(self):
+		facebook = self.cleaned_data['facebook']
+		if facebook:
+			request = requests.get('https://www.facebook.com/' + str(facebook))
+			if request.status_code != 200:
+				raise forms.ValidationError("Invalid Facebook Username")
+		return facebook
+
+	def clean_twitter(self):
+		twitter = self.cleaned_data['twitter']
+		if twitter:
+			request = requests.get('https://www.twitter.com/' + str(twitter))
+			if request.status_code != 200:
+				raise forms.ValidationError("Invalid Twitter Username")
+		return twitter
+
+	def clean_instagram(self):
+		instagram = self.cleaned_data['instagram']
+		if instagram:
+			request = requests.get('https://www.instagram.com/' + str(instagram))
+			if request.status_code != 200:
+				raise forms.ValidationError("Invalid Instagram Username")
+		return instagram
 
 class SpeakerForm(forms.ModelForm):
 	class Meta:
@@ -38,15 +62,38 @@ class SpeakerForm(forms.ModelForm):
 			'email': forms.EmailInput(attrs={'id': 'speaker-email'}),
 			'description': forms.Textarea(attrs={'rows': 3, 'cols': 20, 'id': 'speaker-description',}),
 			'expertise': forms.Textarea(attrs={'rows': 3, 'cols': 20, 'id': 'speaker-expertise',}),
-			'facebook': forms.URLInput(attrs={'id': 'speaker-facebook',}),
-			'twitter': forms.URLInput(attrs={'id': 'speaker-twitter',}),
-			'instagram': forms.URLInput(attrs={'id': 'speaker-instagram',}),
+			'facebook': forms.TextInput(attrs={'id': 'speaker-facebook',}),
+			'twitter': forms.TextInput(attrs={'id': 'speaker-twitter',}),
+			'instagram': forms.TextInput(attrs={'id': 'speaker-instagram',}),
 			'website': forms.URLInput(attrs={'id': 'speaker-website',}),
 		}
 
 	def clean_photo(self):
 		return self.cleaned_data['photo'] or None
 
+	def clean_facebook(self):
+		facebook = self.cleaned_data['facebook']
+		if facebook:
+			request = requests.get('https://www.facebook.com/' + str(facebook))
+			if request.status_code != 200:
+				raise forms.ValidationError("Invalid Facebook Username")
+		return facebook
+
+	def clean_twitter(self):
+		twitter = self.cleaned_data['twitter']
+		if twitter:
+			request = requests.get('https://www.twitter.com/' + str(twitter))
+			if request.status_code != 200:
+				raise forms.ValidationError("Invalid Twitter Username")
+		return twitter
+
+	def clean_instagram(self):
+		instagram = self.cleaned_data['instagram']
+		if instagram:
+			request = requests.get('https://www.instagram.com/' + str(instagram))
+			if request.status_code != 200:
+				raise forms.ValidationError("Invalid Instagram Username")
+		return instagram
 
 class EventForm(forms.ModelForm):
 	class Meta:

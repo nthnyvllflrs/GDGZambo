@@ -16,9 +16,9 @@ class Member(models.Model):
 	description = models.TextField()
 	expertise = models.TextField(null=True, blank=True)
 	email = models.EmailField()
-	facebook = models.URLField(max_length=500, null=True, blank=True)
-	twitter = models.URLField(max_length=500, null=True, blank=True)
-	instagram = models.URLField(max_length=500, null=True, blank=True)
+	facebook = models.CharField(max_length=500, null=True, blank=True)
+	twitter = models.CharField(max_length=500, null=True, blank=True)
+	instagram = models.CharField(max_length=500, null=True, blank=True)
 	website = models.URLField(max_length=500, null=True, blank=True)
 	slug = models.SlugField(max_length=255, null=True, blank=True)
 	timestamp = models.DateTimeField(auto_now_add=True)
@@ -29,6 +29,9 @@ class Member(models.Model):
 def member_pre_save_receiver(sender, instance, *args, **kwargs):
 	if not instance.slug:
 		instance.slug = unique_slug_generator(instance)
+	instance.facebook = 'https://www.facebook.com/' + instance.facebook
+	instance.twitter = 'https://www.twitter.com/' + instance.twitter
+	instance.instagram = 'https://www.instagram.com/' + instance.instagram
 pre_save.connect(member_pre_save_receiver, sender=Member)
 
 
@@ -40,12 +43,20 @@ class Volunteer(models.Model):
 	description = models.TextField(max_length=300)
 	expertise = models.TextField(null=True, blank=True)
 	email = models.EmailField()
-	facebook = models.URLField(max_length=500, null=True, blank=True)
-	twitter = models.URLField(max_length=500, null=True, blank=True)
-	instagram = models.URLField(max_length=500, null=True, blank=True)
+	facebook = models.CharField(max_length=500, null=True, blank=True)
+	twitter = models.CharField(max_length=500, null=True, blank=True)
+	instagram = models.CharField(max_length=500, null=True, blank=True)
 	website = models.URLField(max_length=500, null=True, blank=True)
 	slug = models.SlugField(max_length=255, null=True, blank=True)
 	timestamp = models.DateTimeField(auto_now_add=True)
 
 	def __str__(self):
 		return self.name
+
+def volunteer_pre_save_receiver(sender, instance, *args, **kwargs):
+	if not instance.slug:
+		instance.slug = unique_slug_generator(instance)
+	instance.facebook = 'https://www.facebook.com/' + instance.facebook
+	instance.twitter = 'https://www.twitter.com/' + instance.twitter
+	instance.instagram = 'https://www.instagram.com/' + instance.instagram
+pre_save.connect(volunteer_pre_save_receiver, sender=Volunteer)
