@@ -161,12 +161,12 @@
 					      						</div>
 					      						{% for event in speaker.event_set.all %}
 					      						<div class="col-sm-6">
-				      								+ {{ event.title }} 
+				      								+ {{ event.title }} <br /> 
 				      								<small>(
 														{% if event.date == event.date_to %}
-															{{ event.date|date:'l, F d, Y'}} <br /> {{ event.time|time:'f A' }} - {{ event.time_to|time:'f A' }}
+															{{ event.date|date:'F d, Y'}} <br /> {{ event.time|time:'f A' }} - {{ event.time_to|time:'f A' }}
 														{% else %}
-															{{ event.date|date:'l, F d, Y'}}, {{ event.time|time:'f A' }} - {{ event.date_to|date:'l, F d, Y'}}, {{ event.time_to|time:'f A' }}
+															{{ event.date|date:'F d, Y'}}, {{ event.time|time:'f A' }} - {{ event.date_to|date:'F d, Y'}}, {{ event.time_to|time:'f A' }}
 														{% endif %}
 				      								)</small>
 					      						</div>
