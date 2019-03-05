@@ -92,7 +92,7 @@ def list_log(request):
 
 @user_passes_test(lambda u: u.is_superuser)
 def list_user(request):
-	user_list = User.objects.exclude(username='admin')
+	user_list = User.objects.exclude(is_superuser=True)
 	context = {'user_list': user_list,}
 	return render(request, 'user/list-user.html', context)
 
