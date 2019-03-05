@@ -578,6 +578,10 @@ def event_data(request):
 		event_list = Event.objects.filter(
 			(Q(date__range=(date_from, date_to)) & Q(title__contains=title)) & 
 			Q(date__gte=date_now)).order_by('-date', '-time')
+	elif 'ongoing' in status:
+		print("ONGOING!")
+		event_list = Event.objects.filter(
+			(Q(date__lte=date_now) & Q(date_to__gte=date_now))).order_by('-date', '-time')
 	else:
 		event_list = []
 

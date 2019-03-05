@@ -61,10 +61,11 @@
 					<div class="col-sm-6 mt-3">
 						<input type="text" class="form-control form-control-sm" id="search" name="title" placeholder="Event Title">
 					</div>
-					<div class="col-sm-3 mt-3">
+					<div class="col-sm-4 mt-3">
+					<small>
 						<div class="custom-control custom-radio custom-control-inline">
 							<input type="radio" id="pastRadioButton" name="status" value="past" class="custom-control-input" 
-								{% if 'past' in request.GET.status %}checked{% elif not 'upcoming' in request.GET.status %}checked{% endif %}>
+								{% if 'past' in request.GET.status %}checked{% elif not 'upcoming' in request.GET.status and not 'ongoing' in request.GET.status %}checked{% endif %}>
 							<label class="custom-control-label" for="pastRadioButton">Past</label>
 						</div>
 						<div class="custom-control custom-radio custom-control-inline">
@@ -72,8 +73,14 @@
 								{% if 'upcoming' in request.GET.status %}checked{% endif %}>
 							<label class="custom-control-label" for="upcomingRadioButton">Upcoming</label>
 						</div>
+						<div class="custom-control custom-radio custom-control-inline">
+							<input type="radio" id="ongoingRadioButton" name="status" value="ongoing" class="custom-control-input"
+								{% if 'ongoing' in request.GET.status %}checked{% endif %}>
+							<label class="custom-control-label" for="ongoingRadioButton">Ongoing</label>
+						</div>
+					</small>	
 					</div>
-					<div class="col-sm-3 mt-3">
+					<div class="col-sm-2 mt-3">
 						<label>{{ event_list.count }} Event(s) was retrieved.</label>
 					</div>
 					<div class="col-sm-3 mt-3">
@@ -115,11 +122,9 @@
 		</thead>
 		<tbody>
 			{% for event in event_list %}
-				{% if event.event_status != 'Ongoing' %}
+				{% if event.event_status != 'Ongoing' and not 'ongoing' in request.GET.status %}
 				    <tr class="
-						{% if event.event_status == 'Ongoing' %}
-							table-success
-						{% elif event.event_status == 'Upcoming' %}
+						{% if event.event_status == 'Upcoming' %}
 							table-warning
 					    {% else %}
 					    	table-secondary
@@ -149,6 +154,31 @@
 									</a>
 						      		&nbsp | &nbsp
 								{% endif %}
+					      		<a id="eventDetails{{event.slug}}" href="{% url 'event:event-data-details' event.slug %}">Details</a>
+					      		&nbsp | &nbsp
+					      		<a href="{% url 'event:event-data-pdf' event.slug %}" target="_blank">PDF</a>
+				      		</small>
+						</td>
+					</tr>
+				{% else %}
+				    <tr class="table-success">
+						<td class="text-center">
+							<small>
+								S: {{ event.date|date:'m/d/Y' }}<br>E: {{ event.date_to|date:'m/d/Y' }}
+							</small>
+						</td>
+						<td class="text-center">{{ event.meetup_ID }}</td>
+						<td>
+							{{ event.title }}
+							<small>
+								({{ event.event_status }})
+							</small>
+						</td>
+
+						<td class="text-center">{{ event.eventstatistics.yes_rsvp }}</td>
+						<td class="text-center">{{ event.eventstatistics.manual_count }}</td>
+						<td class="text-center">
+							<small>
 					      		<a id="eventDetails{{event.slug}}" href="{% url 'event:event-data-details' event.slug %}">Details</a>
 					      		&nbsp | &nbsp
 					      		<a href="{% url 'event:event-data-pdf' event.slug %}" target="_blank">PDF</a>
