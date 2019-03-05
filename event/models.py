@@ -95,10 +95,10 @@ class Event(models.Model):
 
 	speakers = models.ManyToManyField(Speaker, blank=True)
 	sponsors = models.ManyToManyField(Sponsor, blank=True)
-	volunteers = models.ManyToManyField(Volunteer)
-	member_speaker = models.ManyToManyField(Member)
-	member_sponsor = models.ManyToManyField(Member, related_name='sponsored_events')
-	member_volunteer = models.ManyToManyField(Member, related_name='volunteered_events')
+	volunteers = models.ManyToManyField(Volunteer, blank=True)
+	member_speaker = models.ManyToManyField(Member, blank=True)
+	member_sponsor = models.ManyToManyField(Member, related_name='sponsored_events', blank=True)
+	member_volunteer = models.ManyToManyField(Member, related_name='volunteered_events', blank=True)
 
 	registration = models.URLField(max_length=1000, blank=True, null=True)
 	status = models.CharField(max_length=120, default='Draft')
