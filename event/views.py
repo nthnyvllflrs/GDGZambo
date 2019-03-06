@@ -291,8 +291,18 @@ def update_event(request, slug):
 		if event_form.is_valid():
 			event = event_form.save(commit=False)
 
-			event_speakers = request.POST.getlist('checked_speakers')
-			unchecked_speakers = event.speakers.exclude(id__in=event_speakers)
+			# Logical Flow of line 304 - 326
+			# 1. Get all the checked event speakers, sponsors, volunteers. member_speakers, member_sponsors and member_volunteers from template
+			# 2. Get all the current event speakers, sponsors, volunteers. member_speakers, member_sponsors and member_volunteers from database 
+			# 		exluding the speakers, sponsors, volunteers. member_speakers, member_sponsors and member_volunteers 
+			# 		that exist in the variables 
+			# 		event_speakers, event_sponsors, event_volunteers, event_member_speakers, event_member_sponsors and event_member_volunteers respectively, 
+			# 		this are the speakers, sponsors, volunteers. member_speakers, member_sponsors and member_volunteers that were unchecked in the template
+			# 3. Get all of the checked event event speakers, sponsors, volunteers. member_speakers, member_sponsors and member_volunteers 
+			# 		that were checked in the template that does not exist in the database
+
+			event_speakers = request.POST.getlist('checked_speakers') 
+			unchecked_speakers = event.speakers.exclude(id__in=event_speakers) 
 			checked_speakers = request.POST.getlist('unchecked_speakers')
 
 			event_sponsors = request.POST.getlist('checked_sponsors')

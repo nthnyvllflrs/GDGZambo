@@ -25,28 +25,28 @@ class MemberForm(forms.ModelForm):
 		return self.cleaned_data['photo'] or None
 
 	def clean_facebook(self):
-		facebook = self.cleaned_data['facebook']
-		if facebook:
-			request = requests.get('https://www.facebook.com/' + str(facebook))
+		facebook_username = self.cleaned_data['facebook']
+		if facebook_username:
+			request = requests.get('https://www.facebook.com/' + str(facebook_username))
 			if request.status_code != 200:
 				raise forms.ValidationError("Invalid Facebook Username")
-		return facebook
+		return facebook_username
 
 	def clean_twitter(self):
-		twitter = self.cleaned_data['twitter']
-		if twitter:
-			request = requests.get('https://www.twitter.com/' + str(twitter))
+		twitter_username = self.cleaned_data['twitter']
+		if twitter_username:
+			request = requests.get('https://www.twitter.com/' + str(twitter_username))
 			if request.status_code != 200:
 				raise forms.ValidationError("Invalid Twitter Username")
-		return twitter
+		return twitter_username
 
 	def clean_instagram(self):
-		instagram = self.cleaned_data['instagram']
-		if instagram:
-			request = requests.get('https://www.instagram.com/' + str(instagram))
+		instagram_username = self.cleaned_data['instagram']
+		if instagram_username:
+			request = requests.get('https://www.instagram.com/' + str(instagram_username))
 			if request.status_code != 200:
 				raise forms.ValidationError("Invalid Instagram Username")
-		return instagram
+		return instagram_username
 
 
 class VolunteerForm(forms.ModelForm):
@@ -71,25 +71,25 @@ class VolunteerForm(forms.ModelForm):
 		return self.cleaned_data['photo'] or None
 
 	def clean_facebook(self):
-		facebook = self.cleaned_data['facebook']
-		if facebook:
-			request = requests.get('https://www.facebook.com/' + str(facebook))
+		facebook_username = self.cleaned_data['facebook']
+		if facebook_username:
+			request = requests.get('https://www.facebook.com/' + str(facebook_username))
 			if request.status_code != 200:
 				raise forms.ValidationError("Invalid Facebook Username")
-		return facebook
+		return facebook_username
 
 	def clean_twitter(self):
-		twitter = self.cleaned_data['twitter']
-		if twitter:
-			request = requests.get('https://www.twitter.com/' + str(twitter))
+		twitter_username = self.cleaned_data['twitter']
+		if twitter_username:
+			request = requests.get('https://www.twitter.com/' + str(twitter_username))
 			if request.status_code != 200:
 				raise forms.ValidationError("Invalid Twitter Username")
-		return twitter
+		return twitter_username
 
 	def clean_instagram(self):
-		instagram = self.cleaned_data['instagram']
-		if instagram:
-			request = requests.get('https://www.instagram.com/' + str(instagram))
+		instagram_username = self.cleaned_data['instagram']
+		if instagram_username:
+			request = requests.get('https://www.instagram.com/' + str(instagram_username))
 			if request.status_code != 200:
 				raise forms.ValidationError("Invalid Instagram Username")
-		return instagram
+		return instagram_username
