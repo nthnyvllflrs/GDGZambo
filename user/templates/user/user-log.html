@@ -40,6 +40,33 @@
 			</tbody>
 		</table>
 	</div>
+
+	<div class="row">
+		<div class="col-md-4 col-12 offset-md-4 text-center">
+			<div class="btn-group text-center" role="group" aria-label="Basic example">
+				{% if log_list.has_previous %}
+					<a class="page-link btn btn-sm btn-primary" href="?page=1">
+						<span>&laquo;&laquo;</span>
+					</a>
+					<a class="page-link btn btn-sm btn-primary" href="?page={{ log_list.previous_page_number }}">
+						<span>&laquo;</span>
+					</a>
+				{% endif %}
+		
+				{% if log_list.has_next %}
+					<a class="page-link btn btn-sm btn-primary" href="?page={{ log_list.next_page_number }}">
+						<span>&raquo;</span>
+					</a>
+					<a class="page-link btn btn-sm btn-primary" href="?page={{ log_list.paginator.num_pages }}">
+						<span>&raquo;&raquo;</span>
+					</a>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+
+	
+
 	{% else %}
 		<div class="card">
 		  	<div class="card-body">
