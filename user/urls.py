@@ -5,12 +5,14 @@ from django.urls import path
 from .views import (
 	list_user, create_user, delete_user, change_password_user, list_log,
 	subscribe_user, unsubscribe_user, list_subscriber, delete_subscriber,
-	change_dynamic_data, update_view_site_carousel, delete_site_carousel,)
+	change_dynamic_data, update_view_site_carousel, delete_site_carousel,
+	list_log_tmp,)
 
 urlpatterns = [
 	path('', list_user, name='list-user'),
 	path('dynamic-data/', change_dynamic_data, name='dynamic-data'),
 	path('logs/', list_log, name='user-logs'),
+	path('logs-tmp/', list_log_tmp, name='user-logs-tmp'),
 
 	path('subscriber/', list_subscriber, name='subscriber-list'),
 	path('subscriber/<int:pk>/', delete_subscriber, name='subscriber-delete'),
