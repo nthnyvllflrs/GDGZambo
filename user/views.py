@@ -183,15 +183,3 @@ def delete_site_carousel(request, pk):
 	site_carousel.delete()
 	UserLog.objects.create(user = request.user,description = "Site Carousel Image Removed.",)
 	return redirect('user:site-carousel')
-
-
-@user_passes_test(lambda u: u.is_superuser)
-def list_log_tmp(request):
-	log_list = UserLog.objects.order_by('-timestamp')
-	paginator = Paginator(log_list, 25) # Show 25 contacts per page
-
-	page = request.GET.get('page')
-	log_list = paginator.get_page(page)
-
-	context = {'log_list': log_list,}
-	return render(request, 'user/user-log-tmp.html', context)
