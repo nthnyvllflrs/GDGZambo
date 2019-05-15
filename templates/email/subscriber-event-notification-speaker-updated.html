@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    </head>
+    <body>
+        <h3>GDG Zamboanga Event Speaker Invitation Updated</h3>
+        <p>Event Title: {{ event.title }}</p>
+        <p>Date and Time: {{ event.date|date:'l, F d, Y'}}, {{ event.time|time:'f A' }} - {{ event.date_to|date:'l, F d, Y'}}, {{ event.time_to|time:'f A' }}</p>
+        <p>{{ event.description|truncatechars:350 }}</p>
+        <p>Read More Here https://gdgzambo.herokuapp.com/event/{{ event.slug }}</p>
+    </body>
+</html>

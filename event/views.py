@@ -14,7 +14,7 @@ from django.utils.dateparse import parse_date, parse_time
 
 from .models import (Sponsor, Speaker, Event, Feedback, EventStatistics, EventAttendance, Info,)
 from .forms import (SponsorForm, SpeakerForm, EventForm, FeedbackForm, EventStatisticForm, EventStatisticManualCountForm)
-from .utils import render_to_pdf
+from .utils import render_to_pdf, send_event_notification_to_speakers, send_event_notification_to_speakers_updated
 
 from user.models import UserLog
 from user.utils import send_event_notification, send_feedback_notification, send_event_updated_notification
@@ -227,8 +227,15 @@ def create_event(request, meetup_id):
 				t = threading.Thread(target=send_event_notification(event))
 				t.setDaemon = True
 				t.start()
+			send_event_notification_to_speakers(event)
 			return redirect('event:event-upcoming')
 	else:
+
+		if Event.objects.filter(meetup_ID=meetup_id).exists():
+			event = Event.objects.get(meetup_ID=meetup_id)
+			return redirect('event:event-view', slug=event.slug)
+
+
 		meetup_event = settings.MEETUP_CLIENT.GetEvent({'id': meetup_id})
 		# Get Event Banner
 		photo_url = meetup_event.photo_url if 'photo_url' in meetup_event.__dict__ else None
@@ -376,7 +383,7 @@ def update_event(request, slug):
 				t = threading.Thread(target=send_event_updated_notification(event))
 				t.setDaemon = True
 				t.start()
-
+			send_event_notification_to_speakers_updated(event)
 			return redirect('event:event-view', event.slug)
 	else:
 		# RESYNC
