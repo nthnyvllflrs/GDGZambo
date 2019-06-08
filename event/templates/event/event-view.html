@@ -71,9 +71,9 @@
 						    <strong>{{ speaker.name }}</strong> <br>
 							<small>
 								{% if speaker.expertise != '' %}
-								    {{ speaker.expertise }}
+								    {{ speaker.expertise|truncatechars:50 }}
 							   	{% else %}
-							   	    {{ speaker.description }}
+							   	    {{ speaker.description|truncatechars:50 }}
 								{% endif %}
 				  			</small>
 					  	</div>
@@ -92,9 +92,9 @@
 						    <strong>{{ member.name }}</strong> <br>
 							<small>
 								{% if member.expertise != '' %}
-								    {{ member.expertise }}
+								    {{ member.expertise|truncatechars:50 }}
 							   	{% else %}
-							   	    {{ member.description }}
+							   	    {{ member.description|truncatechars:50 }}
 								{% endif %}
 				  			</small>
 					  	</div>
@@ -124,7 +124,7 @@
 					  	<div class="media-body">
 						    <strong>{{ sponsor.name }}</strong> <br>
 							<small>
-								{{ sponsor.description }}
+								{{ sponsor.description|truncatechars:50 }}
 				  			</small>
 					  	</div>
 					</div>
@@ -142,9 +142,9 @@
 						    <strong>{{ member.name }}</strong> <br>
 							<small>
 								{% if member.expertise != '' %}
-								    {{ member.expertise }}
+								    {{ member.expertise|truncatechars:50 }}
 							   	{% else %}
-							   	    {{ member.description }}
+							   	    {{ member.description|truncatechars:50 }}
 								{% endif %}
 				  			</small>
 					  	</div>
@@ -174,7 +174,7 @@
 					  	<div class="media-body">
 						    <strong>{{ volunteer.name }}</strong> <br>
 							<small>
-								{{ volunteer.description }}
+								{{ volunteer.description|truncatechars:50 }}
 				  			</small>
 					  	</div>
 					</div>
@@ -192,9 +192,9 @@
 						    <strong>{{ volunteer.name }}</strong> <br>
 							<small>
 								{% if volunteer.expertise != '' %}
-								    {{ volunteer.expertise }}
+								    {{ volunteer.expertise|truncatechars:50 }}
 							   	{% else %}
-							   	    {{ volunteer.description }}
+							   	    {{ volunteer.description|truncatechars:50 }}
 								{% endif %}
 				  			</small>
 					  	</div>

@@ -94,7 +94,7 @@
 										  	<div class="media-body">
 										  		{% check_conflict_speaker speaker start_date end_date as conflict %}
 											    <strong {% if conflict %}class="text-danger"{% endif %}>{{ speaker.name }}</strong> <br>
-												<small>{% if speaker.expertise != '' %}{{ speaker.expertise }}{% else %}{{ speaker.description }}{% endif %}
+												<small>{% if speaker.expertise != '' %}{{ speaker.expertise|truncatechars:50 }}{% else %}{{ speaker.description|truncatechars:50 }}{% endif %}
 									  			</small>
 										  	</div>
 										</div>
@@ -125,7 +125,7 @@
 											{% endif %}
 										  	<div class="media-body">
 											    <strong>{{ member.name }}</strong> <br>
-												<small>{% if member.expertise != '' %}{{ member.expertise }}{% else %}{{ member.description }}{% endif %}
+												<small>{% if member.expertise != '' %}{{ member.expertise|truncatechars:50 }}{% else %}{{ member.description|truncatechars:50 }}{% endif %}
 									  			</small>
 										  	</div>
 										</div>
@@ -165,7 +165,7 @@
 											{% endif %}
 										  	<div class="media-body">
 											    <strong>{{ sponsor.name }}</strong> <br>
-												<small>{{ sponsor.description }}</small>
+												<small>{{ sponsor.description|truncatechars:50 }}</small>
 										  	</div>
 										</div>
 									</div>
@@ -195,7 +195,7 @@
 											{% endif %}
 										  	<div class="media-body">
 											    <strong>{{ member.name }}</strong> <br>
-												<small>{% if member.expertise != '' %}{{ member.expertise }}{% else %}{{ member.description }}{% endif %}
+												<small>{% if member.expertise != '' %}{{ member.expertise|truncatechars:50 }}{% else %}{{ member.description|truncatechars:50 }}{% endif %}
 									  			</small>
 										  	</div>
 										</div>
@@ -235,7 +235,7 @@
 											{% endif %}
 										  	<div class="media-body">
 											    <strong>{{ volunteer.name }}</strong> <br>
-												<small>{% if volunteer.expertise != '' %}{{ volunteer.expertise }}{% else %}{{ volunteer.description }}{% endif %}
+												<small>{% if volunteer.expertise != '' %}{{ volunteer.expertise|truncatechars:50 }}{% else %}{{ volunteer.description|truncatechars:50 }}{% endif %}
 									  			</small>
 										  	</div>
 										</div>
@@ -266,7 +266,7 @@
 											{% endif %}
 										  	<div class="media-body">
 											    <strong>{{ member.name }}</strong> <br>
-												<small>{% if member.expertise != '' %}{{ member.expertise }}{% else %}{{ member.description }}{% endif %}
+												<small>{% if member.expertise != '' %}{{ member.expertise|truncatechars:50 }}{% else %}{{ member.description|truncatechars:50 }}{% endif %}
 									  			</small>
 										  	</div>
 										</div>
@@ -470,7 +470,7 @@
 						console.log(json.error)
 						$("#EventSpeakerError").text(json.error)
 					} else {
-						$("#speaker-checkgroup").append("<div class='col-sm-4 mt-3'><div class='row'><div class='col-1'><input type='checkbox' name='speakers' id='option" + json.id + "' value=" + json.id + " checked/></div><div class='col'><div class='media'><img class='mr-3 img-fluid rounded-circle' src='https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg' width='60px' height='60px' /><div class='media-body'><strong>" + json.name + "</strong> <br><small>" + json.description + "</small></div></div></div></div></div>");
+						$("#speaker-checkgroup").append("<div class='col-sm-4 mt-3'><div class='row'><div class='col-1'><input type='checkbox' name='speakers' id='option" + json.id + "' value=" + json.id + " checked/></div><div class='col'><div class='media'><img class='mr-3 img-fluid rounded-circle' src='https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg' width='60px' height='60px' /><div class='media-body'><strong>" + json.name + "</strong> <br><small>" + json.description + "...</small></div></div></div></div></div>");
 						$("#EventSpeakerError").text('')
 						$('#speakerModal').modal('toggle');
 					}
@@ -500,7 +500,7 @@
 						console.log(json.error)
 						$("#EventSponsorError").text(json.error)
 					} else {
-						$("#sponsor-checkgroup").append("<div class='col-sm-4 mt-3'><div class='row'><div class='col-1'><input type='checkbox' name='sponsors' id='option" + json.id + "' value=" + json.id + " checked/></div><div class='col'><div class='media'><img class='mr-3 img-fluid rounded-circle' src='https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg' width='60px' height='60px' /><div class='media-body'><strong>" + json.name + "</strong> <br><small>" + json.description + "</small></div></div></div></div></div>");
+						$("#sponsor-checkgroup").append("<div class='col-sm-4 mt-3'><div class='row'><div class='col-1'><input type='checkbox' name='sponsors' id='option" + json.id + "' value=" + json.id + " checked/></div><div class='col'><div class='media'><img class='mr-3 img-fluid rounded-circle' src='https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg' width='60px' height='60px' /><div class='media-body'><strong>" + json.name + "</strong> <br><small>" + json.description + "...</small></div></div></div></div></div>");
 						$("#EventSponsorError").text('')
 						$('#sponsorModal').modal('toggle');
 					}
@@ -533,7 +533,7 @@
 						console.log(json.error)
 						$("#EventVolunteerError").text(json.error)
 					} else {
-						$("#volunteer-checkgroup").append("<div class='col-sm-4 mt-3'><div class='row'><div class='col-1'><input type='checkbox' name='volunteers' id='option" + json.id + "' value=" + json.id + " checked/></div><div class='col'><div class='media'><img class='mr-3 img-fluid rounded-circle' src='https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg' width='60px' height='60px' /><div class='media-body'><strong>" + json.name + "</strong> <br><small>" + json.description + "</small></div></div></div></div></div>");
+						$("#volunteer-checkgroup").append("<div class='col-sm-4 mt-3'><div class='row'><div class='col-1'><input type='checkbox' name='volunteers' id='option" + json.id + "' value=" + json.id + " checked/></div><div class='col'><div class='media'><img class='mr-3 img-fluid rounded-circle' src='https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg' width='60px' height='60px' /><div class='media-body'><strong>" + json.name + "</strong> <br><small>" + json.description + "...</small></div></div></div></div></div>");
 						$("#EventVolunteerError").text('')
 						$('#volunteerModal').modal('toggle');
 					}

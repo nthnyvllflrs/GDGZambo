@@ -42,7 +42,7 @@ def create_speaker_api(request):
 		speaker = Speaker.objects.create(
 			name = firstname + ' ' + lastname, firstname = firstname, lastname = lastname, email = email, description = description, 
 			expertise = expertise, facebook = facebook, twitter = twitter, instagram = instagram, website = website,)
-		data = { 'id': speaker.id, 'name': speaker.name, 'description': speaker.description[:30], 'created': True,}
+		data = { 'id': speaker.id, 'name': speaker.name, 'description': speaker.description[:50], 'created': True,}
 	else:
 		data = {'error': 'One of the Social Media URL is invalid. Please supply a valid URL or leave it blank.'}
 
@@ -78,7 +78,7 @@ def create_sponsor_api(request):
 		sponsor = Sponsor.objects.create(
 			name = name, email = email, description = description, facebook = facebook, 
 			twitter = twitter, instagram = instagram, website = website,)
-		data = { 'id': sponsor.id, 'name': sponsor.name, 'description': sponsor.description, 'created': True,}
+		data = { 'id': sponsor.id, 'name': sponsor.name, 'description': sponsor.description[:50], 'created': True,}
 	else:
 		data = {'error': 'One of the Social Media URL is invalid. Please supply a valid URL or leave it blank.'}
 

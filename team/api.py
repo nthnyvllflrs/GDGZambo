@@ -36,7 +36,7 @@ def create_volunteer_api(request):
 		volunteer = Volunteer.objects.create(
 			name = firstname + ' ' + lastname, firstname = firstname, lastname = lastname, email = email, description = description, 
 			expertise = expertise, facebook = facebook, twitter = twitter, instagram = instagram, website = website,)
-		data = {'id': volunteer.id, 'name': volunteer.name, 'description': volunteer.description[:30], 'created': True,}
+		data = {'id': volunteer.id, 'name': volunteer.name, 'description': volunteer.description[:50], 'created': True,}
 	else:
 		data = {'error': 'One of the Social Media URL is invalid. Please supply a valid URL or leave it blank.'}
 
