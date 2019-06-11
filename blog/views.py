@@ -65,7 +65,7 @@ def delete_comment(request, slug, pk):
     comment = get_object_or_404(Comment, blog = blog, pk = pk)
     UserLog.objects.create(user = request.user, description = "Blog Comment Removed. (%s)" % (blog.title,),)
     comment.delete()
-    return redirect('blog:comment-list', slug)
+    return redirect('blog:blog-comment', slug)
 
 
 @login_required

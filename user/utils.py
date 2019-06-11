@@ -93,18 +93,25 @@ def send_story_published_notification(member, instance):
 
 
 def send_comment_notification(instance):
-	email_subject = "New Comment <%s>" % (instance.blog.title)
-	email_body = ''
-	html_message = loader.render_to_string('email/comment-notification.html',{'instance': instance})
-	recipient_list = instance.blog.author.useraccount.member.email
-	email_from = settings.EMAIL_HOST_USER
-	send_mail(email_subject, email_body, email_from, (recipient_list,), html_message=html_message)
-
+	try:
+		email_subject = "New Comment <%s>" % (instance.blog.title)
+		email_body = ''
+		html_message = loader.render_to_string('email/comment-notification.html',{'instance': instance})
+		recipient_list = instance.blog.author.useraccount.member.email
+		email_from = settings.EMAIL_HOST_USER
+		send_mail(email_subject, email_body, email_from, (recipient_list,), html_message=html_message)
+	except:
+		pass
+	
 
 def send_feedback_notification(instance):
-	email_subject = "New Feedback <%s>" % (instance.event.title)
-	email_body = ''
-	html_message = loader.render_to_string('email/feedback-notification.html',{'instance': instance})
-	recipient_list = instance.event.author.useraccount.member.email
-	email_from = settings.EMAIL_HOST_USER
-	send_mail(email_subject, email_body, email_from, (recipient_list,), html_message=html_message)
+	try:
+		email_subject = "New Feedback <%s>" % (instance.event.title)
+		email_body = ''
+		html_message = loader.render_to_string('email/feedback-notification.html',{'instance': instance})
+		recipient_list = instance.event.author.useraccount.member.email
+		email_from = settings.EMAIL_HOST_USER
+		send_mail(email_subject, email_body, email_from, (recipient_list,), html_message=html_message)
+	except:
+		pass
+	
