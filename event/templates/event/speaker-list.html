@@ -25,9 +25,11 @@
 				<div class="col-6 col-lg-3 mb-5">
 					<div class="card text-center border-0">
 						{% if speaker.photo.url %}
-						    <div class="responsive-image rounded-circle" style="background-image: url({{ speaker.photo.url }});"></div>
+							<img src="{{ speaker.photo.url }}" class="img-thumbnail">	
+						    <!-- <div class="responsive-image round-border" style="background-image: url({{ speaker.photo.url }});"></div> -->
 						{% else %}
-							<div class="responsive-image rounded-circle" style="background-image: url('https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg');"></div>
+							<img src="https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg" class="img-thumbnail">
+							<!-- <div class="responsive-image rounded-circle" style="background-image: url('https://res.cloudinary.com/nthnyvllflrs/image/upload/v1550622836/samples/stock-placeholder.jpg');"></div> -->
 						{% endif %}
 					  	<div class="card-body">
 					  		<p class="card-title mb-1">
