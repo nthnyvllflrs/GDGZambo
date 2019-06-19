@@ -160,7 +160,7 @@ MEETUP_CLIENT = meetup.api.Client(os.environ.get('MEETUP_API'))
 # HTTPS SETTINGS
 CORS_REPLACE_HTTPS_REFERER      = True
 HOST_SCHEME                     = "https://"
-SECURE_PROXY_SSL_HEADER         = ('HTTP_X_FORWARDED_PROTO', 'https')
+#SECURE_PROXY_SSL_HEADER         = ('HTTP_X_FORWARDED_PROTO', 'https')
 SECURE_SSL_REDIRECT             = True
 SESSION_COOKIE_SECURE           = True
 CSRF_COOKIE_SECURE              = True
