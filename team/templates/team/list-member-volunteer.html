@@ -86,7 +86,7 @@
 									  	<div class="modal-dialog modal-dialog-centered" role="document">
 									    	<div class="modal-content">
 									      		<div class="modal-header">
-									        		<h5 class="modal-title">Confirm Member Deletion</h5>
+													<h5 class="modal-title">Confirm Member Deletion</h5>
 									      		</div>
 									      		<div class="modal-body text-center">
 									        		<p style="font-size: 1.3em;">Are you sure you want to delete <strong>{{ member.firstname }} {{ member.lastname }}</strong>?</p>
@@ -106,7 +106,10 @@
 					  	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 					    	<div class="modal-content">
 					      		<div class="modal-header">
-					        		<h5 class="modal-title"><strong>{{ member.name }}</strong></h5>
+									<h5 class="modal-title"><strong>{{ member.name }}</strong></h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
 					      		</div>
 					      		<div class="modal-body" style="font-size: 1.2em;">
 
@@ -300,7 +303,7 @@
 									  	<div class="modal-dialog modal-dialog-centered" role="document">
 									    	<div class="modal-content">
 									      		<div class="modal-header">
-									        		<h5 class="modal-title">Confirm Volunteer Migration</h5>
+													<h5 class="modal-title">Confirm Volunteer Migration</h5>
 									      		</div>
 									      		<div class="modal-body text-center">
 									        		<p style="font-size: 1.3em;">Are you sure you want to change <strong>{{ volunteer.firstname }} {{ volunteer.lastname }}</strong> from volunteer to a core member?</p>
@@ -337,7 +340,10 @@
 					  	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 					    	<div class="modal-content">
 					      		<div class="modal-header">
-					        		<h5 class="modal-title"><strong>{{ volunteer.name }}</strong></h5>
+									<h5 class="modal-title"><strong>{{ volunteer.name }}</strong></h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
 					      		</div>
 					      		<div class="modal-body" style="font-size: 1.2em;">
 
