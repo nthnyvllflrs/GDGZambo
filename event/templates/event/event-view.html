@@ -2,13 +2,13 @@
 
 {% block content %}
 <div class="container mt-5">
-	{% if banner_list.count != 0 %}
+	<!-- {% if banner_list.count != 0 %}
 	    {% for banner in banner_list %}
 			<img src="{{ banner.image.url }}" class="img-fluid" width="100%">
 		{% endfor %}
-	{% endif %}
+	{% endif %} -->
 
-	<img src="{{ event.banner.url }}" class="img-fluid" width="100%">
+	<img src="{{ event.banner.url }}" class="img-fluid">
 
 	<h3 class="mt-3">
 		<strong>{{ event.title }}</strong>

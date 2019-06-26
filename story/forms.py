@@ -1,6 +1,8 @@
 # Django imports
 from django import forms
 
+from cloudinary.forms import CloudinaryFileField   
+
 # Inner App imports
 from .models import Story, Image
 
@@ -17,6 +19,10 @@ class ImageForm(forms.ModelForm):
 	class Meta:
 		model = Image
 		fields = ('photo',)
+		
+	photo = CloudinaryFileField( 
+		options = { 'crop': 'scale', 'width': 720, 'height': 720,
+	})
 
 	def clean_photo(self):
 		return self.cleaned_data['photo'] or None

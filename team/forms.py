@@ -2,6 +2,8 @@ import requests
 
 from django import forms
 
+from cloudinary.forms import CloudinaryFileField   
+
 from .models import Member, Volunteer
 
 class MemberForm(forms.ModelForm):
@@ -20,6 +22,10 @@ class MemberForm(forms.ModelForm):
 			'instagram': forms.TextInput(attrs={'id': 'member-instagram',}),
 			'website': forms.URLInput(attrs={'id': 'member-website',}),
 		}
+
+	photo = CloudinaryFileField( 
+		options = { 'crop': 'scale', 'width': 720, 'height': 720,
+	})
 
 	def clean_photo(self):
 		return self.cleaned_data['photo'] or None
@@ -67,6 +73,10 @@ class VolunteerForm(forms.ModelForm):
 		'instagram': forms.TextInput(attrs={'id': 'volunteer-instagram',}),
 		'website': forms.URLInput(attrs={'id': 'volunteer-website',}),}
 
+	photo = CloudinaryFileField( 
+		options = { 'crop': 'scale', 'width': 720, 'height': 720,
+	})
+	
 	def clean_photo(self):
 		return self.cleaned_data['photo'] or None
 

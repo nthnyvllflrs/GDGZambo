@@ -2,6 +2,8 @@ import requests
 # Django imports
 from django import forms
 
+from cloudinary.forms import CloudinaryFileField   
+
 # Inner App imports
 from .models import (
 	Sponsor, Speaker, Event, Feedback, EventStatistics, Info,
@@ -21,6 +23,10 @@ class SponsorForm(forms.ModelForm):
 			'twitter': forms.TextInput(attrs={'id': 'sponsor-twitter',}),
 			'instagram': forms.TextInput(attrs={'id': 'sponsor-instagram',}),
 			'website': forms.URLInput(attrs={'id': 'sponsor-website',}),}
+
+	photo = CloudinaryFileField( 
+		options = { 'crop': 'scale', 'width': 720, 'height': 720,
+	})
 
 	def clean_photo(self):
 		return self.cleaned_data['photo'] or None
@@ -68,6 +74,10 @@ class SpeakerForm(forms.ModelForm):
 			'website': forms.URLInput(attrs={'id': 'speaker-website',}),
 		}
 
+	photo = CloudinaryFileField( 
+		options = { 'crop': 'scale', 'width': 720, 'height': 720,
+	})
+
 	def clean_photo(self):
 		return self.cleaned_data['photo'] or None
 
@@ -96,6 +106,10 @@ class SpeakerForm(forms.ModelForm):
 		return instagram_username
 
 class EventForm(forms.ModelForm):
+	# banner = CloudinaryFileField( 
+	# 	options = { 'crop': 'scale', 'width': 720, 'height': 720,},
+	# 	required = False,
+	# )
 	class Meta:
 		model = Event
 		fields = (
@@ -116,6 +130,8 @@ class EventForm(forms.ModelForm):
 			'latitude': forms.TextInput(attrs={'hidden': 'True', 'readonly': 'True'}),
 			'longitude': forms.TextInput(attrs={'hidden': 'True', 'readonly': 'True'}),}
 		help_texts ={'registration': '*Complete event registration URL',}
+
+	
 
 	def clean_banner(self):
 		return self.cleaned_data['banner'] or None
