@@ -52,11 +52,12 @@ def update_member(request, slug):
 @user_passes_test(lambda u: u.is_superuser)
 def delete_member(request, slug):
 	member = get_object_or_404(Member, slug=slug)
-	useraccount = get_object_or_404(UserAccount, member=member)
-	user = get_object_or_404(User, username=useraccount.user.username)
+	if UserAccount.objects.filter(member=member).exists():
+		useraccount = get_object_or_404(UserAccount, member=member)
+		user = get_object_or_404(User, username=useraccount.user.username)
+		user.delete()
+		useraccount.delete()
 	UserLog.objects.create(user = request.user, description = "Member Removed. (%s)" % (member.name,),)
-	user.delete()
-	useraccount.delete()
 	member.delete()
 	return redirect('team:list-member-volunteer')
 
