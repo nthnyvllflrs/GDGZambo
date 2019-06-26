@@ -44,24 +44,24 @@
 						  		</strong>
 					  		</p>
 					    	<p>
-								{% if sponsor.facebook %}
+								{% if sponsor.facebook != None %}
 					    		    <a href="https://www.facebook.com/{{ sponsor.facebook }}" target="_blank" style="font-size: 1.2em;color: #333;">
 										<i class="fab fa-facebook-f"></i>
 									</a>
 					    		{% endif %}
-								{% if sponsor.twitter %}
+								{% if sponsor.twitter != None  %}
 									<a href="https://www.twitter.com/{{ sponsor.twitter }}" target="_blank" style="font-size: 1.2em;color: #333;">
 										<i class="fab fa-twitter"></i>
 									</a>
 								{% endif %}
 								
-								{% if sponsor.instagram %}
+								{% if sponsor.instagram != None  %}
 									<a href="https://www.instagram.com/{{ sponsor.instagram }}" target="_blank" style="font-size: 1.2em;color: #333;">
 										<i class="fab fa-instagram"></i>
 									</a>
 								{% endif %}
 								
-								{% if sponsor.website %}
+								{% if sponsor.website != None  %}
 									<a href="{{ sponsor.website }}" target="_blank" style="font-size: 1.2em;color: #333;">
 										<i class="fas fa-globe-asia"></i>
 									</a>
@@ -111,14 +111,19 @@
 					      		<div class="modal-body" style="font-size: 1.2em;">
 
 					      			<div class="row">
+										{% if sponsor.email != None %}
 					      				<div class="col-sm-12">
 					      					<strong>Description</strong>
 					      					<p>{{ sponsor.description }}</p>
-					      				</div>
-					      				<div class="col-sm-12">
+										</div>
+										{% endif %}
+										{% if sponsor.email != None %}
+										<div class="col-sm-12">
 					      					<strong>Email</strong>
 					      					<p>{{ sponsor.email }}</p>
-					      				</div>
+										  </div>
+										{% endif %}
+										{% if sponsor.facebook != None %}
 					      				<div class="col-sm-6">
 					      					<strong>Facebook</strong>
 					      					<p>
@@ -127,7 +132,9 @@
 					      							<i class="fas fa-external-link-alt"></i>
 					      						</a>
 					      					</p>
-					      				</div>
+										</div>
+										{% endif %}
+										{% if sponsor.twitter != None %}
 					      				<div class="col-sm-6">
 					      					<strong>Twitter</strong>
 					      					<p>
@@ -136,7 +143,9 @@
 					      							<i class="fas fa-external-link-alt"></i>
 					      						</a>
 					      					</p>
-					      				</div>
+										</div>
+										{% endif %}
+										{% if sponsor.instagram != None %}
 					      				<div class="col-sm-6">
 					      					<strong>Instagram</strong>
 					      					<p>
@@ -145,7 +154,9 @@
 					      							<i class="fas fa-external-link-alt"></i>
 					      						</a>
 					      					</p>
-					      				</div>
+										</div>
+										{% endif %}
+										{% if sponsor.website != None %}
 					      				<div class="col-sm-6">
 					      					<strong>Website</strong>
 					      					<p>
@@ -154,7 +165,9 @@
 					      							<i class="fas fa-external-link-alt"></i>
 					      						</a>
 					      					</p>
-					      				</div>
+										</div>
+										{% endif %}
+										{% if sponsor.event_set.all %}
 					      				<div class="col-sm-12">
 					      					<div class="row">
 					      						<div class="col-sm-12">
@@ -166,7 +179,8 @@
 					      						</div>
 					      						{% endfor %}
 					      					</div>
-					      				</div>
+										</div>
+										{% endif %}
 					      			</div>
 					      		</div>
 					    	</div>

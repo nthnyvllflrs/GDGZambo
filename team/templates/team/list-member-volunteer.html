@@ -43,22 +43,22 @@
 						  		</strong>
 					  		</p>
 					    	<p>
-								{% if member.facebook %}
+								{% if member.facebook != None %}
 					    		    <a href="https://www.facebook.com/{{ member.facebook }}" target="_blank" style="font-size: 1.2em;color: #333;">
 										<i class="fab fa-facebook-f"></i>
 									</a>
 					    		{% endif %}
-								{% if member.twitter %}
+								{% if member.twitter != None %}
 									<a href="https://www.twitter.com/{{ member.twitter }}" target="_blank" style="font-size: 1.2em;color: #333;">
 										<i class="fab fa-twitter"></i>
 									</a>
 								{% endif %}
-								{% if member.instagram %}
+								{% if member.instagram != None %}
 									<a href="https://www.instagram.com/{{ member.instagram }}" target="_blank" style="font-size: 1.2em;color: #333;">
 										<i class="fab fa-instagram"></i>
 									</a>
 								{% endif %}
-								{% if member.website %}
+								{% if member.website != None %}
 									<a href="{{ member.website }}" target="_blank" style="font-size: 1.2em;color: #333;">
 										<i class="fas fa-globe-asia"></i>
 									</a>
@@ -114,22 +114,31 @@
 					      		<div class="modal-body" style="font-size: 1.2em;">
 
 					      			<div class="row">
+										{% if member.description != "" %}
 					      				<div class="col-sm-12">
 					      					<strong>Description</strong>
 					      					<p>{{ member.description|linebreaksbr }}</p>
-					      				</div>
+										</div>
+										{% endif %}
+										{% if member.expertise != "" %}
 					      				<div class="col-sm-12">
 					      					<strong>Expertise</strong>
 					      					<p>{{ member.expertise|linebreaksbr }}</p>
-					      				</div>
+										</div>
+										{% endif %}
+										{% if member.email != None %}
 					      				<div class="col-sm-6">
 					      					<strong>Email</strong>
 					      					<p>{{ member.email }}</p>
-					      				</div>
+										</div>
+										{% endif %}
+										{% if member.position != None %}
 					      				<div class="col-sm-6">
 					      					<strong>Position</strong>
 					      					<p>{{ member.position }}</p>
-					      				</div>
+										</div>
+										{% endif %}
+										{% if member.facebook != None %}
 					      				<div class="col-sm-6">
 					      					<strong>Facebook</strong>
 					      					<p>
@@ -138,7 +147,9 @@
 					      							<i class="fas fa-external-link-alt"></i>
 					      						</a>
 					      					</p>
-					      				</div>
+										</div>
+										{% endif %}
+										{% if member.twitter != None %}
 					      				<div class="col-sm-6">
 					      					<strong>Twitter</strong>
 					      					<p>
@@ -147,7 +158,9 @@
 					      							<i class="fas fa-external-link-alt"></i>
 					      						</a>
 					      					</p>
-					      				</div>
+										</div>
+										{% endif %}
+										{% if member.instagram != None %}
 					      				<div class="col-sm-6">
 					      					<strong>Instagram</strong>
 					      					<p>
@@ -156,7 +169,9 @@
 					      							<i class="fas fa-external-link-alt"></i>
 					      						</a>
 					      					</p>
-					      				</div>
+										</div>
+										{% endif %}
+										{% if member.website != None %}
 					      				<div class="col-sm-6">
 					      					<strong>Website</strong>
 					      					<p>
@@ -165,11 +180,13 @@
 					      							<i class="fas fa-external-link-alt"></i>
 					      						</a>
 					      					</p>
-					      				</div>
+										</div>
+										{% endif %}
 					      				<div class="col-sm-12">
 					      					<div class="row">
 					      						<div class="col-12 col-sm-4 mb-3">
 					      							<div class="row">
+														{% if member.event_set.all %}
 					      								<div class="col-sm-12">
 					      									<strong>Events (Speaker)</strong>
 					      								</div>
@@ -177,11 +194,13 @@
 					      									<div class="col-sm-12">
 						      									+ {{ event.title }}
 						      								</div>
-					      								{% endfor %}
+														{% endfor %}
+														{% endif %}
 					      							</div>
 					      						</div>
 					      						<div class="col-12 col-sm-4 mb-3">
 					      							<div class="row">
+														{% if member.sponsored_events.all %}
 					      								<div class="col-sm-12">
 					      									<strong>Sponsored Events</strong>
 					      								</div>
@@ -189,11 +208,13 @@
 					      									<div class="col-sm-12">
 						      									+ {{ event.title }}
 						      								</div>
-					      								{% endfor %}
+														{% endfor %}
+														{% endif %}
 					      							</div>
 					      						</div>
 					      						<div class="col-12 col-sm-4 mb-3">
 					      							<div class="row">
+														{% if member.volunteered_events.all %}
 					      								<div class="col-sm-12">
 					      									<strong>Volunteered Events</strong>
 					      								</div>
@@ -201,7 +222,8 @@
 					      									<div class="col-sm-12">
 						      									+ {{ event.title }}
 						      								</div>
-					      								{% endfor %}
+														{% endfor %}
+														{% endif %}
 					      							</div>
 					      						</div>
 					      					</div>
@@ -259,24 +281,24 @@
 						  		</strong>
 					  		</p>
 					    	<p>
-								{% if volunteer.facebook %}
+								{% if volunteer.facebook != None %}
 					    		    <a href="https://www.facebook.com/{{ volunteer.facebook }}" target="_blank" style="font-size: 1.2em;color: #333;">
 										<i class="fab fa-facebook-f"></i>
 									</a>
 					    		{% endif %}
-								{% if volunteer.twitter %}
+								{% if volunteer.twitter != None %}
 									<a href="https://www.twitter.com/{{ volunteer.twitter }}" target="_blank" style="font-size: 1.2em;color: #333;">
 										<i class="fab fa-twitter"></i>
 									</a>
 								{% endif %}
 								
-								{% if volunteer.instagram %}
+								{% if volunteer.instagram != None %}
 									<a href="https://www.instagram.com/{{ volunteer.instagram }}" target="_blank" style="font-size: 1.2em;color: #333;">
 										<i class="fab fa-instagram"></i>
 									</a>
 								{% endif %}
 								
-								{% if volunteer.website %}
+								{% if volunteer.website != None %}
 									<a href="{{ volunteer.website }}" target="_blank" style="font-size: 1.2em;color: #333;">
 										<i class="fas fa-globe-asia"></i>
 									</a>
@@ -348,18 +370,25 @@
 					      		<div class="modal-body" style="font-size: 1.2em;">
 
 					      			<div class="row">
+										{% if volunteer.description != "" %}
 					      				<div class="col-sm-12">
 					      					<strong>Description</strong>
 					      					<p>{{ volunteer.description }}</p>
-					      				</div>
+										  </div>
+										{% endif %}
+										{% if volunteer.expertise != "" %}
 					      				<div class="col-sm-12">
 					      					<strong>Expertise</strong>
 					      					<p>{{ volunteer.expertise }}</p>
-					      				</div>
+										</div>
+										{% endif %}
+										{% if volunteer.email != None %}
 					      				<div class="col-sm-12">
 					      					<strong>Email</strong>
 					      					<p>{{ volunteer.email }}</p>
-					      				</div>
+										</div>
+										{% endif %}	
+										{% if volunteer.facebook != None %}
 					      				<div class="col-sm-6">
 					      					<strong>Facebook</strong>
 					      					<p>
@@ -368,7 +397,9 @@
 					      							<i class="fas fa-external-link-alt"></i>
 					      						</a>
 					      					</p>
-					      				</div>
+										</div>
+										{% endif %}	
+										{% if volunteer.twitter != None %}
 					      				<div class="col-sm-6">
 					      					<strong>Twitter</strong>
 					      					<p>
@@ -377,7 +408,9 @@
 					      							<i class="fas fa-external-link-alt"></i>
 					      						</a>
 					      					</p>
-					      				</div>
+										</div>
+										{% endif %}	
+										{% if volunteer.instagram != None %}
 					      				<div class="col-sm-6">
 					      					<strong>Instagram</strong>
 					      					<p>
@@ -386,7 +419,9 @@
 					      							<i class="fas fa-external-link-alt"></i>
 					      						</a>
 					      					</p>
-					      				</div>
+										</div>
+										{% endif %}	
+										{% if volunteer.website != None %}
 					      				<div class="col-sm-6">
 					      					<strong>Website</strong>
 					      					<p>
@@ -395,11 +430,13 @@
 					      							<i class="fas fa-external-link-alt"></i>
 					      						</a>
 					      					</p>
-					      				</div>
+										</div>
+										{% endif %}	
 					      				<div class="col-sm-12">
 					      					<div class="row">
 					      						<div class="col-sm-12">
 					      							<div class="row">
+														{% if volunteer.event_set.all %}
 					      								<div class="col-sm-12">
 					      									<strong>Events Volunteered</strong>
 					      								</div>
@@ -407,7 +444,8 @@
 					      									<div class="col-sm-6 mt-2">
 						      									{{ event.title }}
 						      								</div>
-					      								{% endfor %}
+														{% endfor %}
+														{% endif %}	
 					      							</div>
 					      						</div>
 					      					</div>
