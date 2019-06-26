@@ -1,3 +1,6 @@
+import cloudinary.uploader
+import cloudinary
+
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
@@ -57,6 +60,7 @@ def delete_member(request, slug):
 		user = get_object_or_404(User, username=useraccount.user.username)
 		user.delete()
 		useraccount.delete()
+	cloudinary.uploader.destroy(member.photo.public_id)
 	UserLog.objects.create(user = request.user, description = "Member Removed. (%s)" % (member.name,),)
 	member.delete()
 	return redirect('team:list-member-volunteer')
@@ -105,6 +109,7 @@ def delete_volunteer(request, slug):
 	if not request.user.is_superuser and not request.user.useraccount.is_event_creator:
 		return redirect('landing-page')
 	volunteer = get_object_or_404(Volunteer, slug=slug)
+	cloudinary.uploader.destroy(volunteer.photo.public_id)
 	UserLog.objects.create(user = request.user, description = "Volunteer Removed. (%s)" % (volunteer.name,),)
 	volunteer.delete()
 	return redirect('team:list-member-volunteer')

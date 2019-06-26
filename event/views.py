@@ -1,6 +1,7 @@
 import datetime
 import json
 import threading
+import cloudinary.uploader
 import cloudinary
 from bs4 import BeautifulSoup
 
@@ -70,6 +71,7 @@ def delete_speaker(request, slug):
 	if not request.user.is_superuser and not request.user.useraccount.is_event_creator:
 		return redirect('landing-page')
 	speaker = get_object_or_404(Speaker, slug=slug)
+	cloudinary.uploader.destroy(speaker.photo.public_id)
 	UserLog.objects.create(user = request.user, description = "Speaker Removed. (%s)" % (speaker.name,),)
 	speaker.delete()
 	return redirect('event:speaker-list')
@@ -121,6 +123,7 @@ def delete_sponsor(request, slug):
 	if not request.user.is_superuser and not request.user.useraccount.is_event_creator:
 		return redirect('landing-page')
 	sponsor = get_object_or_404(Sponsor, slug=slug)
+	cloudinary.uploader.destroy(sponsor.photo.public_id)
 	UserLog.objects.create(user = request.user, description = "Sponsor Removed. (%s)" % (sponsor.name,),)
 	sponsor.delete()
 	return redirect('event:sponsor-list')
@@ -495,6 +498,7 @@ def delete_event(request, slug):
 	if not request.user.is_superuser and not request.user.useraccount.is_event_creator:
 		return redirect('landing-page')
 	event = get_object_or_404(Event, slug=slug)
+	cloudinary.uploader.destroy(event.banner.public_id)
 	UserLog.objects.create(user = request.user, description = "Event Removed. (%s)" % (event.title,),)
 	event.delete()
 	return redirect('event:event-upcoming')

@@ -1,4 +1,6 @@
 import threading
+import cloudinary.uploader
+import cloudinary
 
 from django import forms
 from django.contrib.auth.decorators import user_passes_test, login_required
@@ -202,6 +204,9 @@ def delete_blog(request, slug):
     if not request.user.is_superuser and not request.user.useraccount.is_blog_creator:
         return redirect('landing-page')
     blog = get_object_or_404(Blog, slug=slug)
+    photo_set = Photo.objects.filter(blog=blog)
+    for photo in photo_set:
+        cloudinary.uploader.destroy(photo.image.public_id)
     UserLog.objects.create(user = request.user, description = "Blog Removed. (%s)" % (blog.title,),)
     blog.delete()
     return redirect('blog:blog-list')
@@ -242,5 +247,6 @@ def delete_photo(request, slug, pk):
     blog = get_object_or_404(Blog, slug=slug)
     photo = get_object_or_404(Photo, blog=blog, pk=pk)
     UserLog.objects.create(user = request.user, description = "Blog Photo Removed. (%s)" % (blog.title,),)
+    cloudinary.uploader.destroy(photo.image.public_id)
     photo.delete()
     return redirect('blog:blog-photo', slug=slug)

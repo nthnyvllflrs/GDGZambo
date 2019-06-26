@@ -15,17 +15,18 @@ class BlogForm(forms.ModelForm):
 
 
 class PhotoForm(forms.ModelForm):
+    image = CloudinaryFileField( 
+		options = { 'crop': 'scale', 'width': 720, 'height': 720,},
+        required=False,
+    )
+
     class Meta:
         model = Photo
         fields = ('image',)
 
     def clean_image(self):
         return self.cleaned_data['image'] or None
-    
-    image = CloudinaryFileField( 
-		options = { 'crop': 'scale', 'width': 720, 'height': 720,
-	})
-
+     
 
 class CommentForm(forms.ModelForm):
     class Meta:

@@ -56,6 +56,11 @@ class MemberForm(forms.ModelForm):
 
 
 class VolunteerForm(forms.ModelForm):
+	photo = CloudinaryFileField( 
+		options = { 'crop': 'scale', 'width': 720, 'height': 720,},
+		required=False,
+	)
+	
 	class Meta:
 		model = Volunteer
 		fields = (
@@ -73,10 +78,6 @@ class VolunteerForm(forms.ModelForm):
 		'instagram': forms.TextInput(attrs={'id': 'volunteer-instagram',}),
 		'website': forms.URLInput(attrs={'id': 'volunteer-website',}),}
 
-	photo = CloudinaryFileField( 
-		options = { 'crop': 'scale', 'width': 720, 'height': 720,
-	})
-	
 	def clean_photo(self):
 		return self.cleaned_data['photo'] or None
 

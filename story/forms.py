@@ -16,13 +16,14 @@ class StoryForm(forms.ModelForm):
 
 
 class ImageForm(forms.ModelForm):
+	photo = CloudinaryFileField( 
+		options = { 'crop': 'scale', 'width': 720, 'height': 720,}, 
+		required=False,
+	)
+
 	class Meta:
 		model = Image
 		fields = ('photo',)
 		
-	photo = CloudinaryFileField( 
-		options = { 'crop': 'scale', 'width': 720, 'height': 720,
-	})
-
 	def clean_photo(self):
 		return self.cleaned_data['photo'] or None
